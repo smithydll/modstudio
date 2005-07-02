@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.1 2005-06-30 06:21:00 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.2 2005-07-02 04:11:11 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -38,8 +38,17 @@ namespace ModTemplateTools
 
 		private char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public ModHeader Header;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public ModActions Actions;
+
+		private string TextTemplate;
 
 		/// <summary>
 		/// The different supported MOD file formats.
@@ -68,6 +77,11 @@ namespace ModTemplateTools
 			private string[] Language;
 			private string[] Value;
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="_value"></param>
+			/// <param name="_language"></param>
 			public PropertyLang(string _value, string _language)
 			{
 				this.Language = new string[1];
@@ -76,6 +90,10 @@ namespace ModTemplateTools
 				this.Value[0] = _value;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="_value"></param>
 			public PropertyLang(string _value)
 			{
 				this.Language = new string[1];
@@ -84,6 +102,11 @@ namespace ModTemplateTools
 				this.Value[0] = _value;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="_value"></param>
+			/// <param name="_language"></param>
 			public void AddLanguage(string _value, string _language)
 			{
 				string[] tempL = this.Language;
@@ -97,6 +120,11 @@ namespace ModTemplateTools
 				this.Value[Value.GetUpperBound(0)] = _value;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="_language"></param>
+			/// <returns></returns>
 			public string GetValue(string _language)
 			{
 				for (int i = 0; i < this.Language.Length; i++)
@@ -109,6 +137,10 @@ namespace ModTemplateTools
 				return null;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
 			public string GetValue()
 			{
 				return GetValue(DefaultLanguage);
@@ -128,6 +160,9 @@ namespace ModTemplateTools
 				}
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
 			public string pValue
 			{
 				get
@@ -162,10 +197,25 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModAction
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public string ActionType;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string ActionBody;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string BeforeComment;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string AfterComment;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int StartLine;
 			/// <summary>
 			/// Modifier is a variable that modifies the behaviour of an actions, for example regex can
@@ -232,7 +282,7 @@ namespace ModTemplateTools
 			/// </summary>
 			/// <param name="actiontype">Type</param>
 			/// <param name="actionbody">Body</param>
-			/// <param name="acaftercomment">After Comment</param>
+			/// <param name="aftercomment">After Comment</param>
 			public ModAction(string actiontype, string actionbody, string aftercomment)
 			{
 				this.ActionType = actiontype;
@@ -242,6 +292,34 @@ namespace ModTemplateTools
 				this.StartLine = 0;
 				this.Modifier = null;
 			}
+
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
+			public override string ToString()
+			{
+				// TODO: niceify this
+				string MODBuild = null;
+				MODBuild += "#\n";
+				MODBuild += "#-----[ " + ActionType + " ]------------------------------------------\n";
+				MODBuild += "#\n";
+				if (!(AfterComment == null || AfterComment == "\n")) 
+				{
+					string[] ACsplit = AfterComment.Replace("\r\n", "\n").Split('\n');
+					for (int j = 0; j < ACsplit.Length; j++) 
+					{
+						if (!((ACsplit[j] == "" && j == 0))) 
+						{
+							//MODBuild += Newline;
+							MODBuild += "\n# " + ACsplit[j];
+						}
+					}
+				}
+				//MODBuild += Newline;
+				MODBuild += ActionBody;
+				return MODBuild;
+			}
 		}
 
 		/// <summary>
@@ -249,6 +327,9 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModActions
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModAction[] Actions;
 
 			/// <summary>
@@ -257,9 +338,16 @@ namespace ModTemplateTools
 			/// <param name="newaction"></param>
 			public void AddEntry(ModAction newaction)
 			{
-				ModAction[] tempArray = Actions;
-				Actions = new ModAction[tempArray.Length + 1];
-				tempArray.CopyTo(Actions, 0);
+				if (Actions != null)
+				{
+					ModAction[] tempArray = Actions;
+					Actions = new ModAction[tempArray.Length + 1];
+					tempArray.CopyTo(Actions, 0);
+				}
+				else
+				{
+					Actions = new ModAction[1];
+				}
 
 				Actions[Actions.GetUpperBound(0)] = newaction;
 			}
@@ -324,20 +412,65 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModHeader
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public PropertyLang ModTitle;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModAuthor ModAuthor;
+			/// <summary>
+			/// 
+			/// </summary>
 			public PropertyLang ModDescription;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModVersion ModVersion;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModInstallationLevel ModInstallationLevel;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int ModInstallationTime;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int ModSuggestedInstallTime;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string[] ModFilesToEdit;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string[] ModIncludedFiles;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string ModGenerator;
+			/// <summary>
+			/// 
+			/// </summary>
 			public PropertyLang ModAuthorNotes;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModVersion ModEasymodCompatibility;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModHistory ModHistory;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModVersion ModphpBBVersion;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string[] Meta;
 		}
 		
@@ -346,10 +479,25 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModVersion
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public int VersionMajor;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int VersionMinor;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int VersionRevision;
+			/// <summary>
+			/// 
+			/// </summary>
 			public char VersionRelease;
+			/// <summary>
+			/// 
+			/// </summary>
 			public const char nullChar = '-';
 
 			/// <summary>
@@ -457,11 +605,25 @@ namespace ModTemplateTools
 		/// </summary>
 		public enum ModInstallationLevel
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			Easy,
+			/// <summary>
+			/// 
+			/// </summary>
 			Moderate,
+			/// <summary>
+			/// 
+			/// </summary>
 			Hard
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
 		public static ModInstallationLevel ModInstallationLevelParse(string input)
 		{
 			char[] trimChars = {'(', ')'};
@@ -483,6 +645,11 @@ namespace ModTemplateTools
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
 		public static int StringToSeconds(string input)
 		{
 			string[] getints = input.Split(' ');
@@ -510,8 +677,17 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModHistoryEntry
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModVersion HistoryVersion;
+			/// <summary>
+			/// 
+			/// </summary>
 			public System.DateTime HistoryDate;
+			/// <summary>
+			/// 
+			/// </summary>
 			public PropertyLang HistoryChanges;
 
 			/// <summary>
@@ -556,6 +732,9 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModHistory
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModHistoryEntry[] History;
 
 			/// <summary>
@@ -575,9 +754,16 @@ namespace ModTemplateTools
 			/// <param name="newhistory"></param>
 			public void AddEntry(ModHistoryEntry newhistory)
 			{
-				ModHistoryEntry[] tempArray = History;
-				History = new ModHistoryEntry[tempArray.Length + 1];
-				tempArray.CopyTo(History, 0);
+				if (History != null)
+				{
+					ModHistoryEntry[] tempArray = History;
+					History = new ModHistoryEntry[tempArray.Length + 1];
+					tempArray.CopyTo(History, 0);
+				}
+				else
+				{
+					History = new ModHistoryEntry[1];
+				}
 
 				History[History.GetUpperBound(0)] = newhistory;
 			}
@@ -609,7 +795,13 @@ namespace ModTemplateTools
 		/// </summary>
 		public enum ModAuthorStatus
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			Current,
+			/// <summary>
+			/// 
+			/// </summary>
 			Past
 		}
 
@@ -618,12 +810,33 @@ namespace ModTemplateTools
 		/// </summary>
 		public struct ModAuthorEntry
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public string UserName;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string RealName;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string Email;
+			/// <summary>
+			/// 
+			/// </summary>
 			public string Homepage;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int AuthorFrom;
+			/// <summary>
+			/// 
+			/// </summary>
 			public int AuthorTo;
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModAuthorStatus Status;
 
 				/// <summary>
@@ -666,24 +879,52 @@ namespace ModTemplateTools
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public struct ModAuthor
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			public ModAuthorEntry[] Authors;
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="UserName"></param>
+			/// <param name="RealName"></param>
+			/// <param name="Email"></param>
+			/// <param name="Homepage"></param>
 			public void AddEntry(string UserName, string RealName, string Email, string Homepage)
 			{
 				AddEntry(new ModAuthorEntry(UserName, RealName, Email, Homepage));
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="newauthor"></param>
 			public void AddEntry(ModAuthorEntry newauthor)
 			{
-				ModAuthorEntry[] tempArray = Authors;
-				Authors = new ModAuthorEntry[tempArray.Length + 1];
-				tempArray.CopyTo(Authors, 0);
+				if (Authors != null)
+				{
+					ModAuthorEntry[] tempArray = Authors;
+					Authors = new ModAuthorEntry[tempArray.Length + 1];
+					tempArray.CopyTo(Authors, 0);
+				}
+				else
+				{
+					Authors = new ModAuthorEntry[1];
+				}
 
 				Authors[Authors.GetUpperBound(0)] = newauthor;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="index"></param>
 			public void RemoveEntry(int index)
 			{
 				ModAuthorEntry[] tempAuthors = Authors;
@@ -710,8 +951,18 @@ namespace ModTemplateTools
 		/// <summary>
 		/// 
 		/// </summary>
-		public PhpbbMod()
+		public PhpbbMod(string TemplatePath)
 		{
+			TextTemplate = OpenTextFile(TemplatePath + "\\MOD.mot");
+			try 
+			{
+				TextTemplate = Regex.Replace(TextTemplate, "^#(.*?)([\\s\\S]*?)(|\\r)\\n###END OF HEADER###(|\\r)\\n", "");
+				TextTemplate = TextTemplate.Replace("\r", "");
+			} 
+			catch 
+			{
+			}
+
 			Header = new ModHeader();
 			Actions = new ModActions();
 		}
@@ -975,11 +1226,11 @@ namespace ModTemplateTools
 		/// 
 		/// </summary>
 		/// <param name="TextMod"></param>
-		private void ReadTextActions(string TextMod)
+		public void ReadTextActions(string TextMod)
 		{
 			Actions = new ModActions();
-			TextMod = TextMod.Replace(WinNewLine, Newline.ToString()) + Newline + "#" + Newline + "#-----[";
-			string[] ModTextLines = TextMod.Split(Newline);
+			TextMod = TextMod.Replace("\r\n", "\n") + "\n#\n#-----[";
+			string[] ModTextLines = TextMod.Split('\n');
 
 			bool InMODAction = false;
 			string ThisMODActionBody = null;
@@ -989,12 +1240,24 @@ namespace ModTemplateTools
 			bool IsFirstMALine = false;
 			bool IsFirstTCLine = false;
 			int IntFirstMALine = 0;
+			bool FirstActionFound = false;
 
-			for (int i = 1; i < ModTextLines.Length; i++) 
+			int HeaderEndLine = 0;
+			bool Found = false;
+			for (int i = ModTextLines.Length - 1; i != 0 && Found == false; i--) 
 			{
-				if (!(ModTextLines[i].StartsWith("##"))) 
+				if (Regex.IsMatch(ModTextLines[i], "^(\\#){60}") && Found == false) 
 				{
-					if (ModTextLines[i].StartsWith("#") && ModTextLines[i + 1].StartsWith("#-----[")) 
+					Found = true;
+					HeaderEndLine = i;
+				}
+			}
+
+			for (int i = HeaderEndLine; i < ModTextLines.Length - 1; i++) 
+			{
+				if (!ModTextLines[i].StartsWith("##")) 
+				{
+					if (ModTextLines[i].StartsWith("#") && ModTextLines[i + 1].StartsWith("#-----[") && FirstActionFound) 
 					{
 						Actions.AddEntry(new ModAction(ThisMODActionType, ThisMODActionBody, NextMODActionComm, ThisMODActionComm, IntFirstMALine));
 						ThisMODActionBody = "";
@@ -1012,7 +1275,7 @@ namespace ModTemplateTools
 					{
 						if (ModTextLines[i].StartsWith("#")) 
 						{
-							if (!(IsFirstTCLine)) 
+							if (!IsFirstTCLine)
 							{
 								ThisMODActionComm += Newline;
 							}
@@ -1021,7 +1284,7 @@ namespace ModTemplateTools
 						} 
 						else 
 						{
-							if (!(IsFirstMALine)) 
+							if (!IsFirstMALine) 
 							{
 								ThisMODActionBody += Newline;
 							}
@@ -1032,6 +1295,7 @@ namespace ModTemplateTools
 					if (ModTextLines[i].StartsWith("#-----[")) 
 					{
 						InMODAction = true;
+						FirstActionFound = true;
 						ThisMODActionType = Regex.Replace(ModTextLines[i], "^#([\\-]+)\\[(\\W)([A-Za-z, \\/\\-\\\\]+?) \\]([\\-]+)(| )$", "$3", RegexOptions.IgnoreCase);
 						if (IntFirstMALine == 0) 
 						{
@@ -1118,7 +1382,142 @@ namespace ModTemplateTools
 		/// <returns>A string of the Text format of the MOD.</returns>
 		public string WriteText()
 		{
-			return "";
+			//
+			// TODO: Not elegant, fixed up a little, still needs some work.
+			//
+
+			string BlankTemplate = TextTemplate;
+			System.Text.StringBuilder NewModBody = new System.Text.StringBuilder();
+			BlankTemplate = BlankTemplate.Replace("<mod.title/>", Header.ModTitle.GetValue());
+			string MyMODAuthorS = null;
+			for (int i = 0; i <= Header.ModAuthor.Authors.GetUpperBound(0); i++) 
+			{
+				if (i == 0) 
+				{
+					MyMODAuthorS = Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
+				} 
+				else 
+				{
+					MyMODAuthorS += Newline + "## MOD Author, secondary: " + Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
+				}
+			}
+
+			BlankTemplate = BlankTemplate.Replace("<mod.author/>", MyMODAuthorS);
+			BlankTemplate = BlankTemplate.Replace("<mod.description/>", Header.ModDescription.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+			BlankTemplate = BlankTemplate.Replace("<mod.version/>", Header.ModVersion.ToString());
+			BlankTemplate = BlankTemplate.Replace("<mod.install_level/>", Header.ModInstallationLevel.ToString());
+			BlankTemplate = BlankTemplate.Replace("<mod.install_time/>", Math.Ceiling(Header.ModInstallationTime / 60) + " minutes");
+
+			string MyMODFTE = null;
+			for (int i = 0; i < Header.ModFilesToEdit.Length; i++) 
+			{
+				if (i == 0) 
+				{
+					MyMODFTE = Header.ModFilesToEdit[i];
+				} 
+				else 
+				{
+					MyMODFTE += Newline + "## " + Header.ModFilesToEdit[i];
+				}
+			}
+			BlankTemplate = BlankTemplate.Replace("<mod.files_to_edit/>", MyMODFTE);
+
+			string MyMODIC = null;
+			for (int i = 0; i < Header.ModIncludedFiles.Length; i++) 
+			{
+				if (i == 0) 
+				{
+					MyMODIC = Header.ModIncludedFiles[i];
+				} 
+				else 
+				{
+					MyMODIC += Newline + "## " + Header.ModIncludedFiles[i];
+				}
+			}
+			BlankTemplate = BlankTemplate.Replace("<mod.inc_files/>", MyMODIC);
+			BlankTemplate = BlankTemplate.Replace("<mod.generator/>", Newline + "## Generator: MOD Studio [ ModTemplateTools " + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion + " ]");
+			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+			string MyMODHistory;
+			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
+			for (int i = 0; i < Header.ModHistory.History.Length; i++) 
+			{
+				if (i == 0 && !((Header.ModHistory.History[i].HistoryChanges.GetValue() == null))) 
+				{
+					NewMyMODHistory.Append("##############################################################");
+					NewMyMODHistory.Append(Newline + "## MOD History:");
+					NewMyMODHistory.Append(Newline + "## ");
+					NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
+					if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+					{
+						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+					} 
+					else 
+					{
+						NewMyMODHistory.Append(Newline + "## - ");
+					}
+				} 
+				else 
+				{
+					NewMyMODHistory.Append(Newline + "## ");
+					NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
+					if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+					{
+						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+					} 
+					else 
+					{
+						NewMyMODHistory.Append(Newline + "## - ");
+					}
+				}
+			}
+			MyMODHistory = NewMyMODHistory.ToString();
+			if (!(MyMODHistory.Length == 0)) 
+			{
+				MyMODHistory = Newline + MyMODHistory;
+				MyMODHistory += Newline + "## ";
+			}
+			BlankTemplate = BlankTemplate.Replace("<mod.history/>", MyMODHistory);
+			BlankTemplate = Regex.Replace(BlankTemplate, "^#(.*?)([\\s\\S]*?)\\n###END OF HEADER###\\n", "", RegexOptions.Compiled);
+			if (Header.ModEasymodCompatibility.VersionMinor > 0 || Header.ModEasymodCompatibility.VersionRevision > 0) 
+			{
+				BlankTemplate = "## EasyMod " + Header.ModEasymodCompatibility.ToString() + " compliant" + Newline + BlankTemplate;
+			}
+			NewModBody.Append(BlankTemplate);
+			try 
+			{
+				foreach (ModAction MA in Actions.Actions) 
+				{
+					if (MA.ActionType != null) 
+					{
+						
+						NewModBody.Append(Newline);
+						NewModBody.Append("#");
+						NewModBody.Append(Newline);
+						NewModBody.Append("#-----[ " + MA.ActionType + " ]------------------------------------------");
+						NewModBody.Append(Newline);
+						NewModBody.Append("#");
+						if (!((MA.AfterComment == null || MA.AfterComment == Newline.ToString()))) 
+						{
+							string[] ACsplit = MA.AfterComment.Replace("\r", "").Split(Newline);
+							for (int j = 0; j <= ACsplit.GetUpperBound(0); j++) 
+							{
+								if (!((ACsplit[j] == "" & j == 0))) 
+								{
+									NewModBody.Append(Newline);
+									NewModBody.Append("# " + ACsplit[j]);
+								}
+							}
+						}
+						NewModBody.Append(Newline);
+						NewModBody.Append(MA.ActionBody);
+					}
+				}
+			} 
+			catch 
+			{
+			}
+
+			return NewModBody.ToString();
 		}
 
 		/// <summary>
