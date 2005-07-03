@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.2 2005-07-02 04:11:11 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.3 2005-07-03 03:31:21 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -300,7 +300,7 @@ namespace ModTemplateTools
 			public override string ToString()
 			{
 				// TODO: niceify this
-				string MODBuild = null;
+				string MODBuild = "";
 				MODBuild += "#\n";
 				MODBuild += "#-----[ " + ActionType + " ]------------------------------------------\n";
 				MODBuild += "#\n";
@@ -733,6 +733,11 @@ namespace ModTemplateTools
 		public struct ModHistory
 		{
 			/// <summary>
+			/// The string which represents an empty MOD Author field.
+			/// </summary>
+			public const string Empty = "N/A";
+
+			/// <summary>
 			/// 
 			/// </summary>
 			public ModHistoryEntry[] History;
@@ -877,6 +882,27 @@ namespace ModTemplateTools
 				this.AuthorTo = AuthorTo;
 				this.Status = Status;
 			}
+
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <returns></returns>
+			public override string ToString()
+			{
+				return string.Format("{0} < {1} > ({2}) {3}", this.UserName, this.Email, this.RealName, this.Homepage);
+			}
+
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="input"></param>
+			/// <returns></returns>
+			public static ModAuthorEntry Parse(string input)
+			{
+				string[] MODTempAuthor = Regex.Replace(input, "^(## MOD Author(|, secondary):|)([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
+				return new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]);
+			}
+
 		}
 
 		/// <summary>

@@ -130,6 +130,7 @@ templates/subSilver/viewtopic_poll_ballot.tpl
 templates/subSilver/viewtopic_poll_result.tpl
 templates/subSilver/formIE.css
 templates/subSilver/subSilver.css
+templates/subSilver/subSilver.cfg
 templates/subSilver/admin/admin_message_body.tpl
 templates/subSilver/admin/auth_forum_body.tpl
 templates/subSilver/admin/auth_select_body.tpl
