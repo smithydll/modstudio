@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.3 2005-07-03 03:31:21 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.4 2005-07-09 13:18:46 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -109,15 +109,25 @@ namespace ModTemplateTools
 			/// <param name="_language"></param>
 			public void AddLanguage(string _value, string _language)
 			{
-				string[] tempL = this.Language;
-				string[] tempV = this.Value;
+				if (Language != null)
+				{
+					string[] tempL = this.Language;
+					string[] tempV = this.Value;
 
-				this.Language = new string[tempL.Length + 1];
-				tempL.CopyTo(this.Language,0);
-				this.Language[Language.GetUpperBound(0)] = _language;
-				this.Value = new string[tempV.Length + 1];
-				tempV.CopyTo(this.Value,0);
-				this.Value[Value.GetUpperBound(0)] = _value;
+					this.Language = new string[tempL.Length + 1];
+					tempL.CopyTo(this.Language,0);
+					this.Language[Language.GetUpperBound(0)] = _language;
+					this.Value = new string[tempV.Length + 1];
+					tempV.CopyTo(this.Value,0);
+					this.Value[Value.GetUpperBound(0)] = _value;
+				}
+				else
+				{
+					Language = new string[1];
+					Language[0] = _language;
+					Value = new string[1];
+					Value[0] = _value;
+				}
 			}
 
 			/// <summary>
@@ -127,11 +137,14 @@ namespace ModTemplateTools
 			/// <returns></returns>
 			public string GetValue(string _language)
 			{
-				for (int i = 0; i < this.Language.Length; i++)
+				if (Language != null)
 				{
-					if (_language == this.Language[i])
+					for (int i = 0; i < this.Language.Length; i++)
 					{
-						return this.Value[i];
+						if (_language == this.Language[i])
+						{
+							return this.Value[i];
+						}
 					}
 				}
 				return null;
@@ -151,12 +164,22 @@ namespace ModTemplateTools
 			/// </summary>
 			public void SetValue(string _value)
 			{
-				for (int i = 0; i < this.Language.Length; i++)
+				if (Language != null)
 				{
-					if (DefaultLanguage == this.Language[i])
+					for (int i = 0; i < this.Language.Length; i++)
 					{
-						this.Value[i] = _value;
+						if (DefaultLanguage == this.Language[i])
+						{
+							this.Value[i] = _value;
+						}
 					}
+				}
+				else
+				{
+					Language = new string[1];
+					Language[0] = DefaultLanguage;
+					Value = new string[1];
+					Value[0] = _value;
 				}
 			}
 
