@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.1 2005-07-06 05:13:25 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.2 2005-07-09 13:17:02 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ModTemplateTools;
 
 namespace ModStudio
 {
@@ -69,11 +70,23 @@ namespace ModStudio
 		private System.Windows.Forms.Button button5;
 		private System.Windows.Forms.Button button6;
 		private System.Windows.Forms.Button button7;
+		internal ModTemplateTools.PhpbbMod ThisMod;
+		private ModFormControls.ModDisplayBox modDisplayBox2;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelModInstallationTime;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Button button8;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.ListBox listBoxFileEdits;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public ModEditor()
 		{
 			//
@@ -81,9 +94,20 @@ namespace ModStudio
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+			ThisMod = new PhpbbMod(".\\");
+
+			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "Email", "Homepage"));
+			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="filename"></param>
+		public ModEditor(string filename):this()
+		{
+			ThisMod = new PhpbbMod(".\\");
+			ThisMod.ReadFile(filename);
 		}
 
 		/// <summary>
@@ -114,8 +138,6 @@ namespace ModStudio
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.labelOverviewTitle = new System.Windows.Forms.Label();
 			this.tabPageHeader = new System.Windows.Forms.TabPage();
-			this.tabPageActions = new System.Windows.Forms.TabPage();
-			this.modDisplayBox1 = new ModFormControls.ModDisplayBox();
 			this.MODHistoryListView = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -146,13 +168,22 @@ namespace ModStudio
 			this.button5 = new System.Windows.Forms.Button();
 			this.button6 = new System.Windows.Forms.Button();
 			this.button7 = new System.Windows.Forms.Button();
+			this.tabPageActions = new System.Windows.Forms.TabPage();
+			this.modDisplayBox2 = new ModFormControls.ModDisplayBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.labelModInstallationTime = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.button8 = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.listBoxFileEdits = new System.Windows.Forms.ListBox();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
-			this.tabPageActions.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajorNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinorNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevisionNumericUpDown)).BeginInit();
+			this.tabPageActions.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControlEditor
@@ -168,15 +199,23 @@ namespace ModStudio
 			this.tabControlEditor.Size = new System.Drawing.Size(792, 566);
 			this.tabControlEditor.TabIndex = 0;
 			this.tabControlEditor.TabIndexChanged += new System.EventHandler(this.tabControlEditor_TabIndexChanged);
+			this.tabControlEditor.SelectedIndexChanged += new System.EventHandler(this.tabControlEditor_SelectedIndexChanged);
 			// 
 			// tabPageOverview
 			// 
 			this.tabPageOverview.BackColor = System.Drawing.Color.White;
+			this.tabPageOverview.Controls.Add(this.listBoxFileEdits);
+			this.tabPageOverview.Controls.Add(this.button8);
+			this.tabPageOverview.Controls.Add(this.labelModInstallationTime);
+			this.tabPageOverview.Controls.Add(this.label1);
 			this.tabPageOverview.Controls.Add(this.pictureBox1);
 			this.tabPageOverview.Controls.Add(this.labelOverviewTitle);
+			this.tabPageOverview.Controls.Add(this.label4);
+			this.tabPageOverview.Controls.Add(this.label8);
+			this.tabPageOverview.Controls.Add(this.label10);
 			this.tabPageOverview.Location = new System.Drawing.Point(4, 25);
 			this.tabPageOverview.Name = "tabPageOverview";
-			this.tabPageOverview.Size = new System.Drawing.Size(624, 417);
+			this.tabPageOverview.Size = new System.Drawing.Size(784, 537);
 			this.tabPageOverview.TabIndex = 0;
 			this.tabPageOverview.Text = "Overview";
 			// 
@@ -235,24 +274,6 @@ namespace ModStudio
 			this.tabPageHeader.Size = new System.Drawing.Size(784, 537);
 			this.tabPageHeader.TabIndex = 1;
 			this.tabPageHeader.Text = "Header";
-			// 
-			// tabPageActions
-			// 
-			this.tabPageActions.BackColor = System.Drawing.Color.AliceBlue;
-			this.tabPageActions.Controls.Add(this.modDisplayBox1);
-			this.tabPageActions.Location = new System.Drawing.Point(4, 25);
-			this.tabPageActions.Name = "tabPageActions";
-			this.tabPageActions.Size = new System.Drawing.Size(624, 417);
-			this.tabPageActions.TabIndex = 2;
-			this.tabPageActions.Text = "Actions";
-			// 
-			// modDisplayBox1
-			// 
-			this.modDisplayBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.modDisplayBox1.Location = new System.Drawing.Point(0, 0);
-			this.modDisplayBox1.Name = "modDisplayBox1";
-			this.modDisplayBox1.Size = new System.Drawing.Size(624, 417);
-			this.modDisplayBox1.TabIndex = 0;
 			// 
 			// MODHistoryListView
 			// 
@@ -542,6 +563,87 @@ namespace ModStudio
 			this.button7.TabIndex = 33;
 			this.button7.Text = "Delete";
 			// 
+			// tabPageActions
+			// 
+			this.tabPageActions.BackColor = System.Drawing.Color.AliceBlue;
+			this.tabPageActions.Controls.Add(this.modDisplayBox2);
+			this.tabPageActions.Location = new System.Drawing.Point(4, 25);
+			this.tabPageActions.Name = "tabPageActions";
+			this.tabPageActions.Size = new System.Drawing.Size(784, 537);
+			this.tabPageActions.TabIndex = 2;
+			this.tabPageActions.Text = "Actions";
+			// 
+			// modDisplayBox2
+			// 
+			this.modDisplayBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.modDisplayBox2.Location = new System.Drawing.Point(0, 0);
+			this.modDisplayBox2.Name = "modDisplayBox2";
+			this.modDisplayBox2.Size = new System.Drawing.Size(784, 537);
+			this.modDisplayBox2.TabIndex = 0;
+			// 
+			// label1
+			// 
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Location = new System.Drawing.Point(8, 80);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(120, 23);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "Installation Time";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelModInstallationTime
+			// 
+			this.labelModInstallationTime.Location = new System.Drawing.Point(136, 80);
+			this.labelModInstallationTime.Name = "labelModInstallationTime";
+			this.labelModInstallationTime.Size = new System.Drawing.Size(184, 23);
+			this.labelModInstallationTime.TabIndex = 3;
+			this.labelModInstallationTime.Text = "0 minutes";
+			// 
+			// label4
+			// 
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label4.Location = new System.Drawing.Point(8, 112);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(120, 23);
+			this.label4.TabIndex = 2;
+			this.label4.Text = "Included Files";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// button8
+			// 
+			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button8.Location = new System.Drawing.Point(216, 108);
+			this.button8.Name = "button8";
+			this.button8.Size = new System.Drawing.Size(75, 20);
+			this.button8.TabIndex = 4;
+			this.button8.Text = "Edit";
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(136, 112);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(72, 23);
+			this.label8.TabIndex = 3;
+			this.label8.Text = "0 files";
+			// 
+			// label10
+			// 
+			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label10.Location = new System.Drawing.Point(8, 144);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(120, 23);
+			this.label10.TabIndex = 2;
+			this.label10.Text = "File Edits";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// listBoxFileEdits
+			// 
+			this.listBoxFileEdits.Location = new System.Drawing.Point(136, 144);
+			this.listBoxFileEdits.Name = "listBoxFileEdits";
+			this.listBoxFileEdits.Size = new System.Drawing.Size(456, 147);
+			this.listBoxFileEdits.TabIndex = 5;
+			this.listBoxFileEdits.DoubleClick += new System.EventHandler(this.listBoxFileEdits_DoubleClick);
+			// 
 			// ModEditor
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -549,13 +651,15 @@ namespace ModStudio
 			this.Controls.Add(this.tabControlEditor);
 			this.Name = "ModEditor";
 			this.Text = "ModEditor";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Load += new System.EventHandler(this.ModEditor_Load);
 			this.tabControlEditor.ResumeLayout(false);
 			this.tabPageOverview.ResumeLayout(false);
 			this.tabPageHeader.ResumeLayout(false);
-			this.tabPageActions.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevisionNumericUpDown)).EndInit();
+			this.tabPageActions.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -563,19 +667,93 @@ namespace ModStudio
 
 		private void pictureBox1_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
 		{
-			e.Graphics.FillRectangle(new SolidBrush(Color.Orange),0,0,64,16);
+			//e.Graphics.FillRectangle(new SolidBrush(Color.Orange),0,0,64,16);
 		}
 
 		private void tabControlEditor_TabIndexChanged(object sender, System.EventArgs e)
 		{
-			switch (tabControlEditor.TabIndex)
+		}
+
+		private int LastSelectedIndex = 0;
+		private void tabControlEditor_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			switch (LastSelectedIndex)
 			{
 				case 0: // Overview
 					break;
 				case 1: // Header
+					ThisMod.Header.ModTitle.SetValue(MODTitleTextBox.Text);
+					if (MODVersionReleaseDomainUpDown.Text.ToCharArray().Length > 0)
+					{
+						ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value, MODVersionReleaseDomainUpDown.Text.ToCharArray()[0]);
+					}
+					else
+					{
+						ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value);
+					}
+					ThisMod.Header.ModInstallationLevel = PhpbbMod.ModInstallationLevelParse(MODInstallationLevelComboBox.Text);
 					break;
 				case 2: // Actions
+					modDisplayBox2.ModActions = ThisMod.Actions;
 					break;
+			}
+
+			switch (tabControlEditor.SelectedIndex)
+			{
+				case 0: // Overview
+					labelOverviewTitle.Text = ThisMod.Header.ModTitle.pValue;
+					labelModInstallationTime.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
+					listBoxFileEdits.Items.Clear();
+					if (ThisMod.Actions.Actions != null)
+					{
+						foreach (PhpbbMod.ModAction a in ThisMod.Actions.Actions)
+						{
+							char[] TrimChars = {' ', '\t', '\n', '\r'};
+							if (a.ActionType == "OPEN")
+							{
+								listBoxFileEdits.Items.Add(a.ActionBody.Trim(TrimChars));
+							}
+						}
+					}
+					break;
+				case 1: // Header
+					MODTitleTextBox.Text = ThisMod.Header.ModTitle.pValue;
+					MODAuthorListBox.Items.Clear();
+					foreach (PhpbbMod.ModAuthorEntry a in ThisMod.Header.ModAuthor.Authors)
+					{
+						MODAuthorListBox.Items.Add(a.UserName);
+					}
+					MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
+					break;
+				case 2: // Actions
+					modDisplayBox2.ModActions = ThisMod.Actions;
+					modDisplayBox2.UpdateLayout();
+					modDisplayBox2.Select();
+					break;
+			}
+
+			LastSelectedIndex = tabControlEditor.SelectedIndex;
+		}
+
+		private void ModEditor_Load(object sender, System.EventArgs e)
+		{
+			tabControlEditor.SelectedIndex = 0;
+			tabControlEditor_SelectedIndexChanged(null,null);
+		}
+
+		private void listBoxFileEdits_DoubleClick(object sender, System.EventArgs e)
+		{
+			tabControlEditor.SelectedIndex = 2;
+			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
+			{
+				char[] TrimChars = {' ', '\t', '\n', '\r'};
+				if (ThisMod.Actions.Actions[i].ActionType == "OPEN")
+				{
+					if (ThisMod.Actions.Actions[i].ActionBody.Trim(TrimChars) == listBoxFileEdits.Items[listBoxFileEdits.SelectedIndex].ToString())
+					{
+						modDisplayBox2.SelectedIndex = i;
+					}
+				}
 			}
 		}
 	}

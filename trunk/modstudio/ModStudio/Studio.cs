@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.1 2005-07-06 05:13:25 smithydll Exp $
+ *   $Id: Studio.cs,v 1.2 2005-07-09 13:17:02 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -56,11 +56,16 @@ namespace ModStudio
 		private System.Windows.Forms.MenuItem menuItemSep4;
 		private System.Windows.Forms.MenuItem menuItemHelpAbout;
 		private System.Windows.Forms.MenuItem menuItemToolsOptions;
+		private ModStudio.ModEditor[] ModEditors;
+		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public Studio()
 		{
 			//
@@ -71,6 +76,13 @@ namespace ModStudio
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
+
+			ModEditors = new ModEditor[1];
+			ModEditors[0] = new ModEditor();
+			ModEditors[0].ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+			ModEditors[0].MdiParent = this;
+			ModEditors[0].Show();
+
 		}
 
 		/// <summary>
@@ -98,7 +110,6 @@ namespace ModStudio
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Studio));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItemFile = new System.Windows.Forms.MenuItem();
-			this.menuItemEdit = new System.Windows.Forms.MenuItem();
 			this.menuItemFileNew = new System.Windows.Forms.MenuItem();
 			this.menuItemFileOpen = new System.Windows.Forms.MenuItem();
 			this.menuItemFileClose = new System.Windows.Forms.MenuItem();
@@ -106,19 +117,21 @@ namespace ModStudio
 			this.menuItemFileSave = new System.Windows.Forms.MenuItem();
 			this.menuItemFileSaveAs = new System.Windows.Forms.MenuItem();
 			this.menuItemFileSaveAll = new System.Windows.Forms.MenuItem();
+			this.menuItemSep3 = new System.Windows.Forms.MenuItem();
+			this.menuItemFileExport = new System.Windows.Forms.MenuItem();
+			this.menuItemFileValidate = new System.Windows.Forms.MenuItem();
 			this.menuItemSep2 = new System.Windows.Forms.MenuItem();
 			this.menuItemFileExit = new System.Windows.Forms.MenuItem();
-			this.menuItemSep3 = new System.Windows.Forms.MenuItem();
-			this.menuItemFileValidate = new System.Windows.Forms.MenuItem();
-			this.menuItemFileExport = new System.Windows.Forms.MenuItem();
+			this.menuItemEdit = new System.Windows.Forms.MenuItem();
 			this.menuItemView = new System.Windows.Forms.MenuItem();
 			this.menuItemTools = new System.Windows.Forms.MenuItem();
+			this.menuItemToolsOptions = new System.Windows.Forms.MenuItem();
 			this.menuItemWindow = new System.Windows.Forms.MenuItem();
 			this.menuItemHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpHelp = new System.Windows.Forms.MenuItem();
 			this.menuItemSep4 = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpAbout = new System.Windows.Forms.MenuItem();
-			this.menuItemToolsOptions = new System.Windows.Forms.MenuItem();
+			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			// 
 			// mainMenu
 			// 
@@ -153,15 +166,6 @@ namespace ModStudio
 			this.menuItemFile.Text = resources.GetString("menuItemFile.Text");
 			this.menuItemFile.Visible = ((bool)(resources.GetObject("menuItemFile.Visible")));
 			// 
-			// menuItemEdit
-			// 
-			this.menuItemEdit.Enabled = ((bool)(resources.GetObject("menuItemEdit.Enabled")));
-			this.menuItemEdit.Index = 1;
-			this.menuItemEdit.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemEdit.Shortcut")));
-			this.menuItemEdit.ShowShortcut = ((bool)(resources.GetObject("menuItemEdit.ShowShortcut")));
-			this.menuItemEdit.Text = resources.GetString("menuItemEdit.Text");
-			this.menuItemEdit.Visible = ((bool)(resources.GetObject("menuItemEdit.Visible")));
-			// 
 			// menuItemFileNew
 			// 
 			this.menuItemFileNew.Enabled = ((bool)(resources.GetObject("menuItemFileNew.Enabled")));
@@ -179,6 +183,7 @@ namespace ModStudio
 			this.menuItemFileOpen.ShowShortcut = ((bool)(resources.GetObject("menuItemFileOpen.ShowShortcut")));
 			this.menuItemFileOpen.Text = resources.GetString("menuItemFileOpen.Text");
 			this.menuItemFileOpen.Visible = ((bool)(resources.GetObject("menuItemFileOpen.Visible")));
+			this.menuItemFileOpen.Click += new System.EventHandler(this.menuItemFileOpen_Click);
 			// 
 			// menuItemFileClose
 			// 
@@ -225,6 +230,33 @@ namespace ModStudio
 			this.menuItemFileSaveAll.Text = resources.GetString("menuItemFileSaveAll.Text");
 			this.menuItemFileSaveAll.Visible = ((bool)(resources.GetObject("menuItemFileSaveAll.Visible")));
 			// 
+			// menuItemSep3
+			// 
+			this.menuItemSep3.Enabled = ((bool)(resources.GetObject("menuItemSep3.Enabled")));
+			this.menuItemSep3.Index = 7;
+			this.menuItemSep3.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep3.Shortcut")));
+			this.menuItemSep3.ShowShortcut = ((bool)(resources.GetObject("menuItemSep3.ShowShortcut")));
+			this.menuItemSep3.Text = resources.GetString("menuItemSep3.Text");
+			this.menuItemSep3.Visible = ((bool)(resources.GetObject("menuItemSep3.Visible")));
+			// 
+			// menuItemFileExport
+			// 
+			this.menuItemFileExport.Enabled = ((bool)(resources.GetObject("menuItemFileExport.Enabled")));
+			this.menuItemFileExport.Index = 8;
+			this.menuItemFileExport.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileExport.Shortcut")));
+			this.menuItemFileExport.ShowShortcut = ((bool)(resources.GetObject("menuItemFileExport.ShowShortcut")));
+			this.menuItemFileExport.Text = resources.GetString("menuItemFileExport.Text");
+			this.menuItemFileExport.Visible = ((bool)(resources.GetObject("menuItemFileExport.Visible")));
+			// 
+			// menuItemFileValidate
+			// 
+			this.menuItemFileValidate.Enabled = ((bool)(resources.GetObject("menuItemFileValidate.Enabled")));
+			this.menuItemFileValidate.Index = 9;
+			this.menuItemFileValidate.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileValidate.Shortcut")));
+			this.menuItemFileValidate.ShowShortcut = ((bool)(resources.GetObject("menuItemFileValidate.ShowShortcut")));
+			this.menuItemFileValidate.Text = resources.GetString("menuItemFileValidate.Text");
+			this.menuItemFileValidate.Visible = ((bool)(resources.GetObject("menuItemFileValidate.Visible")));
+			// 
 			// menuItemSep2
 			// 
 			this.menuItemSep2.Enabled = ((bool)(resources.GetObject("menuItemSep2.Enabled")));
@@ -244,32 +276,14 @@ namespace ModStudio
 			this.menuItemFileExit.Visible = ((bool)(resources.GetObject("menuItemFileExit.Visible")));
 			this.menuItemFileExit.Click += new System.EventHandler(this.menuItemFileExit_Click);
 			// 
-			// menuItemSep3
+			// menuItemEdit
 			// 
-			this.menuItemSep3.Enabled = ((bool)(resources.GetObject("menuItemSep3.Enabled")));
-			this.menuItemSep3.Index = 7;
-			this.menuItemSep3.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep3.Shortcut")));
-			this.menuItemSep3.ShowShortcut = ((bool)(resources.GetObject("menuItemSep3.ShowShortcut")));
-			this.menuItemSep3.Text = resources.GetString("menuItemSep3.Text");
-			this.menuItemSep3.Visible = ((bool)(resources.GetObject("menuItemSep3.Visible")));
-			// 
-			// menuItemFileValidate
-			// 
-			this.menuItemFileValidate.Enabled = ((bool)(resources.GetObject("menuItemFileValidate.Enabled")));
-			this.menuItemFileValidate.Index = 9;
-			this.menuItemFileValidate.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileValidate.Shortcut")));
-			this.menuItemFileValidate.ShowShortcut = ((bool)(resources.GetObject("menuItemFileValidate.ShowShortcut")));
-			this.menuItemFileValidate.Text = resources.GetString("menuItemFileValidate.Text");
-			this.menuItemFileValidate.Visible = ((bool)(resources.GetObject("menuItemFileValidate.Visible")));
-			// 
-			// menuItemFileExport
-			// 
-			this.menuItemFileExport.Enabled = ((bool)(resources.GetObject("menuItemFileExport.Enabled")));
-			this.menuItemFileExport.Index = 8;
-			this.menuItemFileExport.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileExport.Shortcut")));
-			this.menuItemFileExport.ShowShortcut = ((bool)(resources.GetObject("menuItemFileExport.ShowShortcut")));
-			this.menuItemFileExport.Text = resources.GetString("menuItemFileExport.Text");
-			this.menuItemFileExport.Visible = ((bool)(resources.GetObject("menuItemFileExport.Visible")));
+			this.menuItemEdit.Enabled = ((bool)(resources.GetObject("menuItemEdit.Enabled")));
+			this.menuItemEdit.Index = 1;
+			this.menuItemEdit.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemEdit.Shortcut")));
+			this.menuItemEdit.ShowShortcut = ((bool)(resources.GetObject("menuItemEdit.ShowShortcut")));
+			this.menuItemEdit.Text = resources.GetString("menuItemEdit.Text");
+			this.menuItemEdit.Visible = ((bool)(resources.GetObject("menuItemEdit.Visible")));
 			// 
 			// menuItemView
 			// 
@@ -290,6 +304,15 @@ namespace ModStudio
 			this.menuItemTools.ShowShortcut = ((bool)(resources.GetObject("menuItemTools.ShowShortcut")));
 			this.menuItemTools.Text = resources.GetString("menuItemTools.Text");
 			this.menuItemTools.Visible = ((bool)(resources.GetObject("menuItemTools.Visible")));
+			// 
+			// menuItemToolsOptions
+			// 
+			this.menuItemToolsOptions.Enabled = ((bool)(resources.GetObject("menuItemToolsOptions.Enabled")));
+			this.menuItemToolsOptions.Index = 0;
+			this.menuItemToolsOptions.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemToolsOptions.Shortcut")));
+			this.menuItemToolsOptions.ShowShortcut = ((bool)(resources.GetObject("menuItemToolsOptions.ShowShortcut")));
+			this.menuItemToolsOptions.Text = resources.GetString("menuItemToolsOptions.Text");
+			this.menuItemToolsOptions.Visible = ((bool)(resources.GetObject("menuItemToolsOptions.Visible")));
 			// 
 			// menuItemWindow
 			// 
@@ -341,14 +364,11 @@ namespace ModStudio
 			this.menuItemHelpAbout.Text = resources.GetString("menuItemHelpAbout.Text");
 			this.menuItemHelpAbout.Visible = ((bool)(resources.GetObject("menuItemHelpAbout.Visible")));
 			// 
-			// menuItemToolsOptions
+			// openFileDialog1
 			// 
-			this.menuItemToolsOptions.Enabled = ((bool)(resources.GetObject("menuItemToolsOptions.Enabled")));
-			this.menuItemToolsOptions.Index = 0;
-			this.menuItemToolsOptions.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemToolsOptions.Shortcut")));
-			this.menuItemToolsOptions.ShowShortcut = ((bool)(resources.GetObject("menuItemToolsOptions.ShowShortcut")));
-			this.menuItemToolsOptions.Text = resources.GetString("menuItemToolsOptions.Text");
-			this.menuItemToolsOptions.Visible = ((bool)(resources.GetObject("menuItemToolsOptions.Visible")));
+			this.openFileDialog1.Filter = resources.GetString("openFileDialog1.Filter");
+			this.openFileDialog1.Title = resources.GetString("openFileDialog1.Title");
+			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
 			// 
 			// Studio
 			// 
@@ -373,7 +393,6 @@ namespace ModStudio
 			this.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("$this.RightToLeft")));
 			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
 			this.Text = resources.GetString("$this.Text");
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Closed += new System.EventHandler(this.Studio_Closed);
 
 		}
@@ -403,6 +422,37 @@ namespace ModStudio
 			// some reason closed and the application is still running.
 			//
 			Application.Exit();
+		}
+
+		private void OpenFile(string filename)
+		{
+			if (ModEditors != null)
+			{
+				ModEditor[] temp = ModEditors;
+
+				ModEditors = new ModEditor[temp.Length + 1];
+				temp.CopyTo(ModEditors,0);
+				ModEditors[ModEditors.GetUpperBound(0)] = new ModEditor(filename);
+				ModEditors[ModEditors.GetUpperBound(0)].MdiParent = this;
+				ModEditors[ModEditors.GetUpperBound(0)].Show();
+			}
+			else
+			{
+				ModEditors = new ModEditor[1];
+				ModEditors[0] = new ModEditor(filename);
+				ModEditors[0].MdiParent = this;
+				ModEditors[0].Show();
+			}
+		}
+
+		private void menuItemFileOpen_Click(object sender, System.EventArgs e)
+		{
+			openFileDialog1.ShowDialog(this);
+		}
+
+		private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			OpenFile(openFileDialog1.FileName);
 		}
 	}
 }
