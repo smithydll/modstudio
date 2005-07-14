@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.2 2005-07-09 13:17:02 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -76,9 +76,13 @@ namespace ModStudio
 		private System.Windows.Forms.Label labelModInstallationTime;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button button8;
-		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.ListBox listBoxFileEdits;
+		private System.Windows.Forms.Button button9;
+		private System.Windows.Forms.Label labelIncludedFiles;
+		private System.Windows.Forms.ToolBar toolBar1;
+		private System.Windows.Forms.ToolBarButton toolBarButtonEditAction;
+		private System.Windows.Forms.ToolBarButton toolBarButtonAddAction;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -98,6 +102,7 @@ namespace ModStudio
 
 			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "Email", "Homepage"));
 			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
+			ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("SAVE/CLOSE ALL FILES", "", "# EoM", ""));
 		}
 
 		/// <summary>
@@ -135,8 +140,16 @@ namespace ModStudio
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ModEditor));
 			this.tabControlEditor = new System.Windows.Forms.TabControl();
 			this.tabPageOverview = new System.Windows.Forms.TabPage();
+			this.button9 = new System.Windows.Forms.Button();
+			this.listBoxFileEdits = new System.Windows.Forms.ListBox();
+			this.button8 = new System.Windows.Forms.Button();
+			this.labelModInstallationTime = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.labelOverviewTitle = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.labelIncludedFiles = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
 			this.tabPageHeader = new System.Windows.Forms.TabPage();
 			this.MODHistoryListView = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -170,13 +183,9 @@ namespace ModStudio
 			this.button7 = new System.Windows.Forms.Button();
 			this.tabPageActions = new System.Windows.Forms.TabPage();
 			this.modDisplayBox2 = new ModFormControls.ModDisplayBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.labelModInstallationTime = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.button8 = new System.Windows.Forms.Button();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.listBoxFileEdits = new System.Windows.Forms.ListBox();
+			this.toolBar1 = new System.Windows.Forms.ToolBar();
+			this.toolBarButtonEditAction = new System.Windows.Forms.ToolBarButton();
+			this.toolBarButtonAddAction = new System.Windows.Forms.ToolBarButton();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -204,6 +213,7 @@ namespace ModStudio
 			// tabPageOverview
 			// 
 			this.tabPageOverview.BackColor = System.Drawing.Color.White;
+			this.tabPageOverview.Controls.Add(this.button9);
 			this.tabPageOverview.Controls.Add(this.listBoxFileEdits);
 			this.tabPageOverview.Controls.Add(this.button8);
 			this.tabPageOverview.Controls.Add(this.labelModInstallationTime);
@@ -211,13 +221,56 @@ namespace ModStudio
 			this.tabPageOverview.Controls.Add(this.pictureBox1);
 			this.tabPageOverview.Controls.Add(this.labelOverviewTitle);
 			this.tabPageOverview.Controls.Add(this.label4);
-			this.tabPageOverview.Controls.Add(this.label8);
+			this.tabPageOverview.Controls.Add(this.labelIncludedFiles);
 			this.tabPageOverview.Controls.Add(this.label10);
 			this.tabPageOverview.Location = new System.Drawing.Point(4, 25);
 			this.tabPageOverview.Name = "tabPageOverview";
 			this.tabPageOverview.Size = new System.Drawing.Size(784, 537);
 			this.tabPageOverview.TabIndex = 0;
 			this.tabPageOverview.Text = "Overview";
+			// 
+			// button9
+			// 
+			this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button9.Location = new System.Drawing.Point(56, 176);
+			this.button9.Name = "button9";
+			this.button9.TabIndex = 6;
+			this.button9.Text = "Add File";
+			// 
+			// listBoxFileEdits
+			// 
+			this.listBoxFileEdits.Location = new System.Drawing.Point(136, 144);
+			this.listBoxFileEdits.Name = "listBoxFileEdits";
+			this.listBoxFileEdits.Size = new System.Drawing.Size(456, 147);
+			this.listBoxFileEdits.TabIndex = 5;
+			this.listBoxFileEdits.DoubleClick += new System.EventHandler(this.listBoxFileEdits_DoubleClick);
+			// 
+			// button8
+			// 
+			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button8.Location = new System.Drawing.Point(216, 108);
+			this.button8.Name = "button8";
+			this.button8.Size = new System.Drawing.Size(75, 20);
+			this.button8.TabIndex = 4;
+			this.button8.Text = "Edit";
+			// 
+			// labelModInstallationTime
+			// 
+			this.labelModInstallationTime.Location = new System.Drawing.Point(136, 80);
+			this.labelModInstallationTime.Name = "labelModInstallationTime";
+			this.labelModInstallationTime.Size = new System.Drawing.Size(184, 23);
+			this.labelModInstallationTime.TabIndex = 3;
+			this.labelModInstallationTime.Text = "0 minutes";
+			// 
+			// label1
+			// 
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Location = new System.Drawing.Point(8, 80);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(120, 23);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "Installation Time";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// pictureBox1
 			// 
@@ -238,6 +291,34 @@ namespace ModStudio
 			this.labelOverviewTitle.Size = new System.Drawing.Size(219, 36);
 			this.labelOverviewTitle.TabIndex = 0;
 			this.labelOverviewTitle.Text = "{MOD TITLE}";
+			// 
+			// label4
+			// 
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label4.Location = new System.Drawing.Point(8, 112);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(120, 23);
+			this.label4.TabIndex = 2;
+			this.label4.Text = "Included Files";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelIncludedFiles
+			// 
+			this.labelIncludedFiles.Location = new System.Drawing.Point(136, 112);
+			this.labelIncludedFiles.Name = "labelIncludedFiles";
+			this.labelIncludedFiles.Size = new System.Drawing.Size(72, 23);
+			this.labelIncludedFiles.TabIndex = 3;
+			this.labelIncludedFiles.Text = "0 files";
+			// 
+			// label10
+			// 
+			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label10.Location = new System.Drawing.Point(8, 144);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(120, 23);
+			this.label10.TabIndex = 2;
+			this.label10.Text = "File Edits";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// tabPageHeader
 			// 
@@ -565,8 +646,9 @@ namespace ModStudio
 			// 
 			// tabPageActions
 			// 
-			this.tabPageActions.BackColor = System.Drawing.Color.AliceBlue;
+			this.tabPageActions.BackColor = System.Drawing.SystemColors.Control;
 			this.tabPageActions.Controls.Add(this.modDisplayBox2);
+			this.tabPageActions.Controls.Add(this.toolBar1);
 			this.tabPageActions.Location = new System.Drawing.Point(4, 25);
 			this.tabPageActions.Name = "tabPageActions";
 			this.tabPageActions.Size = new System.Drawing.Size(784, 537);
@@ -576,73 +658,35 @@ namespace ModStudio
 			// modDisplayBox2
 			// 
 			this.modDisplayBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.modDisplayBox2.Location = new System.Drawing.Point(0, 0);
+			this.modDisplayBox2.Location = new System.Drawing.Point(0, 28);
 			this.modDisplayBox2.Name = "modDisplayBox2";
-			this.modDisplayBox2.Size = new System.Drawing.Size(784, 537);
+			this.modDisplayBox2.SelectedIndex = 0;
+			this.modDisplayBox2.Size = new System.Drawing.Size(784, 509);
 			this.modDisplayBox2.TabIndex = 0;
+			this.modDisplayBox2.Click += new System.EventHandler(this.modDisplayBox2_Click);
+			this.modDisplayBox2.ItemDoubleClick += new ModFormControls.ModActionItem.ActionItemClickHandler(this.modDisplayBox2_ItemDoubleClick);
 			// 
-			// label1
+			// toolBar1
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label1.Location = new System.Drawing.Point(8, 80);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(120, 23);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Installation Time";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.toolBar1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
+			this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+																						this.toolBarButtonEditAction,
+																						this.toolBarButtonAddAction});
+			this.toolBar1.DropDownArrows = true;
+			this.toolBar1.Location = new System.Drawing.Point(0, 0);
+			this.toolBar1.Name = "toolBar1";
+			this.toolBar1.ShowToolTips = true;
+			this.toolBar1.Size = new System.Drawing.Size(784, 28);
+			this.toolBar1.TabIndex = 1;
+			this.toolBar1.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			// 
-			// labelModInstallationTime
+			// toolBarButtonEditAction
 			// 
-			this.labelModInstallationTime.Location = new System.Drawing.Point(136, 80);
-			this.labelModInstallationTime.Name = "labelModInstallationTime";
-			this.labelModInstallationTime.Size = new System.Drawing.Size(184, 23);
-			this.labelModInstallationTime.TabIndex = 3;
-			this.labelModInstallationTime.Text = "0 minutes";
+			this.toolBarButtonEditAction.Text = "Edit";
 			// 
-			// label4
+			// toolBarButtonAddAction
 			// 
-			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label4.Location = new System.Drawing.Point(8, 112);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(120, 23);
-			this.label4.TabIndex = 2;
-			this.label4.Text = "Included Files";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// button8
-			// 
-			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button8.Location = new System.Drawing.Point(216, 108);
-			this.button8.Name = "button8";
-			this.button8.Size = new System.Drawing.Size(75, 20);
-			this.button8.TabIndex = 4;
-			this.button8.Text = "Edit";
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(136, 112);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(72, 23);
-			this.label8.TabIndex = 3;
-			this.label8.Text = "0 files";
-			// 
-			// label10
-			// 
-			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label10.Location = new System.Drawing.Point(8, 144);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(120, 23);
-			this.label10.TabIndex = 2;
-			this.label10.Text = "File Edits";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// listBoxFileEdits
-			// 
-			this.listBoxFileEdits.Location = new System.Drawing.Point(136, 144);
-			this.listBoxFileEdits.Name = "listBoxFileEdits";
-			this.listBoxFileEdits.Size = new System.Drawing.Size(456, 147);
-			this.listBoxFileEdits.TabIndex = 5;
-			this.listBoxFileEdits.DoubleClick += new System.EventHandler(this.listBoxFileEdits_DoubleClick);
+			this.toolBarButtonAddAction.Text = "Add Action";
 			// 
 			// ModEditor
 			// 
@@ -652,6 +696,7 @@ namespace ModStudio
 			this.Name = "ModEditor";
 			this.Text = "ModEditor";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Resize += new System.EventHandler(this.ModEditor_Resize);
 			this.Load += new System.EventHandler(this.ModEditor_Load);
 			this.tabControlEditor.ResumeLayout(false);
 			this.tabPageOverview.ResumeLayout(false);
@@ -715,6 +760,14 @@ namespace ModStudio
 							}
 						}
 					}
+					if (ThisMod.Header.ModIncludedFiles != null)
+					{
+						labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Length));
+					}
+					else
+					{
+						labelIncludedFiles.Text = "0 files";
+					}
 					break;
 				case 1: // Header
 					MODTitleTextBox.Text = ThisMod.Header.ModTitle.pValue;
@@ -724,6 +777,7 @@ namespace ModStudio
 						MODAuthorListBox.Items.Add(a.UserName);
 					}
 					MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
+					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.ToString();
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -755,6 +809,33 @@ namespace ModStudio
 					}
 				}
 			}
+			modDisplayBox2.UpdateColours();
+		}
+
+		private void ModEditor_Resize(object sender, System.EventArgs e)
+		{
+			if (tabControlEditor.SelectedIndex == 2)
+			{
+				modDisplayBox2.UpdateSize();
+			}
+		}
+
+		private void modDisplayBox2_ItemDoubleClick(object sender, ModFormControls.ActionItemClickEventArgs e)
+		{
+			ModFormControls.ModActionEditor abc = new ModFormControls.ModActionEditor();
+			abc.Location = new Point(10,10);
+			abc.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20);
+			abc.Visible = true;
+
+			this.tabPageActions.Controls.Add(abc);
+
+			abc.Visible = true;
+			abc.BringToFront();
+		}
+
+		private void modDisplayBox2_Click(object sender, System.EventArgs e)
+		{
+			modDisplayBox2.Select();
 		}
 	}
 }
