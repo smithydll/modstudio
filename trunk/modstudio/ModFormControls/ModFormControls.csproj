@@ -86,13 +86,18 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "ModTemplateTools"
                     AssemblyName = "ModTemplateTools"
                     HintPath = "..\..\phpBBMOD\bin\Debug\ModTemplateTools.dll"
+                />
+                <Reference
+                    Name = "icsharpcode.texteditor"
+                    AssemblyName = "icsharpcode.texteditor"
+                    HintPath = "bin\debug\icsharpcode.texteditor.dll"
                 />
             </References>
         </Build>
@@ -101,6 +106,16 @@
                 <File
                     RelPath = "AssemblyInfo.cs"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ModActionEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ModActionEditor.resx"
+                    DependentUpon = "ModActionEditor.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ModActionItem.cs"

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.2 2005-07-09 13:17:02 smithydll Exp $
+ *   $Id: Studio.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -58,10 +58,13 @@ namespace ModStudio
 		private System.Windows.Forms.MenuItem menuItemToolsOptions;
 		private ModStudio.ModEditor[] ModEditors;
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.ToolBar toolBar1;
+		private System.Windows.Forms.ToolBarButton toolBarButtonNew;
+		private System.Windows.Forms.ToolBarButton toolBarButtonOpen;
+		private System.Windows.Forms.ToolBarButton toolBarButtonSave;
+		private System.Windows.Forms.ToolBarButton toolBarButtonSaveAll;
+		private System.Windows.Forms.ImageList imageList1;
+		private System.ComponentModel.IContainer components;
 
 		/// <summary>
 		/// 
@@ -107,6 +110,7 @@ namespace ModStudio
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Studio));
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuItemFile = new System.Windows.Forms.MenuItem();
@@ -132,6 +136,13 @@ namespace ModStudio
 			this.menuItemSep4 = new System.Windows.Forms.MenuItem();
 			this.menuItemHelpAbout = new System.Windows.Forms.MenuItem();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.toolBar1 = new System.Windows.Forms.ToolBar();
+			this.toolBarButtonNew = new System.Windows.Forms.ToolBarButton();
+			this.toolBarButtonOpen = new System.Windows.Forms.ToolBarButton();
+			this.toolBarButtonSave = new System.Windows.Forms.ToolBarButton();
+			this.toolBarButtonSaveAll = new System.Windows.Forms.ToolBarButton();
+			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.SuspendLayout();
 			// 
 			// mainMenu
 			// 
@@ -370,6 +381,74 @@ namespace ModStudio
 			this.openFileDialog1.Title = resources.GetString("openFileDialog1.Title");
 			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
 			// 
+			// toolBar1
+			// 
+			this.toolBar1.AccessibleDescription = resources.GetString("toolBar1.AccessibleDescription");
+			this.toolBar1.AccessibleName = resources.GetString("toolBar1.AccessibleName");
+			this.toolBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("toolBar1.Anchor")));
+			this.toolBar1.Appearance = ((System.Windows.Forms.ToolBarAppearance)(resources.GetObject("toolBar1.Appearance")));
+			this.toolBar1.AutoSize = ((bool)(resources.GetObject("toolBar1.AutoSize")));
+			this.toolBar1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("toolBar1.BackgroundImage")));
+			this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+																						this.toolBarButtonNew,
+																						this.toolBarButtonOpen,
+																						this.toolBarButtonSave,
+																						this.toolBarButtonSaveAll});
+			this.toolBar1.ButtonSize = ((System.Drawing.Size)(resources.GetObject("toolBar1.ButtonSize")));
+			this.toolBar1.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("toolBar1.Dock")));
+			this.toolBar1.DropDownArrows = ((bool)(resources.GetObject("toolBar1.DropDownArrows")));
+			this.toolBar1.Enabled = ((bool)(resources.GetObject("toolBar1.Enabled")));
+			this.toolBar1.Font = ((System.Drawing.Font)(resources.GetObject("toolBar1.Font")));
+			this.toolBar1.ImageList = this.imageList1;
+			this.toolBar1.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("toolBar1.ImeMode")));
+			this.toolBar1.Location = ((System.Drawing.Point)(resources.GetObject("toolBar1.Location")));
+			this.toolBar1.Name = "toolBar1";
+			this.toolBar1.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("toolBar1.RightToLeft")));
+			this.toolBar1.ShowToolTips = ((bool)(resources.GetObject("toolBar1.ShowToolTips")));
+			this.toolBar1.Size = ((System.Drawing.Size)(resources.GetObject("toolBar1.Size")));
+			this.toolBar1.TabIndex = ((int)(resources.GetObject("toolBar1.TabIndex")));
+			this.toolBar1.TextAlign = ((System.Windows.Forms.ToolBarTextAlign)(resources.GetObject("toolBar1.TextAlign")));
+			this.toolBar1.Visible = ((bool)(resources.GetObject("toolBar1.Visible")));
+			this.toolBar1.Wrappable = ((bool)(resources.GetObject("toolBar1.Wrappable")));
+			// 
+			// toolBarButtonNew
+			// 
+			this.toolBarButtonNew.Enabled = ((bool)(resources.GetObject("toolBarButtonNew.Enabled")));
+			this.toolBarButtonNew.ImageIndex = ((int)(resources.GetObject("toolBarButtonNew.ImageIndex")));
+			this.toolBarButtonNew.Text = resources.GetString("toolBarButtonNew.Text");
+			this.toolBarButtonNew.ToolTipText = resources.GetString("toolBarButtonNew.ToolTipText");
+			this.toolBarButtonNew.Visible = ((bool)(resources.GetObject("toolBarButtonNew.Visible")));
+			// 
+			// toolBarButtonOpen
+			// 
+			this.toolBarButtonOpen.Enabled = ((bool)(resources.GetObject("toolBarButtonOpen.Enabled")));
+			this.toolBarButtonOpen.ImageIndex = ((int)(resources.GetObject("toolBarButtonOpen.ImageIndex")));
+			this.toolBarButtonOpen.Text = resources.GetString("toolBarButtonOpen.Text");
+			this.toolBarButtonOpen.ToolTipText = resources.GetString("toolBarButtonOpen.ToolTipText");
+			this.toolBarButtonOpen.Visible = ((bool)(resources.GetObject("toolBarButtonOpen.Visible")));
+			// 
+			// toolBarButtonSave
+			// 
+			this.toolBarButtonSave.Enabled = ((bool)(resources.GetObject("toolBarButtonSave.Enabled")));
+			this.toolBarButtonSave.ImageIndex = ((int)(resources.GetObject("toolBarButtonSave.ImageIndex")));
+			this.toolBarButtonSave.Text = resources.GetString("toolBarButtonSave.Text");
+			this.toolBarButtonSave.ToolTipText = resources.GetString("toolBarButtonSave.ToolTipText");
+			this.toolBarButtonSave.Visible = ((bool)(resources.GetObject("toolBarButtonSave.Visible")));
+			// 
+			// toolBarButtonSaveAll
+			// 
+			this.toolBarButtonSaveAll.Enabled = ((bool)(resources.GetObject("toolBarButtonSaveAll.Enabled")));
+			this.toolBarButtonSaveAll.ImageIndex = ((int)(resources.GetObject("toolBarButtonSaveAll.ImageIndex")));
+			this.toolBarButtonSaveAll.Text = resources.GetString("toolBarButtonSaveAll.Text");
+			this.toolBarButtonSaveAll.ToolTipText = resources.GetString("toolBarButtonSaveAll.ToolTipText");
+			this.toolBarButtonSaveAll.Visible = ((bool)(resources.GetObject("toolBarButtonSaveAll.Visible")));
+			// 
+			// imageList1
+			// 
+			this.imageList1.ImageSize = ((System.Drawing.Size)(resources.GetObject("imageList1.ImageSize")));
+			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			// 
 			// Studio
 			// 
 			this.AccessibleDescription = resources.GetString("$this.AccessibleDescription");
@@ -380,6 +459,7 @@ namespace ModStudio
 			this.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScrollMinSize")));
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.ClientSize = ((System.Drawing.Size)(resources.GetObject("$this.ClientSize")));
+			this.Controls.Add(this.toolBar1);
 			this.Enabled = ((bool)(resources.GetObject("$this.Enabled")));
 			this.Font = ((System.Drawing.Font)(resources.GetObject("$this.Font")));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -394,6 +474,7 @@ namespace ModStudio
 			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
 			this.Text = resources.GetString("$this.Text");
 			this.Closed += new System.EventHandler(this.Studio_Closed);
+			this.ResumeLayout(false);
 
 		}
 		#endregion

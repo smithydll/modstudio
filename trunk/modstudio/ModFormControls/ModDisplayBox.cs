@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.2 2005-07-09 13:17:02 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -142,12 +142,14 @@ namespace ModFormControls
 					{
 					
 						ActionItems[i] = new ModActionItem();
-						ActionItems[i].Location = new Point(0,0);
-						ActionItems[i].Size = new Size(0,0);
+						ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
+						ActionItems[i].Visible = true;
+						ActionItems[i].Size = new Size(this.Width - 20 - ModBoxScrollBar.Width, 90);
 						ActionItems[i].Visible = false;
 						ActionItems[i].TabIndex = i + 2;
 						ActionItems[i].Index = i;
 						ActionItems[i].ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
+						ActionItems[i].ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
 
 						this.ModDisplayPanel.Controls.Add(this.ActionItems[i]);
 					}
@@ -157,10 +159,17 @@ namespace ModFormControls
 			}
 		}
 
+		public event ModActionItem.ActionItemClickHandler ItemDoubleClick;
+
 		private void ActionItems_SelectedIndexChanged(object sender, ActionItemClickEventArgs e)
 		{
 			selectedIndex = e.Index;
 			UpdateColours();
+		}
+
+		public void ActionItmes_ItemDoubleClick(object sender, ActionItemClickEventArgs e)
+		{
+			this.ItemDoubleClick(this, e);
 		}
 
 		public void UpdateColours()
@@ -217,6 +226,50 @@ namespace ModFormControls
 					if (selectedIndex == i)
 					{
 						ActionItems[i].BackColor = Color.GhostWhite;
+					}
+					ActionItems[i].Refresh();
+				}
+			}
+			this.ModDisplayPanel.ResumeLayout();
+			this.ResumeLayout();
+		}
+
+		public void UpdateSize()
+		{
+			this.ModDisplayPanel.SuspendLayout();
+			this.SuspendLayout();
+			if (Actions.Actions != null)
+			{
+				for (int i = 0; i < ActionItems.Length; i++)
+				{
+					ActionItems[i].SuspendLayout();
+					ActionItems[i].Height = 90;
+					ActionItems[i].Visible = true;
+					//ActionItems[i].Location = new Point(0,0);
+
+					switch (Actions.Actions[i].ActionType)
+					{
+						case "SQL":
+						case "COPY":
+						case "SAVE/CLOSE ALL FILES":
+						case "OPEN":
+							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
+							break;
+						case "FIND":
+							ActionItems[i].Width = this.Width - 40 - ModBoxScrollBar.Width;
+							break;
+						case "IN-LINE FIND":
+						case "REPLACE WITH":
+						case "AFTER, ADD":
+						case "BEFORE, ADD":
+							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
+							break;
+						case "IN-LINE REPLACE WITH":
+						case "IN-LINE AFTER, ADD":
+						case "IN-LINE BEFORE, ADD":
+							ActionItems[i].Width = this.Width - 80 - ModBoxScrollBar.Width;
+							break;
+
 					}
 					ActionItems[i].Refresh();
 				}
@@ -306,6 +359,7 @@ namespace ModFormControls
 					if (selectedIndex == i)
 					{
 						ActionItems[i].BackColor = Color.GhostWhite;
+						ModDisplayPanel.ScrollControlIntoView(ActionItems[i]);
 					}
 					ActionItems[i].Refresh();
 				}
@@ -323,15 +377,18 @@ namespace ModFormControls
 		{
 			set
 			{
-				if (value < ActionItems.Length)
+				if (ActionItems != null)
 				{
-					UpdateColours();
-					selectedIndex = value;
-					ModDisplayPanel.ScrollControlIntoView(ActionItems[value]);
-				}
-				else
-				{
-					// error
+					if (value < ActionItems.Length)
+					{
+						UpdateColours();
+						selectedIndex = value;
+						ModDisplayPanel.ScrollControlIntoView(ActionItems[value]);
+					}
+					else
+					{
+						// error
+					}
 				}
 			}
 			get
