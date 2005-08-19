@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.4 2005-07-09 13:18:46 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.5 2005-08-19 13:02:04 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -147,31 +147,35 @@ namespace ModTemplateTools
 			public enum ModActionType
 			{
 				/// <summary>
-				/// 
+				/// Structured Query Language actions (SQL)
 				/// </summary>
 				Sql,
 				/// <summary>
-				/// 
+				/// File operation actions (OPEN, COPY, SAVE/CLOSE ALL FILES)
 				/// </summary>
 				File,
 				/// <summary>
-				/// 
+				/// Find operations (FIND)
 				/// </summary>
 				Find,
 				/// <summary>
-				/// 
+				/// Edit operations (AFTER, ADD, BEFORE, ADD, REPLACE WITH, INCREMENT)
 				/// </summary>
 				Edit,
 				/// <summary>
-				/// 
+				/// Inline find operations (IN-LINE FIND)
 				/// </summary>
 				InLineFind,
 				/// <summary>
-				/// 
+				/// Inline edit operations (IN-LINE AFTER, ADD, IN-LINE BEFORE, ADD, IN-LINE REPLACE WITH, IN-LINE INCREMENT)
 				/// </summary>
 				InLineEdit,
 				/// <summary>
-				/// 
+				/// Such as DIY INSTRUCTIONS
+				/// </summary>
+				Instruction,
+				/// <summary>
+				/// Null
 				/// </summary>
 				Null
 			}
@@ -203,7 +207,7 @@ namespace ModTemplateTools
 			/// <returns></returns>
 			public static ModActions Parse(string input)
 			{
-				ModActions[] Actions = new ModActions[12];
+				ModActions[] Actions = new ModActions[15];
 				Actions[0] = new ModActions("COPY", ModActions.ModActionType.File);
 				Actions[1] = new ModActions("OPEN", ModActions.ModActionType.File);
 				Actions[2] = new ModActions("FIND", ModActions.ModActionType.Find);
@@ -216,6 +220,9 @@ namespace ModTemplateTools
 				Actions[9] = new ModActions("IN-LINE BEFORE, ADD", ModActions.ModActionType.InLineEdit);
 				Actions[10] = new ModActions("SAVE/CLOSE ALL FILES", ModActions.ModActionType.File);
 				Actions[11] = new ModActions("SQL", ModActions.ModActionType.Sql);
+				Actions[12] = new ModActions("INCREMENT", ModActions.ModActionType.Edit);
+				Actions[13] = new ModActions("IN-LINE INCREMENT", ModActions.ModActionType.InLineEdit);
+				Actions[14] = new ModActions("DIY INSTRUCTIONS", ModActions.ModActionType.Instruction);
 
 				for (int i = 0; i < Actions.Length; i++)
 				{
@@ -250,7 +257,7 @@ namespace ModTemplateTools
 			string[] TextModLines = TextMod.Split(Newline);
 			int HeaderEndLine = TextModLines.Length - 1;
 
-			ModActions[] Actions = new ModActions[12];
+			ModActions[] Actions = new ModActions[15];
 			Actions[0] = new ModActions("COPY", ModActions.ModActionType.File);
 			Actions[1] = new ModActions("OPEN", ModActions.ModActionType.File);
 			Actions[2] = new ModActions("FIND", ModActions.ModActionType.Find);
@@ -263,6 +270,9 @@ namespace ModTemplateTools
 			Actions[9] = new ModActions("IN-LINE BEFORE, ADD", ModActions.ModActionType.InLineEdit);
 			Actions[10] = new ModActions("SAVE/CLOSE ALL FILES", ModActions.ModActionType.File);
 			Actions[11] = new ModActions("SQL", ModActions.ModActionType.Sql);
+			Actions[12] = new ModActions("INCREMENT", ModActions.ModActionType.Edit);
+			Actions[13] = new ModActions("IN-LINE INCREMENT", ModActions.ModActionType.InLineEdit);
+			Actions[14] = new ModActions("DIY INSTRUCTIONS", ModActions.ModActionType.Instruction);
 
 			int StartOffset = 0;
 
@@ -302,7 +312,7 @@ namespace ModTemplateTools
 			}
 
 			int li;
-			for (int j = 0; j < 13; j++) 
+			for (int j = 0; j < 14; j++) 
 			{
 				for (int i = StartOffset; i < HeaderEndLine; i++) 
 				{
@@ -312,7 +322,7 @@ namespace ModTemplateTools
 					{
 						if (Regex.IsMatch(TextModLines[i], "\\# MOD Author(, Secondary|)")) 
 						{
-							if (!(Regex.IsMatch(TextModLines[i], "\\# MOD Author(, Secondary|): ((?!n\\/a)[\\w\\s\\.\\-\\[\\]]+?) <( |)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+)( |)> (\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)( |)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)( |)$", RegexOptions.IgnoreCase))) 
+							if (!(Regex.IsMatch(TextModLines[i], "\\# MOD Author: ((?!n\\/a)[\\w\\s\\.\\-\\[\\]]+?) <( |)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+)( |)> (\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)( |)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)( |)$", RegexOptions.IgnoreCase))) 
 							{
 								li = i + 1;
 								Report.HeaderReport += string.Format("Incorrect MOD Author Syntax on line: {0}\n[code]{1}[/code]\n", li, TextModLines[i]);
@@ -324,7 +334,9 @@ namespace ModTemplateTools
 					{
 						if (Regex.IsMatch(TextModLines[i], "\\#\\# EasyMod (.+?) Compliant", RegexOptions.IgnoreCase)) 
 						{
-							Report.HeaderReport += "[i]## EasyMod Compliant[/i]";
+							Report.HeaderReport += "[i]## EasyMod Compliant[/i]\n";
+							Report.HeaderReport += "[i]EasyMod Compliant is not a ratified standard. It is not part of the MOD Template.[/i]\n";
+							ValidateFlag = false;
 						}
 						check = 1;
 						StartOffset = i + 1;
@@ -346,7 +358,7 @@ namespace ModTemplateTools
 							ValidateWarnFlag = false;
 							check = 2;
 						}
-						if (HeaderEndLine == row && flag == false & WarnFlag == false) 
+						if (HeaderEndLine == row && flag == false && WarnFlag == false) 
 						{
 							Report.HeaderReport += "Missing or incorrect [i]MOD Title[/i]\n";
 							flag = true;
@@ -544,12 +556,42 @@ namespace ModTemplateTools
 							check = 9;
 						}
 					}
-					if (check == 9) 
+					if (check == 9)
+					{
+						if (Regex.IsMatch(TextModLines[i], "License:"))
+						{
+							if (Regex.IsMatch(TextModLines[i], "http://opensource.org/licenses/gpl-license.php GNU General Public License v2"))
+							{
+								Report.HeaderReport += "[i]You are using the GNU GPL License[/i].\n";
+							}
+							else if (Regex.IsMatch(TextModLines[i], "http://opensource.org/licenses/gpl-license.php GNU Public License v2"))
+							{
+								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]You are using the GPL License, however the license statement in the MOD Template has been updated to include the word 'General', you should update accordingly[/i]. (16/08/2005)\n";
+								ValidateWarnFlag = false; // we will let them off with a warning, this time
+							}
+							else
+							{
+								Report.HeaderReport += "[i]You are not using the GPL License[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n";
+							}
+							flag = true;
+							check = 10;
+							StartOffset = i + 1;
+						}
+						if (HeaderEndLine == row && flag == false)
+						{
+							Report.HeaderReport += "Missing or incorrect [i]License[/i] statement - A license statement is important for phpBB MODs. Please read the MOD docs for more information.\n";
+							flag = true;
+							//$validate_flag = false;  // no longer a fail
+							ValidateFlag = false;
+							check = 10;
+						}
+					}
+					if (check == 10) 
 					{
 						if (Regex.IsMatch(TextModLines[i], "For Security Purposes, Please Check: http://www.phpbb.com/mods/ for the")) 
 						{
 							flag = true;
-							check = 10;
+							check = 11;
 							StartOffset = i + 1;
 						}
 						if (HeaderEndLine == row && flag == false) 
@@ -557,15 +599,15 @@ namespace ModTemplateTools
 							Report.HeaderReport += "Missing or incorrect [i]Security Disclaimer[/i] - The disclaimer was recently updated 3/06/2003.\n";
 							flag = true;
 							ValidateFlag = false;
-							check = 10;
+							check = 11;
 						}
 					}
-					if (check == 10) 
+					if (check == 11) 
 					{
 						if (Regex.IsMatch(TextModLines[i], "Author Notes")) 
 						{
 							flag = true;
-							check = 11;
+							check = 12;
 							StartOffset = i + 1;
 						}
 						if (HeaderEndLine == row && flag == false) 
@@ -573,27 +615,12 @@ namespace ModTemplateTools
 							Report.HeaderReport += "Missing or incorrect [i]Author Notes[/i]\n";
 							flag = true;
 							ValidateFlag = false;
-							check = 11;
-						}
-					}
-					if (check == 11) 
-					{
-						if (Regex.IsMatch(TextModLines[i], "MOD History")) 
-						{
-							flag = true;
-							check = 12;
-							StartOffset = i + 1;
-						}
-						if (HeaderEndLine == row & flag == false) 
-						{
-							Report.HeaderReport += "[color=green]not used [i]MOD History[/i][/color] - [u]This is not an error[/u]\n";
-							flag = true;
 							check = 12;
 						}
 					}
 					if (check == 12) 
 					{
-						if (Regex.IsMatch(TextModLines[i], "Before Adding This MOD To Your Forum, You Should Back Up All Files Related To This MOD")) 
+						if (Regex.IsMatch(TextModLines[i], "MOD History")) 
 						{
 							flag = true;
 							check = 13;
@@ -601,10 +628,25 @@ namespace ModTemplateTools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
+							Report.HeaderReport += "[color=green]not used [i]MOD History[/i][/color] - [u]This is not an error[/u]\n";
+							flag = true;
+							check = 13;
+						}
+					}
+					if (check == 13) 
+					{
+						if (Regex.IsMatch(TextModLines[i], "Before Adding This MOD To Your Forum, You Should Back Up All Files Related To This MOD")) 
+						{
+							flag = true;
+							check = 14;
+							StartOffset = i + 1;
+						}
+						if (HeaderEndLine == row && flag == false) 
+						{
 							Report.HeaderReport += "Missing or incorrect [i]Install disclaimer[/i]\n";
 							flag = true;
 							ValidateFlag = false;
-							check = 13;
+							check = 14;
 						}
 					}
 				}
@@ -631,14 +673,14 @@ namespace ModTemplateTools
 					flag = true;
 					WarnFlag = true;
 					ValidateFlag = false;
-					check = 14;
+					check = 15;
 				}
 				if (TextModLines.Length == row && flag == false) 
 				{
 					Report.HeaderReport += "Missing or incorrect [i]# EoM[/i]\n";
 					flag = true;
 					ValidateFlag = false;
-					check = 14;
+					check = 15;
 				}
 			}
 
@@ -675,7 +717,7 @@ namespace ModTemplateTools
 			PhpbbMod Modification = new PhpbbMod(TemplatePath);
 			//try
 			//{
-				Modification.ReadTextActions(TextMod);
+			Modification.ReadTextActions(TextMod);
 			//}
 			//catch
 			//{
