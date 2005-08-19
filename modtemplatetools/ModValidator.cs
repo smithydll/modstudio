@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.5 2005-08-19 13:02:04 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.6 2005-08-19 13:40:13 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -322,7 +322,7 @@ namespace ModTemplateTools
 					{
 						if (Regex.IsMatch(TextModLines[i], "\\# MOD Author(, Secondary|)")) 
 						{
-							if (!(Regex.IsMatch(TextModLines[i], "\\# MOD Author: ((?!n\\/a)[\\w\\s\\.\\-\\[\\]]+?) <( |)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+)( |)> (\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)( |)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)( |)$", RegexOptions.IgnoreCase))) 
+							if (!(Regex.IsMatch(TextModLines[i], "\\# MOD Author: ((?!n\\/a)[\\w\\s\\.\\-|@]+?) <( |)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+)( |)> (\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)( |)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)( |)$", RegexOptions.IgnoreCase))) 
 							{
 								li = i + 1;
 								Report.HeaderReport += string.Format("Incorrect MOD Author Syntax on line: {0}\n[code]{1}[/code]\n", li, TextModLines[i]);
@@ -588,7 +588,12 @@ namespace ModTemplateTools
 					}
 					if (check == 10) 
 					{
-						if (Regex.IsMatch(TextModLines[i], "For Security Purposes, Please Check: http://www.phpbb.com/mods/ for the")) 
+						if (Regex.IsMatch(TextModLines[i], "For security purposes, please check: http://www.phpbb.com/mods/")
+                			&& Regex.IsMatch(TextModLines[i], "for the latest version of this MOD. Although MODs are checked")
+                			&& Regex.IsMatch(TextModLines[i], "before being allowed in the MODs Database there is no guarantee")
+                			&& Regex.IsMatch(TextModLines[i], "that there are no security problems within the MOD. No support")
+                			&& Regex.IsMatch(TextModLines[i], "will be given for MODs not found within the MODs Database which")
+                			&& Regex.IsMatch(TextModLines[i], "can be found at http://www.phpbb.com/mods/"))
 						{
 							flag = true;
 							check = 11;
@@ -596,7 +601,7 @@ namespace ModTemplateTools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "Missing or incorrect [i]Security Disclaimer[/i] - The disclaimer was recently updated 3/06/2003.\n";
+							Report.HeaderReport += "Missing or incorrect [i]Security Disclaimer[/i] - The disclaimer was recently updated 24 July 2005.\n";
 							flag = true;
 							ValidateFlag = false;
 							check = 11;
