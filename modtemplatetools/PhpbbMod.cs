@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.4 2005-07-09 13:18:46 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.5 2005-08-19 13:02:04 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -495,6 +495,10 @@ namespace ModTemplateTools
 			/// 
 			/// </summary>
 			public string[] Meta;
+			/// <summary>
+			/// 
+			/// </summary>
+			public string License;
 		}
 		
 		/// <summary>
@@ -1039,7 +1043,7 @@ namespace ModTemplateTools
 			int StartOffset = 0;
 			int e = 1;
 			bool InMultiLineElement = false;
-			for (int j = 1; j <= 11; j++) 
+			for (int j = 1; j <= 12; j++) 
 			{
 				for (int i = StartOffset; i < TextModLines.Length; i++) 
 				{
@@ -1186,7 +1190,7 @@ namespace ModTemplateTools
 							} 
 							else 
 							{
-								if (TextModLines[i].ToUpper().StartsWith("####") || TextModLines[i].ToUpper().StartsWith("## GEN")) 
+								if (TextModLines[i].ToUpper().StartsWith("####") || TextModLines[i].ToUpper().StartsWith("## GEN") || TextModLines[i].ToUpper().StartsWith("## LICENSE")) 
 								{
 									StartOffset = i;
 									e++;
@@ -1212,6 +1216,21 @@ namespace ModTemplateTools
 							}
 							break;
 						case 10:
+							if (TextModLines[i].ToUpper().StartsWith("## LICENSE")) 
+							{
+								Header.License = Regex.Replace(TextModLines[i], "\\#\\# LICENSE\\:", "", RegexOptions.IgnoreCase).Trim(TrimChars);
+								StartOffset = i + 1;
+								e++;
+								i = TextModLines.Length;
+							}
+							if (TextModLines[i].ToUpper().StartsWith("## AUTHOR NOTE")) 
+							{
+								StartOffset = i - 1;
+								e++;
+								i = TextModLines.Length;
+							}
+							break;
+						case 11:
 							if (TextModLines[i].ToUpper().StartsWith("## AUTHOR NOTE")) 
 							{
 								Header.ModAuthorNotes = new PropertyLang(Regex.Replace(TextModLines[i], "\\#\\# Author Note(s|)\\:(\\W|)", "", RegexOptions.IgnoreCase));
@@ -1232,7 +1251,7 @@ namespace ModTemplateTools
 								}
 							}
 							break;
-						case 11:
+						case 12:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD HISTORY")) 
 							{
 								InMultiLineElement = true;
@@ -1447,7 +1466,7 @@ namespace ModTemplateTools
 				} 
 				else 
 				{
-					MyMODAuthorS += Newline + "## MOD Author, secondary: " + Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
+					MyMODAuthorS += Newline + "## MOD Author: " + Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
 				}
 			}
 
@@ -1485,6 +1504,10 @@ namespace ModTemplateTools
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.inc_files/>", MyMODIC);
 			BlankTemplate = BlankTemplate.Replace("<mod.generator/>", Newline + "## Generator: MOD Studio [ ModTemplateTools " + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion + " ]");
+			if (Header.License != "")
+			{
+				BlankTemplate = BlankTemplate.Replace("<mod.license/>", Newline + "## License: " + Header.License);
+			}
 			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
 			string MyMODHistory;
 			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
