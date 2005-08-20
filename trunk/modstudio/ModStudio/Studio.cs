@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
+ *   $Id: Studio.cs,v 1.4 2005-08-20 08:09:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -222,6 +222,7 @@ namespace ModStudio
 			this.menuItemFileSave.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSave.ShowShortcut")));
 			this.menuItemFileSave.Text = resources.GetString("menuItemFileSave.Text");
 			this.menuItemFileSave.Visible = ((bool)(resources.GetObject("menuItemFileSave.Visible")));
+			this.menuItemFileSave.Click += new System.EventHandler(this.menuItemFileSave_Click);
 			// 
 			// menuItemFileSaveAs
 			// 
@@ -231,6 +232,7 @@ namespace ModStudio
 			this.menuItemFileSaveAs.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSaveAs.ShowShortcut")));
 			this.menuItemFileSaveAs.Text = resources.GetString("menuItemFileSaveAs.Text");
 			this.menuItemFileSaveAs.Visible = ((bool)(resources.GetObject("menuItemFileSaveAs.Visible")));
+			this.menuItemFileSaveAs.Click += new System.EventHandler(this.menuItemFileSaveAs_Click);
 			// 
 			// menuItemFileSaveAll
 			// 
@@ -240,6 +242,7 @@ namespace ModStudio
 			this.menuItemFileSaveAll.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSaveAll.ShowShortcut")));
 			this.menuItemFileSaveAll.Text = resources.GetString("menuItemFileSaveAll.Text");
 			this.menuItemFileSaveAll.Visible = ((bool)(resources.GetObject("menuItemFileSaveAll.Visible")));
+			this.menuItemFileSaveAll.Click += new System.EventHandler(this.menuItemFileSaveAll_Click);
 			// 
 			// menuItemSep3
 			// 
@@ -410,6 +413,7 @@ namespace ModStudio
 			this.toolBar1.TextAlign = ((System.Windows.Forms.ToolBarTextAlign)(resources.GetObject("toolBar1.TextAlign")));
 			this.toolBar1.Visible = ((bool)(resources.GetObject("toolBar1.Visible")));
 			this.toolBar1.Wrappable = ((bool)(resources.GetObject("toolBar1.Wrappable")));
+			this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
 			// 
 			// toolBarButtonNew
 			// 
@@ -507,23 +511,10 @@ namespace ModStudio
 
 		private void OpenFile(string filename)
 		{
-			if (ModEditors != null)
-			{
-				ModEditor[] temp = ModEditors;
-
-				ModEditors = new ModEditor[temp.Length + 1];
-				temp.CopyTo(ModEditors,0);
-				ModEditors[ModEditors.GetUpperBound(0)] = new ModEditor(filename);
-				ModEditors[ModEditors.GetUpperBound(0)].MdiParent = this;
-				ModEditors[ModEditors.GetUpperBound(0)].Show();
-			}
-			else
-			{
-				ModEditors = new ModEditor[1];
-				ModEditors[0] = new ModEditor(filename);
-				ModEditors[0].MdiParent = this;
-				ModEditors[0].Show();
-			}
+			ModEditor newEditor = new ModEditor(filename);
+			newEditor.MdiParent = this;
+			newEditor.Text = filename;
+			newEditor.Show();
 		}
 
 		private void menuItemFileOpen_Click(object sender, System.EventArgs e)
@@ -534,6 +525,55 @@ namespace ModStudio
 		private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			OpenFile(openFileDialog1.FileName);
+		}
+
+		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
+		{
+			switch (toolBar1.Buttons.IndexOf(e.Button))
+			{
+				case 0: // new
+					break;
+				case 1: // open
+					menuItemFileOpen_Click(null, null);
+					break;
+				case 2: // save
+					menuItemFileSave_Click(null, null);
+					break;
+				case 3: // saveall
+					menuItemFileSaveAll_Click(null, null);
+					break;
+			}
+		}
+
+		private void menuItemFileSave_Click(object sender, System.EventArgs e)
+		{
+			if (this.MdiChildren.Length > 0)
+			{
+				((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFile();
+			}
+		}
+
+		private void menuItemFileSaveAs_Click(object sender, System.EventArgs e)
+		{
+			if (this.MdiChildren.Length > 0)
+			{
+				((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFileAs();
+			}
+		}
+
+		private void menuItemFileSaveAll_Click(object sender, System.EventArgs e)
+		{
+			if (this.MdiChildren.Length > 0)
+			{
+				foreach (ModEditor ms in this.MdiChildren)
+				{
+					if (ms.Text.StartsWith("untitled"))
+					{
+						ms.Focus();
+					}
+					ms.SaveFile();
+				}
+			}
 		}
 	}
 }

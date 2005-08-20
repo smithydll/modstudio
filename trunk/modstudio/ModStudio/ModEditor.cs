@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.4 2005-08-20 08:09:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -83,6 +83,22 @@ namespace ModStudio
 		private System.Windows.Forms.ToolBar toolBar1;
 		private System.Windows.Forms.ToolBarButton toolBarButtonEditAction;
 		private System.Windows.Forms.ToolBarButton toolBarButtonAddAction;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.ContextMenu contextMenuAddAction;
+		private System.Windows.Forms.MenuItem menuItemAddActionSql;
+		private System.Windows.Forms.MenuItem menuItemAddActionCopy;
+		private System.Windows.Forms.MenuItem menuItemAddActionOpen;
+		private System.Windows.Forms.MenuItem menuItemAddActionFind;
+		private System.Windows.Forms.MenuItem menuItemAddActionAfterAdd;
+		private System.Windows.Forms.MenuItem menuItemAddActionBeforeAdd;
+		private System.Windows.Forms.MenuItem menuItemAddActionReplaceWith;
+		private System.Windows.Forms.MenuItem menuItemAddActionInLineFind;
+		private System.Windows.Forms.MenuItem menuItemAddActionInLineAfterAdd;
+		private System.Windows.Forms.MenuItem menuItemAddActionInLineBeforeAdd;
+		private System.Windows.Forms.MenuItem menuItemAddActionInLineReplaceWith;
+		private System.Windows.Forms.MenuItem menuItemAddActionIncrement;
+		private System.Windows.Forms.MenuItem menuItemAddActionInLineIncrement;
+		private System.Windows.Forms.MenuItem menuItemAddActionDiyInstruction;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -186,6 +202,22 @@ namespace ModStudio
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
 			this.toolBarButtonEditAction = new System.Windows.Forms.ToolBarButton();
 			this.toolBarButtonAddAction = new System.Windows.Forms.ToolBarButton();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.contextMenuAddAction = new System.Windows.Forms.ContextMenu();
+			this.menuItemAddActionSql = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionCopy = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionOpen = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionFind = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionAfterAdd = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionBeforeAdd = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionReplaceWith = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionInLineFind = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionInLineAfterAdd = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionInLineBeforeAdd = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionInLineReplaceWith = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionIncrement = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionInLineIncrement = new System.Windows.Forms.MenuItem();
+			this.menuItemAddActionDiyInstruction = new System.Windows.Forms.MenuItem();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -413,6 +445,7 @@ namespace ModStudio
 			this.MODInstallationLevelComboBox.Size = new System.Drawing.Size(121, 21);
 			this.MODInstallationLevelComboBox.TabIndex = 30;
 			this.MODInstallationLevelComboBox.Text = "Easy";
+			this.MODInstallationLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.MODInstallationLevelComboBox_SelectedIndexChanged);
 			// 
 			// MODVersionReleaseDomainUpDown
 			// 
@@ -448,6 +481,7 @@ namespace ModStudio
 			this.MODVersionReleaseDomainUpDown.Size = new System.Drawing.Size(48, 20);
 			this.MODVersionReleaseDomainUpDown.Sorted = true;
 			this.MODVersionReleaseDomainUpDown.TabIndex = 29;
+			this.MODVersionReleaseDomainUpDown.SelectedItemChanged += new System.EventHandler(this.MODVersionReleaseDomainUpDown_SelectedItemChanged);
 			// 
 			// MODVersionMajorNumericUpDown
 			// 
@@ -455,6 +489,7 @@ namespace ModStudio
 			this.MODVersionMajorNumericUpDown.Name = "MODVersionMajorNumericUpDown";
 			this.MODVersionMajorNumericUpDown.Size = new System.Drawing.Size(40, 20);
 			this.MODVersionMajorNumericUpDown.TabIndex = 26;
+			this.MODVersionMajorNumericUpDown.ValueChanged += new System.EventHandler(this.MODVersionMajorNumericUpDown_ValueChanged);
 			// 
 			// Button16
 			// 
@@ -480,6 +515,7 @@ namespace ModStudio
 			this.MODTitleTextBox.Size = new System.Drawing.Size(448, 20);
 			this.MODTitleTextBox.TabIndex = 20;
 			this.MODTitleTextBox.Text = "";
+			this.MODTitleTextBox.TextChanged += new System.EventHandler(this.MODTitleTextBox_TextChanged);
 			// 
 			// label2
 			// 
@@ -517,6 +553,7 @@ namespace ModStudio
 			this.MODVersionMinorNumericUpDown.Name = "MODVersionMinorNumericUpDown";
 			this.MODVersionMinorNumericUpDown.Size = new System.Drawing.Size(40, 20);
 			this.MODVersionMinorNumericUpDown.TabIndex = 27;
+			this.MODVersionMinorNumericUpDown.ValueChanged += new System.EventHandler(this.MODVersionMinorNumericUpDown_ValueChanged);
 			// 
 			// MODVersionRevisionNumericUpDown
 			// 
@@ -524,6 +561,7 @@ namespace ModStudio
 			this.MODVersionRevisionNumericUpDown.Name = "MODVersionRevisionNumericUpDown";
 			this.MODVersionRevisionNumericUpDown.Size = new System.Drawing.Size(48, 20);
 			this.MODVersionRevisionNumericUpDown.TabIndex = 28;
+			this.MODVersionRevisionNumericUpDown.ValueChanged += new System.EventHandler(this.MODVersionRevisionNumericUpDown_ValueChanged);
 			// 
 			// label6
 			// 
@@ -686,7 +724,103 @@ namespace ModStudio
 			// 
 			// toolBarButtonAddAction
 			// 
+			this.toolBarButtonAddAction.DropDownMenu = this.contextMenuAddAction;
+			this.toolBarButtonAddAction.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton;
 			this.toolBarButtonAddAction.Text = "Add Action";
+			// 
+			// saveFileDialog1
+			// 
+			this.saveFileDialog1.FileName = "untitled.mod";
+			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
+			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+			// 
+			// contextMenuAddAction
+			// 
+			this.contextMenuAddAction.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																								 this.menuItemAddActionSql,
+																								 this.menuItemAddActionCopy,
+																								 this.menuItemAddActionOpen,
+																								 this.menuItemAddActionFind,
+																								 this.menuItemAddActionAfterAdd,
+																								 this.menuItemAddActionBeforeAdd,
+																								 this.menuItemAddActionReplaceWith,
+																								 this.menuItemAddActionInLineFind,
+																								 this.menuItemAddActionInLineAfterAdd,
+																								 this.menuItemAddActionInLineBeforeAdd,
+																								 this.menuItemAddActionInLineReplaceWith,
+																								 this.menuItemAddActionIncrement,
+																								 this.menuItemAddActionInLineIncrement,
+																								 this.menuItemAddActionDiyInstruction});
+			// 
+			// menuItemAddActionSql
+			// 
+			this.menuItemAddActionSql.Index = 0;
+			this.menuItemAddActionSql.Text = "SQL";
+			// 
+			// menuItemAddActionCopy
+			// 
+			this.menuItemAddActionCopy.Index = 1;
+			this.menuItemAddActionCopy.Text = "COPY";
+			// 
+			// menuItemAddActionOpen
+			// 
+			this.menuItemAddActionOpen.Index = 2;
+			this.menuItemAddActionOpen.Text = "OPEN";
+			// 
+			// menuItemAddActionFind
+			// 
+			this.menuItemAddActionFind.Index = 3;
+			this.menuItemAddActionFind.Text = "FIND";
+			// 
+			// menuItemAddActionAfterAdd
+			// 
+			this.menuItemAddActionAfterAdd.Index = 4;
+			this.menuItemAddActionAfterAdd.Text = "AFTER, ADD";
+			// 
+			// menuItemAddActionBeforeAdd
+			// 
+			this.menuItemAddActionBeforeAdd.Index = 5;
+			this.menuItemAddActionBeforeAdd.Text = "BEFORE, ADD";
+			// 
+			// menuItemAddActionReplaceWith
+			// 
+			this.menuItemAddActionReplaceWith.Index = 6;
+			this.menuItemAddActionReplaceWith.Text = "REPLACE WITH";
+			// 
+			// menuItemAddActionInLineFind
+			// 
+			this.menuItemAddActionInLineFind.Index = 7;
+			this.menuItemAddActionInLineFind.Text = "IN-LINE FIND";
+			// 
+			// menuItemAddActionInLineAfterAdd
+			// 
+			this.menuItemAddActionInLineAfterAdd.Index = 8;
+			this.menuItemAddActionInLineAfterAdd.Text = "IN-LINE AFTER, ADD";
+			// 
+			// menuItemAddActionInLineBeforeAdd
+			// 
+			this.menuItemAddActionInLineBeforeAdd.Index = 9;
+			this.menuItemAddActionInLineBeforeAdd.Text = "IN-LINE BEFORE, ADD";
+			// 
+			// menuItemAddActionInLineReplaceWith
+			// 
+			this.menuItemAddActionInLineReplaceWith.Index = 10;
+			this.menuItemAddActionInLineReplaceWith.Text = "IN-LINE REPLACE WITH";
+			// 
+			// menuItemAddActionIncrement
+			// 
+			this.menuItemAddActionIncrement.Index = 11;
+			this.menuItemAddActionIncrement.Text = "INCREMENT";
+			// 
+			// menuItemAddActionInLineIncrement
+			// 
+			this.menuItemAddActionInLineIncrement.Index = 12;
+			this.menuItemAddActionInLineIncrement.Text = "IN-LINE INCREMENT";
+			// 
+			// menuItemAddActionDiyInstruction
+			// 
+			this.menuItemAddActionDiyInstruction.Index = 13;
+			this.menuItemAddActionDiyInstruction.Text = "DIY INSTRUCTION";
 			// 
 			// ModEditor
 			// 
@@ -694,7 +828,7 @@ namespace ModStudio
 			this.ClientSize = new System.Drawing.Size(792, 566);
 			this.Controls.Add(this.tabControlEditor);
 			this.Name = "ModEditor";
-			this.Text = "ModEditor";
+			this.Text = "untitled";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Resize += new System.EventHandler(this.ModEditor_Resize);
 			this.Load += new System.EventHandler(this.ModEditor_Load);
@@ -836,6 +970,92 @@ namespace ModStudio
 		private void modDisplayBox2_Click(object sender, System.EventArgs e)
 		{
 			modDisplayBox2.Select();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void SaveFile()
+		{
+			if (this.Text.EndsWith("*")) // the file has been modified
+			{
+				if (this.Text.StartsWith("untitled")) // hasn't been saved before
+				{
+					SaveFileAs();
+				}
+				else
+				{
+					ThisMod.WriteFile(this.Text);
+					SetUnmodified();
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void SaveFileAs()
+		{
+			saveFileDialog1.ShowDialog(this);
+		}
+
+		private void saveFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			ThisMod.WriteFile(saveFileDialog1.FileName);
+			this.Text = saveFileDialog1.FileName;
+			SetUnmodified();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void SetModified()
+		{
+			if (!this.Text.EndsWith("*"))
+			{
+				this.Text += "*";
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void SetUnmodified()
+		{
+			if (this.Text.EndsWith("*"))
+			{
+				this.Text = this.Text.Substring(0, this.Text.Length - 1);
+			}
+		}
+
+		private void MODTitleTextBox_TextChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
+		}
+
+		private void MODVersionMajorNumericUpDown_ValueChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
+		}
+
+		private void MODVersionMinorNumericUpDown_ValueChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
+		}
+
+		private void MODVersionRevisionNumericUpDown_ValueChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
+		}
+
+		private void MODVersionReleaseDomainUpDown_SelectedItemChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
+		}
+
+		private void MODInstallationLevelComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			SetModified();
 		}
 	}
 }
