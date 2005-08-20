@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.4 2005-08-20 08:09:47 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.5 2005-08-20 23:35:38 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -202,7 +202,6 @@ namespace ModStudio
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
 			this.toolBarButtonEditAction = new System.Windows.Forms.ToolBarButton();
 			this.toolBarButtonAddAction = new System.Windows.Forms.ToolBarButton();
-			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.contextMenuAddAction = new System.Windows.Forms.ContextMenu();
 			this.menuItemAddActionSql = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionCopy = new System.Windows.Forms.MenuItem();
@@ -218,6 +217,7 @@ namespace ModStudio
 			this.menuItemAddActionIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionInLineIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionDiyInstruction = new System.Windows.Forms.MenuItem();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -703,6 +703,7 @@ namespace ModStudio
 			this.modDisplayBox2.TabIndex = 0;
 			this.modDisplayBox2.Click += new System.EventHandler(this.modDisplayBox2_Click);
 			this.modDisplayBox2.ItemDoubleClick += new ModFormControls.ModActionItem.ActionItemClickHandler(this.modDisplayBox2_ItemDoubleClick);
+			this.modDisplayBox2.SelectedIndexChanged += new System.EventHandler(this.modDisplayBox2_SelectedIndexChanged);
 			// 
 			// toolBar1
 			// 
@@ -710,6 +711,7 @@ namespace ModStudio
 			this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 																						this.toolBarButtonEditAction,
 																						this.toolBarButtonAddAction});
+			this.toolBar1.ButtonSize = new System.Drawing.Size(60, 22);
 			this.toolBar1.DropDownArrows = true;
 			this.toolBar1.Location = new System.Drawing.Point(0, 0);
 			this.toolBar1.Name = "toolBar1";
@@ -717,6 +719,7 @@ namespace ModStudio
 			this.toolBar1.Size = new System.Drawing.Size(784, 28);
 			this.toolBar1.TabIndex = 1;
 			this.toolBar1.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
+			this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
 			// 
 			// toolBarButtonEditAction
 			// 
@@ -727,12 +730,6 @@ namespace ModStudio
 			this.toolBarButtonAddAction.DropDownMenu = this.contextMenuAddAction;
 			this.toolBarButtonAddAction.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton;
 			this.toolBarButtonAddAction.Text = "Add Action";
-			// 
-			// saveFileDialog1
-			// 
-			this.saveFileDialog1.FileName = "untitled.mod";
-			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
-			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
 			// 
 			// contextMenuAddAction
 			// 
@@ -756,21 +753,25 @@ namespace ModStudio
 			// 
 			this.menuItemAddActionSql.Index = 0;
 			this.menuItemAddActionSql.Text = "SQL";
+			this.menuItemAddActionSql.Click += new System.EventHandler(this.menuItemAddActionSql_Click);
 			// 
 			// menuItemAddActionCopy
 			// 
 			this.menuItemAddActionCopy.Index = 1;
 			this.menuItemAddActionCopy.Text = "COPY";
+			this.menuItemAddActionCopy.Click += new System.EventHandler(this.menuItemAddActionCopy_Click);
 			// 
 			// menuItemAddActionOpen
 			// 
 			this.menuItemAddActionOpen.Index = 2;
 			this.menuItemAddActionOpen.Text = "OPEN";
+			this.menuItemAddActionOpen.Click += new System.EventHandler(this.menuItemAddActionOpen_Click);
 			// 
 			// menuItemAddActionFind
 			// 
 			this.menuItemAddActionFind.Index = 3;
 			this.menuItemAddActionFind.Text = "FIND";
+			this.menuItemAddActionFind.Click += new System.EventHandler(this.menuItemAddActionFind_Click);
 			// 
 			// menuItemAddActionAfterAdd
 			// 
@@ -821,6 +822,12 @@ namespace ModStudio
 			// 
 			this.menuItemAddActionDiyInstruction.Index = 13;
 			this.menuItemAddActionDiyInstruction.Text = "DIY INSTRUCTION";
+			// 
+			// saveFileDialog1
+			// 
+			this.saveFileDialog1.FileName = "untitled.mod";
+			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
+			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
 			// 
 			// ModEditor
 			// 
@@ -927,6 +934,7 @@ namespace ModStudio
 		{
 			tabControlEditor.SelectedIndex = 0;
 			tabControlEditor_SelectedIndexChanged(null,null);
+			modDisplayBox2_SelectedIndexChanged(null, null);
 		}
 
 		private void listBoxFileEdits_DoubleClick(object sender, System.EventArgs e)
@@ -1056,6 +1064,137 @@ namespace ModStudio
 		private void MODInstallationLevelComboBox_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
 			SetModified();
+		}
+
+		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
+		{
+			switch (toolBar1.Buttons.IndexOf(e.Button))
+			{
+				case 0: // edit
+					modDisplayBox2_ItemDoubleClick(null, null);
+					break;
+				case 1: // add action
+					break;
+			}
+		}
+
+		private void modDisplayBox2_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			switch (ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType)
+			{
+				case "OPEN":
+					menuItemAddActionAfterAdd.Enabled = false;
+					menuItemAddActionFind.Enabled = true;
+					menuItemAddActionBeforeAdd.Enabled = false;
+					menuItemAddActionOpen.Enabled = true;
+					menuItemAddActionInLineFind.Enabled = false;
+					menuItemAddActionInLineAfterAdd.Enabled = false;
+					menuItemAddActionInLineBeforeAdd.Enabled = false;
+					menuItemAddActionReplaceWith.Enabled = false;
+					menuItemAddActionInLineReplaceWith.Enabled = false;
+					menuItemAddActionIncrement.Enabled = false;
+					menuItemAddActionInLineIncrement.Enabled = false;
+					menuItemAddActionDiyInstruction.Enabled = true;
+					menuItemAddActionSql.Enabled = true;
+					menuItemAddActionCopy.Enabled = true;
+					break;
+				case "COPY":
+				case "SQL":
+				case "DIY INSTRUCTION":
+				case "SAVE/CLOSE ALL FILES":
+					menuItemAddActionAfterAdd.Enabled = false;
+					menuItemAddActionBeforeAdd.Enabled = false;
+					menuItemAddActionOpen.Enabled = true;
+					menuItemAddActionInLineFind.Enabled = false;
+					menuItemAddActionInLineAfterAdd.Enabled = false;
+					menuItemAddActionInLineBeforeAdd.Enabled = false;
+					menuItemAddActionReplaceWith.Enabled = false;
+					menuItemAddActionInLineReplaceWith.Enabled = false;
+					menuItemAddActionIncrement.Enabled = false;
+					menuItemAddActionInLineIncrement.Enabled = false;
+					menuItemAddActionDiyInstruction.Enabled = true;
+					menuItemAddActionSql.Enabled = true;
+					menuItemAddActionCopy.Enabled = true;
+					menuItemAddActionFind.Enabled = false;
+					break;
+				case "FIND":
+				case "AFTER, ADD":
+				case "BEFORE, ADD":
+				case "REPLACE WITH":
+					menuItemAddActionAfterAdd.Enabled = true;
+					menuItemAddActionFind.Enabled = true;
+					menuItemAddActionBeforeAdd.Enabled = true;
+					menuItemAddActionOpen.Enabled = true;
+					menuItemAddActionInLineFind.Enabled = true;
+					menuItemAddActionInLineAfterAdd.Enabled = false;
+					menuItemAddActionInLineBeforeAdd.Enabled = false;
+					menuItemAddActionReplaceWith.Enabled = true;
+					menuItemAddActionInLineReplaceWith.Enabled = false;
+					menuItemAddActionIncrement.Enabled = true;
+					menuItemAddActionInLineIncrement.Enabled = false;
+					menuItemAddActionDiyInstruction.Enabled = true;
+					menuItemAddActionSql.Enabled = true;
+					menuItemAddActionCopy.Enabled = true;
+					break;
+				case "IN-LINE FIND":
+				case "IN-LINE AFTER, ADD":
+				case "IN-LINE BEFORE, ADD":
+				case "IN-LINE REPLACE WITH":
+					menuItemAddActionAfterAdd.Enabled = true;
+					menuItemAddActionFind.Enabled = true;
+					menuItemAddActionBeforeAdd.Enabled = true;
+					menuItemAddActionOpen.Enabled = true;
+					menuItemAddActionInLineFind.Enabled = true;
+					menuItemAddActionInLineAfterAdd.Enabled = true;
+					menuItemAddActionInLineBeforeAdd.Enabled = true;
+					menuItemAddActionReplaceWith.Enabled = true;
+					menuItemAddActionInLineReplaceWith.Enabled = true;
+					menuItemAddActionIncrement.Enabled = true;
+					menuItemAddActionInLineIncrement.Enabled = true;
+					menuItemAddActionDiyInstruction.Enabled = true;
+					menuItemAddActionSql.Enabled = true;
+					menuItemAddActionCopy.Enabled = true;
+					break;
+			}
+		}
+
+		private void menuItemAddActionSql_Click(object sender, System.EventArgs e)
+		{
+			AddAction("SQL");
+		}
+
+		private void menuItemAddActionOpen_Click(object sender, System.EventArgs e)
+		{
+			AddAction("OPEN");
+		}
+
+		private void AddAction(string actionType)
+		{
+			AddAction(actionType, "");
+		}
+
+		private void menuItemAddActionCopy_Click(object sender, System.EventArgs e)
+		{
+			AddAction("COPY");
+		}
+
+		private void menuItemAddActionFind_Click(object sender, System.EventArgs e)
+		{
+			AddAction("FIND");
+		}
+	
+		private void AddAction(string actionType, string actionBody)
+		{
+			int addBefore = modDisplayBox2.SelectedIndex;
+			if (addBefore + 1 < ThisMod.Actions.Actions.Length) 
+			{
+				addBefore++;
+			}
+			ThisMod.Actions.AddEntry(new ModTemplateTools.PhpbbMod.ModAction(actionType, actionBody, ""), addBefore);
+			modDisplayBox2.ModActions = ThisMod.Actions;
+			modDisplayBox2.UpdateLayout();
+			modDisplayBox2.Select();
+			modDisplayBox2.SelectedIndex = addBefore;
 		}
 	}
 }
