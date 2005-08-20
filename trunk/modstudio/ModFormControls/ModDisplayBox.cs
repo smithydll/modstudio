@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.3 2005-07-14 06:48:59 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.4 2005-08-20 23:35:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -160,11 +160,13 @@ namespace ModFormControls
 		}
 
 		public event ModActionItem.ActionItemClickHandler ItemDoubleClick;
+		public event EventHandler SelectedIndexChanged;
 
 		private void ActionItems_SelectedIndexChanged(object sender, ActionItemClickEventArgs e)
 		{
 			selectedIndex = e.Index;
 			UpdateColours();
+			this.SelectedIndexChanged(this, new EventArgs());
 		}
 
 		public void ActionItmes_ItemDoubleClick(object sender, ActionItemClickEventArgs e)
@@ -384,6 +386,7 @@ namespace ModFormControls
 						UpdateColours();
 						selectedIndex = value;
 						ModDisplayPanel.ScrollControlIntoView(ActionItems[value]);
+						this.SelectedIndexChanged(this, new EventArgs());
 					}
 					else
 					{
