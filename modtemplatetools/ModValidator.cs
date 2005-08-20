@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.6 2005-08-19 13:40:13 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.7 2005-08-20 03:03:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -589,11 +589,11 @@ namespace ModTemplateTools
 					if (check == 10) 
 					{
 						if (Regex.IsMatch(TextModLines[i], "For security purposes, please check: http://www.phpbb.com/mods/")
-                			&& Regex.IsMatch(TextModLines[i], "for the latest version of this MOD. Although MODs are checked")
-                			&& Regex.IsMatch(TextModLines[i], "before being allowed in the MODs Database there is no guarantee")
-                			&& Regex.IsMatch(TextModLines[i], "that there are no security problems within the MOD. No support")
-                			&& Regex.IsMatch(TextModLines[i], "will be given for MODs not found within the MODs Database which")
-                			&& Regex.IsMatch(TextModLines[i], "can be found at http://www.phpbb.com/mods/"))
+                			&& Regex.IsMatch(TextModLines[i + 1], "for the latest version of this MOD. Although MODs are checked")
+                			&& Regex.IsMatch(TextModLines[i + 2], "before being allowed in the MODs Database there is no guarantee")
+                			&& Regex.IsMatch(TextModLines[i + 3], "that there are no security problems within the MOD. No support")
+                			&& Regex.IsMatch(TextModLines[i + 4], "will be given for MODs not found within the MODs Database which")
+                			&& Regex.IsMatch(TextModLines[i + 5], "can be found at http://www.phpbb.com/mods/"))
 						{
 							flag = true;
 							check = 11;
