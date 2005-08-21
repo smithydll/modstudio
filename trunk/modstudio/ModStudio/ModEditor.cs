@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.6 2005-08-21 02:48:05 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.7 2005-08-21 05:58:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -86,6 +86,7 @@ namespace ModStudio
 		private System.Windows.Forms.ToolBarButton toolBarButtonAddAction;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private OpenActionDialogBox openActionDialogBox1;
+		private ModFormControls.ModActionEditor modActionEditor1;
 		private System.Windows.Forms.ContextMenu contextMenuAddAction;
 		private System.Windows.Forms.MenuItem menuItemAddActionSql;
 		private System.Windows.Forms.MenuItem menuItemAddActionCopy;
@@ -223,6 +224,7 @@ namespace ModStudio
 			this.toolBarButtonDelete = new System.Windows.Forms.ToolBarButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.openActionDialogBox1 = new OpenActionDialogBox();
+			this.modActionEditor1 = new ModFormControls.ModActionEditor();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -853,6 +855,13 @@ namespace ModStudio
 			// openActionDialogBox1
 			//
 			this.openActionDialogBox1.SaveNew += new ModStudio.OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler(openActionDialogBox1_SaveNew);
+			//
+			// modActionEditor1
+			//
+			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
+			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
+			this.modActionEditor1.Visible = false;
+			this.modActionEditor1.Return += new ModFormControls.ModActionEditor.ModActionEditorReturnHandler(modActionEditor1_Return);
 			// 
 			// ModEditor
 			// 
@@ -870,6 +879,7 @@ namespace ModStudio
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevisionNumericUpDown)).EndInit();
+			this.tabPageActions.Controls.Add(modActionEditor1);
 			this.tabPageActions.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -943,7 +953,7 @@ namespace ModStudio
 						MODAuthorListBox.Items.Add(a.UserName);
 					}
 					MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
-					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.ToString();
+					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.pValue;
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -985,19 +995,36 @@ namespace ModStudio
 			{
 				modDisplayBox2.UpdateSize();
 			}
+			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
 		}
 
 		private void modDisplayBox2_ItemDoubleClick(object sender, ModFormControls.ActionItemClickEventArgs e)
 		{
-			ModFormControls.ModActionEditor abc = new ModFormControls.ModActionEditor();
+			/*ModFormControls.ModActionEditor abc = new ModFormControls.ModActionEditor();
 			abc.Location = new Point(10,10);
 			abc.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20);
 			abc.Visible = true;
 
-			this.tabPageActions.Controls.Add(abc);
+			this.tabPageActions.Controls.Add(abc);*/
 
-			abc.Visible = true;
-			abc.BringToFront();
+			modActionEditor1.actionIndex = modDisplayBox2.SelectedIndex;
+			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionBody, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].AfterComment);
+			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
+			modActionEditor1.Show();
+			modActionEditor1.BringToFront();
+			modActionEditor1.Select();
+		}
+
+		private void modActionEditor1_Return(object sender, ModFormControls.ModActionEditorReturnEventArgs e)
+		{
+			ThisMod.Actions.Actions[e.Index].ActionType = e.ActionType;
+			ThisMod.Actions.Actions[e.Index].ActionBody = e.ActionBody;
+			ThisMod.Actions.Actions[e.Index].AfterComment = e.ActionComment;
+
+			//modDisplayBox2.ModActions = ThisMod.Actions;
+			modDisplayBox2.UpdateLayout();
+			//modDisplayBox2.Select();
+			SetModified();
 		}
 
 		private void modDisplayBox2_Click(object sender, System.EventArgs e)
@@ -1107,6 +1134,7 @@ namespace ModStudio
 						modDisplayBox2.ModActions = ThisMod.Actions;
 						modDisplayBox2.UpdateLayout();
 						modDisplayBox2.Select();
+						SetModified();
 					}
 					break;
 			}
@@ -1279,6 +1307,7 @@ namespace ModStudio
 			modDisplayBox2.UpdateLayout();
 			modDisplayBox2.Select();
 			modDisplayBox2.SelectedIndex = addBefore;
+			SetModified();
 		}
 
 		private void openActionDialogBox1_SaveNew(object sender, OpenActionDialogBoxSaveNewEventArgs e)
@@ -1291,6 +1320,7 @@ namespace ModStudio
 			{
 				ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("OPEN", e.FileName, ""), ThisMod.Actions.Actions.GetUpperBound(0));
 			}
+			SetModified();
 		}
 
 		private void button9_Click(object sender, System.EventArgs e)

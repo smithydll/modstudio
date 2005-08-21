@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.1 2005-08-21 02:48:05 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.2 2005-08-21 05:58:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ModStudio
 {
@@ -55,6 +56,12 @@ namespace ModStudio
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
+			LoadPhpbbFileList();
+			listBoxFiles.Items.Clear();
+			for (int i = 0; i < PhpbbFileList.Length; i++)
+			{
+				listBoxFiles.Items.Add(PhpbbFileList[i]);
+			}
 		}
 
 		/// <summary>
@@ -125,6 +132,9 @@ namespace ModStudio
 			this.textBoxFile.Size = new System.Drawing.Size(456, 20);
 			this.textBoxFile.TabIndex = 1;
 			this.textBoxFile.Text = "";
+			this.textBoxFile.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFile_KeyPress);
+			this.textBoxFile.TextChanged += new System.EventHandler(this.textBoxFile_TextChanged);
+			this.textBoxFile.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFile_KeyUp);
 			// 
 			// listBoxFiles
 			// 
@@ -133,6 +143,7 @@ namespace ModStudio
 			this.listBoxFiles.Name = "listBoxFiles";
 			this.listBoxFiles.Size = new System.Drawing.Size(456, 134);
 			this.listBoxFiles.TabIndex = 2;
+			this.listBoxFiles.DoubleClick += new System.EventHandler(this.listBoxFiles_DoubleClick);
 			this.listBoxFiles.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
 			// 
 			// OpenActionDialogBox
@@ -149,11 +160,24 @@ namespace ModStudio
 			this.Name = "OpenActionDialogBox";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Select a file to open";
+			this.Load += new System.EventHandler(this.OpenActionDialogBox_Load);
+			this.VisibleChanged += new System.EventHandler(this.OpenActionDialogBox_VisibleChanged);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 		#endregion
+
+		private string[] PhpbbFileList;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void LoadPhpbbFileList()
+		{
+			PhpbbFileList = OpenTextFile(Application.StartupPath + "\\files.txt").Replace("\r\n", "\n").Split('\n');
+			//Console.WriteLine(":" + PhpbbFileList.Length);
+		}
 
 		/// <summary>
 		/// 
@@ -172,11 +196,92 @@ namespace ModStudio
 		private void buttonOk_Click(object sender, System.EventArgs e)
 		{
 			this.SaveNew(this, new OpenActionDialogBoxSaveNewEventArgs(textBoxFile.Text));
+			this.Hide();
 		}
 
+		bool enableTextChange = true;
 		private void listBoxFiles_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			textBoxFile.Text = listBoxFiles.SelectedValue.ToString();
+			string temp = textBoxFile.Text;
+			enableTextChange = false;
+			textBoxFile.Text = listBoxFiles.Text;
+			if (listBoxFiles.Text.StartsWith(temp))
+			{
+				textBoxFile.Select(temp.Length, textBoxFile.Text.Length - temp.Length);
+			}
+		}
+
+		/// <summary>
+		/// Open a text file
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		private static string OpenTextFile(string filename)
+		{
+			StreamReader myStreamReader;
+			string temp;
+			try 
+			{
+				myStreamReader = File.OpenText(filename);
+				temp = myStreamReader.ReadToEnd();
+				myStreamReader.Close();
+			} 
+			catch
+			{
+				temp = "";
+			}
+			return temp;
+		}
+
+		private void OpenActionDialogBox_Load(object sender, System.EventArgs e)
+		{
+		}
+
+		private void listBoxFiles_DoubleClick(object sender, System.EventArgs e)
+		{
+			buttonOk_Click(null, null);
+		}
+
+		private void textBoxFile_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+			
+		}
+
+		private void textBoxFile_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if (e.KeyCode == System.Windows.Forms.Keys.Enter)
+			{
+				buttonOk_Click(null, null);
+			}
+		}
+
+		private void textBoxFile_TextChanged(object sender, System.EventArgs e)
+		{
+			if (enableTextChange)
+			{
+				for (int i = 0; i < PhpbbFileList.Length; i++)
+				{
+					if (PhpbbFileList[i].StartsWith(textBoxFile.Text))
+					{
+						string temp = textBoxFile.Text;
+						listBoxFiles.SelectedIndex = i;
+						
+						enableTextChange = false;
+						textBoxFile.Text = listBoxFiles.Text;
+						if (listBoxFiles.Text.StartsWith(temp))
+						{
+							textBoxFile.Select(temp.Length, textBoxFile.Text.Length - temp.Length);
+						}
+						break;
+					}
+				}
+			}
+			enableTextChange = true;
+		}
+
+		private void OpenActionDialogBox_VisibleChanged(object sender, System.EventArgs e)
+		{
+			textBoxFile.Select();
 		}
 	}
 
