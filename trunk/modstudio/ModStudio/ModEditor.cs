@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.5 2005-08-20 23:35:38 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.6 2005-08-21 02:48:05 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModStudio;
 
 namespace ModStudio
 {
@@ -84,6 +85,7 @@ namespace ModStudio
 		private System.Windows.Forms.ToolBarButton toolBarButtonEditAction;
 		private System.Windows.Forms.ToolBarButton toolBarButtonAddAction;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private OpenActionDialogBox openActionDialogBox1;
 		private System.Windows.Forms.ContextMenu contextMenuAddAction;
 		private System.Windows.Forms.MenuItem menuItemAddActionSql;
 		private System.Windows.Forms.MenuItem menuItemAddActionCopy;
@@ -99,6 +101,7 @@ namespace ModStudio
 		private System.Windows.Forms.MenuItem menuItemAddActionIncrement;
 		private System.Windows.Forms.MenuItem menuItemAddActionInLineIncrement;
 		private System.Windows.Forms.MenuItem menuItemAddActionDiyInstruction;
+		private System.Windows.Forms.ToolBarButton toolBarButtonDelete;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -217,7 +220,9 @@ namespace ModStudio
 			this.menuItemAddActionIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionInLineIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionDiyInstruction = new System.Windows.Forms.MenuItem();
+			this.toolBarButtonDelete = new System.Windows.Forms.ToolBarButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.openActionDialogBox1 = new OpenActionDialogBox();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -268,6 +273,7 @@ namespace ModStudio
 			this.button9.Name = "button9";
 			this.button9.TabIndex = 6;
 			this.button9.Text = "Add File";
+			this.button9.Click += new System.EventHandler(this.button9_Click);
 			// 
 			// listBoxFileEdits
 			// 
@@ -710,7 +716,8 @@ namespace ModStudio
 			this.toolBar1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
 																						this.toolBarButtonEditAction,
-																						this.toolBarButtonAddAction});
+																						this.toolBarButtonAddAction,
+																						this.toolBarButtonDelete});
 			this.toolBar1.ButtonSize = new System.Drawing.Size(60, 22);
 			this.toolBar1.DropDownArrows = true;
 			this.toolBar1.Location = new System.Drawing.Point(0, 0);
@@ -777,57 +784,75 @@ namespace ModStudio
 			// 
 			this.menuItemAddActionAfterAdd.Index = 4;
 			this.menuItemAddActionAfterAdd.Text = "AFTER, ADD";
+			this.menuItemAddActionAfterAdd.Click += new System.EventHandler(this.menuItemAddActionAfterAdd_Click);
 			// 
 			// menuItemAddActionBeforeAdd
 			// 
 			this.menuItemAddActionBeforeAdd.Index = 5;
 			this.menuItemAddActionBeforeAdd.Text = "BEFORE, ADD";
+			this.menuItemAddActionBeforeAdd.Click += new System.EventHandler(this.menuItemAddActionBeforeAdd_Click);
 			// 
 			// menuItemAddActionReplaceWith
 			// 
 			this.menuItemAddActionReplaceWith.Index = 6;
 			this.menuItemAddActionReplaceWith.Text = "REPLACE WITH";
+			this.menuItemAddActionReplaceWith.Click += new System.EventHandler(this.menuItemAddActionReplaceWith_Click);
 			// 
 			// menuItemAddActionInLineFind
 			// 
 			this.menuItemAddActionInLineFind.Index = 7;
 			this.menuItemAddActionInLineFind.Text = "IN-LINE FIND";
+			this.menuItemAddActionInLineFind.Click += new System.EventHandler(this.menuItemAddActionInLineFind_Click);
 			// 
 			// menuItemAddActionInLineAfterAdd
 			// 
 			this.menuItemAddActionInLineAfterAdd.Index = 8;
 			this.menuItemAddActionInLineAfterAdd.Text = "IN-LINE AFTER, ADD";
+			this.menuItemAddActionInLineAfterAdd.Click += new System.EventHandler(this.menuItemAddActionInLineAfterAdd_Click);
 			// 
 			// menuItemAddActionInLineBeforeAdd
 			// 
 			this.menuItemAddActionInLineBeforeAdd.Index = 9;
 			this.menuItemAddActionInLineBeforeAdd.Text = "IN-LINE BEFORE, ADD";
+			this.menuItemAddActionInLineBeforeAdd.Click += new System.EventHandler(this.menuItemAddActionInLineBeforeAdd_Click);
 			// 
 			// menuItemAddActionInLineReplaceWith
 			// 
 			this.menuItemAddActionInLineReplaceWith.Index = 10;
 			this.menuItemAddActionInLineReplaceWith.Text = "IN-LINE REPLACE WITH";
+			this.menuItemAddActionInLineReplaceWith.Click += new System.EventHandler(this.menuItemAddActionInLineReplaceWith_Click);
 			// 
 			// menuItemAddActionIncrement
 			// 
 			this.menuItemAddActionIncrement.Index = 11;
 			this.menuItemAddActionIncrement.Text = "INCREMENT";
+			this.menuItemAddActionIncrement.Click += new System.EventHandler(this.menuItemAddActionIncrement_Click);
 			// 
 			// menuItemAddActionInLineIncrement
 			// 
 			this.menuItemAddActionInLineIncrement.Index = 12;
 			this.menuItemAddActionInLineIncrement.Text = "IN-LINE INCREMENT";
+			this.menuItemAddActionInLineIncrement.Click += new System.EventHandler(this.menuItemAddActionInLineIncrement_Click);
 			// 
 			// menuItemAddActionDiyInstruction
 			// 
 			this.menuItemAddActionDiyInstruction.Index = 13;
 			this.menuItemAddActionDiyInstruction.Text = "DIY INSTRUCTION";
+			this.menuItemAddActionDiyInstruction.Click += new System.EventHandler(this.menuItemAddActionDiyInstruction_Click);
+			// 
+			// toolBarButtonDelete
+			// 
+			this.toolBarButtonDelete.Text = "Delete Action";
 			// 
 			// saveFileDialog1
 			// 
 			this.saveFileDialog1.FileName = "untitled.mod";
 			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
 			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+			//
+			// openActionDialogBox1
+			//
+			this.openActionDialogBox1.SaveNew += new ModStudio.OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler(openActionDialogBox1_SaveNew);
 			// 
 			// ModEditor
 			// 
@@ -993,7 +1018,7 @@ namespace ModStudio
 				}
 				else
 				{
-					ThisMod.WriteFile(this.Text);
+					ThisMod.WriteFile(this.Text.Substring(0, this.Text.Length - 1));
 					SetUnmodified();
 				}
 			}
@@ -1074,6 +1099,15 @@ namespace ModStudio
 					modDisplayBox2_ItemDoubleClick(null, null);
 					break;
 				case 1: // add action
+					break;
+				case 2: // delete action
+					if (ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType != "SAVE/CLOSE ALL FILES")
+					{
+						ThisMod.Actions.RemoveEntry(modDisplayBox2.SelectedIndex);
+						modDisplayBox2.ModActions = ThisMod.Actions;
+						modDisplayBox2.UpdateLayout();
+						modDisplayBox2.Select();
+					}
 					break;
 			}
 		}
@@ -1165,12 +1199,62 @@ namespace ModStudio
 
 		private void menuItemAddActionOpen_Click(object sender, System.EventArgs e)
 		{
-			AddAction("OPEN");
+			openActionDialogBox1.ShowDialog(this);
 		}
 
 		private void AddAction(string actionType)
 		{
 			AddAction(actionType, "");
+		}
+
+		private void menuItemAddActionDiyInstruction_Click(object sender, System.EventArgs e)
+		{
+			AddAction("DIY INSTRUCTION");
+		}
+
+		private void menuItemAddActionInLineIncrement_Click(object sender, System.EventArgs e)
+		{
+			AddAction("IN-LINE INCREMENT");
+		}
+
+		private void menuItemAddActionIncrement_Click(object sender, System.EventArgs e)
+		{
+			AddAction("INCREMENT");
+		}
+
+		private void menuItemAddActionInLineReplaceWith_Click(object sender, System.EventArgs e)
+		{
+			AddAction("IN-LINE REPLACE WITH");
+		}
+
+		private void menuItemAddActionInLineBeforeAdd_Click(object sender, System.EventArgs e)
+		{
+			AddAction("IN-LINE BEFORE, ADD");
+		}
+
+		private void menuItemAddActionInLineAfterAdd_Click(object sender, System.EventArgs e)
+		{
+			AddAction("IN-LINE AFTER, ADD");
+		}
+
+		private void menuItemAddActionInLineFind_Click(object sender, System.EventArgs e)
+		{
+			AddAction("IN-LINE FIND");
+		}
+
+		private void menuItemAddActionReplaceWith_Click(object sender, System.EventArgs e)
+		{
+			AddAction("REPLACE WITH");
+		}
+
+		private void menuItemAddActionBeforeAdd_Click(object sender, System.EventArgs e)
+		{
+			AddAction("BEFORE, ADD");
+		}
+
+		private void menuItemAddActionAfterAdd_Click(object sender, System.EventArgs e)
+		{
+			AddAction("AFTER, ADD");
 		}
 
 		private void menuItemAddActionCopy_Click(object sender, System.EventArgs e)
@@ -1195,6 +1279,24 @@ namespace ModStudio
 			modDisplayBox2.UpdateLayout();
 			modDisplayBox2.Select();
 			modDisplayBox2.SelectedIndex = addBefore;
+		}
+
+		private void openActionDialogBox1_SaveNew(object sender, OpenActionDialogBoxSaveNewEventArgs e)
+		{
+			if (tabControlEditor.SelectedIndex == 2)
+			{
+				AddAction("OPEN", e.FileName);
+			}
+			else
+			{
+				ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("OPEN", e.FileName, ""), ThisMod.Actions.Actions.GetUpperBound(0));
+			}
+		}
+
+		private void button9_Click(object sender, System.EventArgs e)
+		{
+			openActionDialogBox1.ShowDialog(this);
+			tabControlEditor_SelectedIndexChanged(null, null);
 		}
 	}
 }
