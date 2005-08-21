@@ -16,7 +16,6 @@ namespace ModFormControls
 		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ComboBox comboBox1;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panel4;
 		private ICSharpCode.TextEditor.TextEditorControl textEditorControlActionBody;
@@ -28,6 +27,12 @@ namespace ModFormControls
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.ComboBox comboBoxActionType;
+
+		public int actionIndex = 0;
+
+		public delegate void ModActionEditorReturnHandler(object sender, ModActionEditorReturnEventArgs e);
+		public event ModActionEditorReturnHandler Return;
 
 		public ModActionEditor()
 		{
@@ -62,17 +67,17 @@ namespace ModFormControls
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ModActionEditor));
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.textEditorControlActionBody = new ICSharpCode.TextEditor.TextEditorControl();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.panel3 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel4 = new System.Windows.Forms.Panel();
-			this.textEditorControlActionBody = new ICSharpCode.TextEditor.TextEditorControl();
 			this.textEditorControlComment = new ICSharpCode.TextEditor.TextEditorControl();
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboBoxActionType = new System.Windows.Forms.ComboBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel4 = new System.Windows.Forms.Panel();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel5.SuspendLayout();
@@ -85,11 +90,25 @@ namespace ModFormControls
 			this.panel2.Controls.Add(this.textEditorControlActionBody);
 			this.panel2.Controls.Add(this.splitter1);
 			this.panel2.Controls.Add(this.panel3);
-			this.panel2.Controls.Add(this.comboBox1);
+			this.panel2.Controls.Add(this.comboBoxActionType);
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(472, 312);
 			this.panel2.TabIndex = 6;
+			// 
+			// textEditorControlActionBody
+			// 
+			this.textEditorControlActionBody.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textEditorControlActionBody.Encoding = ((System.Text.Encoding)(resources.GetObject("textEditorControlActionBody.Encoding")));
+			this.textEditorControlActionBody.IsIconBarVisible = false;
+			this.textEditorControlActionBody.Location = new System.Drawing.Point(0, 26);
+			this.textEditorControlActionBody.Name = "textEditorControlActionBody";
+			this.textEditorControlActionBody.ShowEOLMarkers = true;
+			this.textEditorControlActionBody.ShowSpaces = true;
+			this.textEditorControlActionBody.ShowTabs = true;
+			this.textEditorControlActionBody.ShowVRuler = true;
+			this.textEditorControlActionBody.Size = new System.Drawing.Size(470, 181);
+			this.textEditorControlActionBody.TabIndex = 3;
 			// 
 			// splitter1
 			// 
@@ -110,68 +129,6 @@ namespace ModFormControls
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(470, 100);
 			this.panel3.TabIndex = 1;
-			// 
-			// label1
-			// 
-			this.label1.BackColor = System.Drawing.Color.SlateGray;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label1.ForeColor = System.Drawing.Color.White;
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(470, 20);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Comment";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.comboBox1.Items.AddRange(new object[] {
-														   "FIND",
-														   "AFTER, ADD",
-														   "BEFORE, ADD",
-														   "REPLACE WITH",
-														   "IN-LINE FIND",
-														   "IN-LINE AFTER, ADD",
-														   "IN-LINE BEFORE, ADD",
-														   "IN-LINE REPLACE WITH"});
-			this.comboBox1.Location = new System.Drawing.Point(0, 0);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(470, 26);
-			this.comboBox1.TabIndex = 0;
-			// 
-			// panel1
-			// 
-			this.panel1.BackColor = System.Drawing.Color.SlateGray;
-			this.panel1.Location = new System.Drawing.Point(4, 4);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(472, 312);
-			this.panel1.TabIndex = 5;
-			// 
-			// panel4
-			// 
-			this.panel4.BackColor = System.Drawing.Color.Transparent;
-			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel4.Location = new System.Drawing.Point(0, 0);
-			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(480, 320);
-			this.panel4.TabIndex = 7;
-			// 
-			// textEditorControlActionBody
-			// 
-			this.textEditorControlActionBody.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textEditorControlActionBody.Encoding = ((System.Text.Encoding)(resources.GetObject("textEditorControlActionBody.Encoding")));
-			this.textEditorControlActionBody.IsIconBarVisible = false;
-			this.textEditorControlActionBody.Location = new System.Drawing.Point(0, 26);
-			this.textEditorControlActionBody.Name = "textEditorControlActionBody";
-			this.textEditorControlActionBody.ShowEOLMarkers = true;
-			this.textEditorControlActionBody.ShowSpaces = true;
-			this.textEditorControlActionBody.ShowTabs = true;
-			this.textEditorControlActionBody.ShowVRuler = true;
-			this.textEditorControlActionBody.Size = new System.Drawing.Size(470, 181);
-			this.textEditorControlActionBody.TabIndex = 3;
 			// 
 			// textEditorControlComment
 			// 
@@ -221,6 +178,54 @@ namespace ModFormControls
 			this.button2.Text = "Cancel";
 			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
+			// label1
+			// 
+			this.label1.BackColor = System.Drawing.Color.SlateGray;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.ForeColor = System.Drawing.Color.White;
+			this.label1.Location = new System.Drawing.Point(0, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(470, 20);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Comment";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBoxActionType
+			// 
+			this.comboBoxActionType.Dock = System.Windows.Forms.DockStyle.Top;
+			this.comboBoxActionType.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.comboBoxActionType.Items.AddRange(new object[] {
+																	"FIND",
+																	"AFTER, ADD",
+																	"BEFORE, ADD",
+																	"REPLACE WITH",
+																	"IN-LINE FIND",
+																	"IN-LINE AFTER, ADD",
+																	"IN-LINE BEFORE, ADD",
+																	"IN-LINE REPLACE WITH"});
+			this.comboBoxActionType.Location = new System.Drawing.Point(0, 0);
+			this.comboBoxActionType.Name = "comboBoxActionType";
+			this.comboBoxActionType.Size = new System.Drawing.Size(470, 26);
+			this.comboBoxActionType.TabIndex = 0;
+			// 
+			// panel1
+			// 
+			this.panel1.BackColor = System.Drawing.Color.SlateGray;
+			this.panel1.Location = new System.Drawing.Point(4, 4);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(472, 312);
+			this.panel1.TabIndex = 5;
+			// 
+			// panel4
+			// 
+			this.panel4.BackColor = System.Drawing.Color.Transparent;
+			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel4.Location = new System.Drawing.Point(0, 0);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(480, 320);
+			this.panel4.TabIndex = 7;
+			// 
 			// ModActionEditor
 			// 
 			this.Controls.Add(this.panel2);
@@ -248,17 +253,41 @@ namespace ModFormControls
 
 		private void ModActionEditor_Leave(object sender, System.EventArgs e)
 		{
-			this.Dispose();
+			this.Return(this, new ModActionEditorReturnEventArgs(actionIndex, comboBoxActionType.Text, textEditorControlActionBody.Text, textEditorControlComment.Text));
+			this.Hide();
 		}
 
 		private void button2_Click(object sender, System.EventArgs e)
 		{
-			this.Dispose();
+			this.Hide();
 		}
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
 			ModActionEditor_Leave(sender, e);
+		}
+
+		public void SetModAction(int index, string actionType, string actionBody, string actionComment)
+		{
+			actionIndex = index;
+			comboBoxActionType.Text = actionType;
+			textEditorControlActionBody.Text = actionBody;
+			textEditorControlComment.Text = actionComment;
+		}
+	}
+
+	public class ModActionEditorReturnEventArgs: EventArgs 
+	{
+		public int Index;
+		public string ActionType;
+		public string ActionBody;
+		public string ActionComment;
+		public ModActionEditorReturnEventArgs(int index, string actionType, string actionBody, string actionComment)
+		{
+			this.Index = index;
+			this.ActionType = actionType;
+			this.ActionBody = actionBody;
+			this.ActionComment = actionComment;
 		}
 	}
 }
