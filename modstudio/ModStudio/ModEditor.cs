@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.7 2005-08-21 05:58:06 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.8 2005-08-22 05:44:49 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -854,12 +854,12 @@ namespace ModStudio
 			//
 			// openActionDialogBox1
 			//
+			this.openActionDialogBox1.Visible = false;
 			this.openActionDialogBox1.SaveNew += new ModStudio.OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler(openActionDialogBox1_SaveNew);
 			//
 			// modActionEditor1
 			//
-			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
-			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
+			this.modActionEditor1.Location = new Point(10,10);
 			this.modActionEditor1.Visible = false;
 			this.modActionEditor1.Return += new ModFormControls.ModActionEditor.ModActionEditorReturnHandler(modActionEditor1_Return);
 			// 
@@ -996,6 +996,7 @@ namespace ModStudio
 				modDisplayBox2.UpdateSize();
 			}
 			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
+			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
 		}
 
 		private void modDisplayBox2_ItemDoubleClick(object sender, ModFormControls.ActionItemClickEventArgs e)
@@ -1010,6 +1011,7 @@ namespace ModStudio
 			modActionEditor1.actionIndex = modDisplayBox2.SelectedIndex;
 			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionBody, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].AfterComment);
 			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
+			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
 			modActionEditor1.Show();
 			modActionEditor1.BringToFront();
 			modActionEditor1.Select();
