@@ -113,6 +113,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AuthorEditorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthorEditorDialog.resx"
+                    DependentUpon = "AuthorEditorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "HistoryEditorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "HistoryEditorDialog.resx"
+                    DependentUpon = "HistoryEditorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ModEditor.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -120,6 +140,26 @@
                 <File
                     RelPath = "ModEditor.resx"
                     DependentUpon = "ModEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "NoteEditorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NoteEditorDialog.resx"
+                    DependentUpon = "NoteEditorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "OpenActionDialogBox.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OpenActionDialogBox.resx"
+                    DependentUpon = "OpenActionDialogBox.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

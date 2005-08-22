@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.2 2005-08-21 05:58:06 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.3 2005-08-22 05:44:49 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -87,8 +87,8 @@ namespace ModStudio
 		private void InitializeComponent()
 		{
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.buttonOk = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
+			this.buttonOk = new System.Windows.Forms.Button();
 			this.textBoxFile = new System.Windows.Forms.TextBox();
 			this.listBoxFiles = new System.Windows.Forms.ListBox();
 			this.panel1.SuspendLayout();
@@ -104,16 +104,6 @@ namespace ModStudio
 			this.panel1.Size = new System.Drawing.Size(456, 40);
 			this.panel1.TabIndex = 0;
 			// 
-			// buttonOk
-			// 
-			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonOk.Location = new System.Drawing.Point(376, 8);
-			this.buttonOk.Name = "buttonOk";
-			this.buttonOk.TabIndex = 0;
-			this.buttonOk.Text = "&OK";
-			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
-			// 
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -123,6 +113,16 @@ namespace ModStudio
 			this.buttonCancel.TabIndex = 1;
 			this.buttonCancel.Text = "&Cancel";
 			this.buttonCancel.Click += new System.EventHandler(this.button2_Click);
+			// 
+			// buttonOk
+			// 
+			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOk.Location = new System.Drawing.Point(376, 8);
+			this.buttonOk.Name = "buttonOk";
+			this.buttonOk.TabIndex = 0;
+			this.buttonOk.Text = "&OK";
+			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
 			// 
 			// textBoxFile
 			// 
@@ -158,6 +158,7 @@ namespace ModStudio
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "OpenActionDialogBox";
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Select a file to open";
 			this.Load += new System.EventHandler(this.OpenActionDialogBox_Load);
