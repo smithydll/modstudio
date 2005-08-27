@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.5 2005-08-19 13:02:04 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.6 2005-08-27 12:14:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -21,6 +21,7 @@
 
 using System;
 using System.IO;
+using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace ModTemplateTools
@@ -466,11 +467,11 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
-			public string[] ModFilesToEdit;
+			public System.Collections.Specialized.StringCollection ModFilesToEdit; //string[]
 			/// <summary>
 			/// 
 			/// </summary>
-			public string[] ModIncludedFiles;
+			public System.Collections.Specialized.StringCollection ModIncludedFiles; //string[]
 			/// <summary>
 			/// 
 			/// </summary>
@@ -746,6 +747,17 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
+			/// <param name="yes"></param>
+			public ModHistoryEntry(bool yes)
+			{
+				this.HistoryVersion = new ModVersion(0,0,0);
+				this.HistoryDate = DateTime.Now;
+				this.HistoryChanges = new PropertyLang("");
+			}
+
+			/// <summary>
+			/// 
+			/// </summary>
 			/// <param name="_value"></param>
 			/// <param name="_language"></param>
 			public void AddLanguage(string _value, string _language)
@@ -913,6 +925,21 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
+			/// <param name="yes"></param>
+			public ModAuthorEntry(bool yes)
+			{
+				this.UserName = "N/A";
+				this.RealName = "N/A";
+				this.Email = "N/A";
+				this.Homepage = "N/A";
+				this.AuthorFrom = DateTime.Now.Year;
+				this.AuthorTo = DateTime.Now.Year;
+				this.Status = ModAuthorStatus.Current;
+			}
+
+			/// <summary>
+			/// 
+			/// </summary>
 			/// <returns></returns>
 			public override string ToString()
 			{
@@ -1004,6 +1031,21 @@ namespace ModTemplateTools
 		/// <summary>
 		/// 
 		/// </summary>
+		public ModFormats lastReadFormat
+		{
+			get
+			{
+				return LastReadFormat;
+			}
+			set
+			{
+				LastReadFormat = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public PhpbbMod(string TemplatePath)
 		{
 			TextTemplate = OpenTextFile(TemplatePath + "\\MOD.mot");
@@ -1017,6 +1059,10 @@ namespace ModTemplateTools
 			}
 
 			Header = new ModHeader();
+			Header.ModAuthor = new ModAuthor();
+			Header.ModHistory = new ModHistory();
+			Header.ModIncludedFiles = new System.Collections.Specialized.StringCollection();
+			Header.ModFilesToEdit = new System.Collections.Specialized.StringCollection();
 			Actions = new ModActions();
 		}
 
@@ -1152,8 +1198,8 @@ namespace ModTemplateTools
 						case 8:
 							if (TextModLines[i].ToUpper().StartsWith("## FILES TO EDIT")) 
 							{
-								Header.ModFilesToEdit = new string[1]; 
-								Header.ModFilesToEdit[0] = Regex.Replace(TextModLines[i], "\\#\\# Files To Edit\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' ');
+								//Header.ModFilesToEdit = new string[1]; 
+								Header.ModFilesToEdit.Add(Regex.Replace(TextModLines[i], "\\#\\# Files To Edit\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
 							} 
 							else 
 							{
@@ -1174,19 +1220,19 @@ namespace ModTemplateTools
 									{
 										tempii = TextModLines[i];
 									}
-									string[] tempA = Header.ModFilesToEdit;
+									/*string[] tempA = Header.ModFilesToEdit;
 									Header.ModFilesToEdit = new string[tempA.Length + 1];
-									tempA.CopyTo(Header.ModFilesToEdit, 0);
+									tempA.CopyTo(Header.ModFilesToEdit, 0);*/
 
-									Header.ModFilesToEdit[Header.ModFilesToEdit.GetUpperBound(0)] = tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' ');
+									Header.ModFilesToEdit.Add(tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' '));
 								}
 							}
 							break;
 						case 9:
 							if (TextModLines[i].ToUpper().StartsWith("## INCLUDED FILES")) 
 							{
-								Header.ModIncludedFiles = new string[1];
-								Header.ModIncludedFiles[0] = Regex.Replace(TextModLines[i], "\\#\\# Included Files\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' ');
+								//Header.ModIncludedFiles = new string[1];
+								Header.ModIncludedFiles.Add(Regex.Replace(TextModLines[i], "\\#\\# Included Files\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
 							} 
 							else 
 							{
@@ -1207,11 +1253,11 @@ namespace ModTemplateTools
 									{
 										tempii = TextModLines[i];
 									}
-									string[] tempA = Header.ModIncludedFiles;
+									/*string[] tempA = Header.ModIncludedFiles;
 									Header.ModIncludedFiles = new string[tempA.Length + 1];
-									tempA.CopyTo(Header.ModIncludedFiles, 0);
+									tempA.CopyTo(Header.ModIncludedFiles, 0);*/
 
-									Header.ModIncludedFiles[Header.ModIncludedFiles.GetUpperBound(0)] = tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' ');
+									Header.ModIncludedFiles.Add(tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' '));
 								}
 							}
 							break;
@@ -1433,15 +1479,25 @@ namespace ModTemplateTools
 		/// <param name="FileName">A string containing the file path where the MOD is to be saved.</param>
 		public void WriteFile(string FileName)
 		{
+			WriteFile(FileName, this.LastReadFormat);
 		}
 
 		/// <summary>
 		/// Write the MOD to a file in the designated file format.
 		/// </summary>
-		/// <param name="Filename">A string containing the file path where the MOD is to be saved.</param>
+		/// <param name="FileName">A string containing the file path where the MOD is to be saved.</param>
 		/// <param name="Format">The format that will be saved.</param>
-		public void WriteFile(string Filename, ModFormats Format)
+		public void WriteFile(string FileName, ModFormats Format)
 		{
+			switch (Format)
+			{
+				case ModFormats.TextMOD:
+					SaveTextFile(WriteText(), FileName);
+					break;
+				case ModFormats.XMLMOD:
+					SaveTextFile(WriteXml(), FileName);
+					break;
+			}
 		}
 
 		/// <summary>
@@ -1477,7 +1533,7 @@ namespace ModTemplateTools
 			BlankTemplate = BlankTemplate.Replace("<mod.install_time/>", Math.Ceiling(Header.ModInstallationTime / 60) + " minutes");
 
 			string MyMODFTE = null;
-			for (int i = 0; i < Header.ModFilesToEdit.Length; i++) 
+			for (int i = 0; i < Header.ModFilesToEdit.Count; i++) 
 			{
 				if (i == 0) 
 				{
@@ -1491,7 +1547,7 @@ namespace ModTemplateTools
 			BlankTemplate = BlankTemplate.Replace("<mod.files_to_edit/>", MyMODFTE);
 
 			string MyMODIC = null;
-			for (int i = 0; i < Header.ModIncludedFiles.Length; i++) 
+			for (int i = 0; i < Header.ModIncludedFiles.Count; i++) 
 			{
 				if (i == 0) 
 				{
@@ -1654,8 +1710,11 @@ namespace ModTemplateTools
 		/// </summary>
 		/// <param name="filetosave"></param>
 		/// <param name="filename"></param>
-		private void SaveTextFile(string filetosave, string filename)
+		private static void SaveTextFile(string filetosave, string filename)
 		{
+			StreamWriter myStreamWriter = File.CreateText(filename);
+			myStreamWriter.Write(filetosave);
+			myStreamWriter.Close();
 		}
 
 	}
