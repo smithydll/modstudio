@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.5 2005-08-21 05:58:06 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.6 2005-08-27 12:12:25 smithydll Exp $
  *
  *
  ***************************************************************************/
