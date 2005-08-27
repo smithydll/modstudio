@@ -114,22 +114,32 @@
                 />
                 <File
                     RelPath = "AuthorEditorDialog.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthorEditorDialogBox.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AuthorEditorDialog.resx"
-                    DependentUpon = "AuthorEditorDialog.cs"
+                    RelPath = "AuthorEditorDialogBox.resx"
+                    DependentUpon = "AuthorEditorDialogBox.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "HistoryEditorDialog.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "HistoryEditorDialogBox.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "HistoryEditorDialog.resx"
-                    DependentUpon = "HistoryEditorDialog.cs"
+                    RelPath = "HistoryEditorDialogBox.resx"
+                    DependentUpon = "HistoryEditorDialogBox.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -144,13 +154,23 @@
                 />
                 <File
                     RelPath = "NoteEditorDialog.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NoteEditorDialogBox.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NoteEditorDialog.resx"
-                    DependentUpon = "NoteEditorDialog.cs"
+                    RelPath = "NoteEditorDialogBox.resx"
+                    DependentUpon = "NoteEditorDialogBox.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "OpenActionDialog.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "OpenActionDialogBox.cs"

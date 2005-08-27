@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialog.cs,v 1.1 2005-08-22 05:44:49 smithydll Exp $
+ *   $Id: NoteEditorDialog.cs,v 1.2 2005-08-27 12:10:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -20,177 +20,108 @@
  ***************************************************************************/
 
 using System;
-using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ModTemplateTools;
 
+/*
+ * Inspired by:
+ * http://groups.google.com.au/group/microsoft.public.dotnet.framework.windowsforms/browse_thread/thread/50554a22d9d040d5/c88268fc037ccad9?lnk=st&q=c%23+CommonDialog+inherit&rnum=5&hl=en#c88268fc037ccad9
+ */
 namespace ModStudio
 {
 	/// <summary>
-	/// Summary description for NoteEditorDialog.
-	/// </summary>
-	public class NoteEditorDialog : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Button buttonCancel;
-		private System.Windows.Forms.Button buttonOk;
-		private System.Windows.Forms.TextBox textBoxNote;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public NoteEditorDialog()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
-
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.buttonCancel = new System.Windows.Forms.Button();
-			this.buttonOk = new System.Windows.Forms.Button();
-			this.textBoxNote = new System.Windows.Forms.TextBox();
-			this.panel1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.buttonCancel);
-			this.panel1.Controls.Add(this.buttonOk);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 214);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(504, 40);
-			this.panel1.TabIndex = 0;
-			// 
-			// buttonCancel
-			// 
-			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonCancel.Location = new System.Drawing.Point(344, 8);
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.TabIndex = 3;
-			this.buttonCancel.Text = "&Cancel";
-			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-			// 
-			// buttonOk
-			// 
-			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonOk.Location = new System.Drawing.Point(424, 8);
-			this.buttonOk.Name = "buttonOk";
-			this.buttonOk.TabIndex = 2;
-			this.buttonOk.Text = "&OK";
-			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
-			// 
-			// textBoxNote
-			// 
-			this.textBoxNote.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxNote.Location = new System.Drawing.Point(0, 0);
-			this.textBoxNote.Multiline = true;
-			this.textBoxNote.Name = "textBoxNote";
-			this.textBoxNote.Size = new System.Drawing.Size(504, 214);
-			this.textBoxNote.TabIndex = 1;
-			this.textBoxNote.Text = "";
-			// 
-			// NoteEditorDialog
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(504, 254);
-			this.ControlBox = false;
-			this.Controls.Add(this.textBoxNote);
-			this.Controls.Add(this.panel1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "NoteEditorDialog";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "NoteEditorDialog";
-			this.panel1.ResumeLayout(false);
-			this.ResumeLayout(false);
-
-		}
-		#endregion
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public delegate void NoteEditorDialogSaveHandler(object sender, NoteEditorDialogSaveEventArgs e);
-		/// <summary>
-		/// 
-		/// </summary>
-		public event NoteEditorDialogSaveHandler Save;
-
-		private void buttonCancel_Click(object sender, System.EventArgs e)
-		{
-			this.Hide();
-		}
-
-		private void buttonOk_Click(object sender, System.EventArgs e)
-		{
-			this.Save(this, new NoteEditorDialogSaveEventArgs(textBoxNote.Text));
-			this.Hide();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="note"></param>
-		public void SetNote(string note)
-		{
-			this.textBoxNote.Text = note;
-		}
-	}
-
-	/// <summary>
 	/// 
 	/// </summary>
-	public class NoteEditorDialogSaveEventArgs: EventArgs 
+	public class NoteEditorDialog : System.Windows.Forms.CommonDialog
 	{
+		private string note = null;
+		private string type = null;
 		/// <summary>
 		/// 
 		/// </summary>
-		public string Note;
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="note"></param>
-		public NoteEditorDialogSaveEventArgs(string note) 
+		[DefaultValue(null)]
+		public string Note
 		{
-			this.Note = note;
+			get
+			{
+				return note;
+			}
+
+			set
+			{
+				note = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[DefaultValue(null)]
+		public string Type
+		{
+			get
+			{
+				return type;
+			}
+			set
+			{
+				type = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public NoteEditorDialog() 
+		{
+
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public event NoteEditorDialogBox.NoteEditorDialogBoxSaveHandler Save;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="hWndOwner"></param>
+		/// <returns></returns>
+		protected override bool RunDialog(IntPtr hWndOwner)
+		{
+			NoteEditorDialogBox dialogInstance = null;
+			bool okTriggered = false;
+			try
+			{
+				dialogInstance = new NoteEditorDialogBox();
+				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
+				dialogInstance.Note = this.note;
+				if (dialogInstance.ShowDialog() == DialogResult.OK)
+				{
+					okTriggered = true;
+					this.note = dialogInstance.Note; 
+					this.Save(this, new NoteEditorDialogBoxSaveEventArgs(note, type));
+				}
+			}
+
+			finally
+			{
+				if (dialogInstance != null)
+				{
+					dialogInstance.Dispose();
+				}
+			}
+			return okTriggered;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public override void Reset()
+		{
+			this.note = null;
+
 		}
 	}
-}
+} 

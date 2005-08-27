@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.3 2005-08-22 05:44:49 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.4 2005-08-27 12:10:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -36,7 +36,7 @@ namespace ModStudio
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button buttonOk;
 		private System.Windows.Forms.Button buttonCancel;
-		private System.Windows.Forms.TextBox textBoxFile;
+		internal System.Windows.Forms.TextBox textBoxFile;
 		private System.Windows.Forms.ListBox listBoxFiles;
 		/// <summary>
 		/// Required designer variable.
@@ -187,7 +187,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public event OpenActionDialogBoxSaveNewHandler SaveNew;
+		//public event OpenActionDialogBoxSaveNewHandler SaveNew;
 
 		private void button2_Click(object sender, System.EventArgs e)
 		{
@@ -196,8 +196,8 @@ namespace ModStudio
 
 		private void buttonOk_Click(object sender, System.EventArgs e)
 		{
-			this.SaveNew(this, new OpenActionDialogBoxSaveNewEventArgs(textBoxFile.Text));
-			this.Hide();
+			//this.SaveNew(this, new OpenActionDialogBoxSaveNewEventArgs(textBoxFile.Text));
+			//this.Hide();
 		}
 
 		bool enableTextChange = true;
