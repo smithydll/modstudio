@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.8 2005-08-22 05:44:49 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.9 2005-08-27 12:10:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
 using ModStudio;
+using System.Text.RegularExpressions;
 
 namespace ModStudio
 {
@@ -85,7 +86,10 @@ namespace ModStudio
 		private System.Windows.Forms.ToolBarButton toolBarButtonEditAction;
 		private System.Windows.Forms.ToolBarButton toolBarButtonAddAction;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-		private OpenActionDialogBox openActionDialogBox1;
+		private OpenActionDialog openActionDialog1;
+		private AuthorEditorDialog authorEditorDialog1;
+		private HistoryEditorDialog historyEditorDialog1;
+		private NoteEditorDialog noteEditorDialog1;
 		private ModFormControls.ModActionEditor modActionEditor1;
 		private System.Windows.Forms.ContextMenu contextMenuAddAction;
 		private System.Windows.Forms.MenuItem menuItemAddActionSql;
@@ -118,11 +122,12 @@ namespace ModStudio
 			//
 			InitializeComponent();
 
-			ThisMod = new PhpbbMod(".\\");
+			ThisMod = new PhpbbMod(Application.StartupPath);
 
 			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "Email", "Homepage"));
 			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
 			ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("SAVE/CLOSE ALL FILES", "", "# EoM", ""));
+			ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
 		}
 
 		/// <summary>
@@ -131,7 +136,7 @@ namespace ModStudio
 		/// <param name="filename"></param>
 		public ModEditor(string filename):this()
 		{
-			ThisMod = new PhpbbMod(".\\");
+			ThisMod = new PhpbbMod(Application.StartupPath);
 			ThisMod.ReadFile(filename);
 		}
 
@@ -222,9 +227,12 @@ namespace ModStudio
 			this.menuItemAddActionInLineIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionDiyInstruction = new System.Windows.Forms.MenuItem();
 			this.toolBarButtonDelete = new System.Windows.Forms.ToolBarButton();
-			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-			this.openActionDialogBox1 = new OpenActionDialogBox();
 			this.modActionEditor1 = new ModFormControls.ModActionEditor();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.openActionDialog1 = new ModStudio.OpenActionDialog();
+			this.authorEditorDialog1 = new ModStudio.AuthorEditorDialog();
+			this.historyEditorDialog1 = new ModStudio.HistoryEditorDialog();
+			this.noteEditorDialog1 = new ModStudio.NoteEditorDialog();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -290,9 +298,10 @@ namespace ModStudio
 			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button8.Location = new System.Drawing.Point(216, 108);
 			this.button8.Name = "button8";
-			this.button8.Size = new System.Drawing.Size(75, 20);
+			this.button8.Size = new System.Drawing.Size(120, 20);
 			this.button8.TabIndex = 4;
-			this.button8.Text = "Edit";
+			this.button8.Text = "Update from MOD";
+			this.button8.Click += new System.EventHandler(this.button8_Click);
 			// 
 			// labelModInstallationTime
 			// 
@@ -411,6 +420,7 @@ namespace ModStudio
 			this.MODHistoryListView.Size = new System.Drawing.Size(448, 160);
 			this.MODHistoryListView.TabIndex = 38;
 			this.MODHistoryListView.View = System.Windows.Forms.View.Details;
+			this.MODHistoryListView.DoubleClick += new System.EventHandler(this.MODHistoryListView_DoubleClick);
 			// 
 			// columnHeader1
 			// 
@@ -431,16 +441,18 @@ namespace ModStudio
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.button1.Location = new System.Drawing.Point(416, 144);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(32, 32);
+			this.button1.Size = new System.Drawing.Size(32, 40);
 			this.button1.TabIndex = 37;
 			this.button1.Text = "Add";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// MODAuthorListBox
 			// 
 			this.MODAuthorListBox.Location = new System.Drawing.Point(136, 144);
 			this.MODAuthorListBox.Name = "MODAuthorListBox";
-			this.MODAuthorListBox.Size = new System.Drawing.Size(272, 30);
+			this.MODAuthorListBox.Size = new System.Drawing.Size(272, 43);
 			this.MODAuthorListBox.TabIndex = 31;
+			this.MODAuthorListBox.DoubleClick += new System.EventHandler(this.MODAuthorListBox_DoubleClick);
 			// 
 			// MODInstallationLevelComboBox
 			// 
@@ -508,6 +520,7 @@ namespace ModStudio
 			this.Button16.TabIndex = 25;
 			this.Button16.Text = "...";
 			this.Button16.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.Button16.Click += new System.EventHandler(this.Button16_Click);
 			// 
 			// MODDescriptionLabel
 			// 
@@ -596,40 +609,43 @@ namespace ModStudio
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.button2.Location = new System.Drawing.Point(456, 144);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(40, 32);
+			this.button2.Size = new System.Drawing.Size(40, 40);
 			this.button2.TabIndex = 35;
 			this.button2.Text = "Edit";
+			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// button3
 			// 
 			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.button3.Location = new System.Drawing.Point(504, 144);
 			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(48, 32);
+			this.button3.Size = new System.Drawing.Size(48, 40);
 			this.button3.TabIndex = 36;
 			this.button3.Text = "Delete";
+			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
 			// MODAuthorNotesLabel
 			// 
-			this.MODAuthorNotesLabel.Location = new System.Drawing.Point(136, 176);
+			this.MODAuthorNotesLabel.Location = new System.Drawing.Point(136, 200);
 			this.MODAuthorNotesLabel.Name = "MODAuthorNotesLabel";
-			this.MODAuthorNotesLabel.Size = new System.Drawing.Size(448, 104);
+			this.MODAuthorNotesLabel.Size = new System.Drawing.Size(448, 80);
 			this.MODAuthorNotesLabel.TabIndex = 22;
 			// 
 			// button4
 			// 
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button4.Location = new System.Drawing.Point(104, 192);
+			this.button4.Location = new System.Drawing.Point(104, 224);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(24, 16);
 			this.button4.TabIndex = 24;
 			this.button4.Text = "...";
 			this.button4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.button4.Click += new System.EventHandler(this.button4_Click);
 			// 
 			// label9
 			// 
 			this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label9.Location = new System.Drawing.Point(8, 176);
+			this.label9.Location = new System.Drawing.Point(8, 200);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(120, 23);
 			this.label9.TabIndex = 18;
@@ -671,6 +687,7 @@ namespace ModStudio
 			this.button5.Size = new System.Drawing.Size(120, 20);
 			this.button5.TabIndex = 32;
 			this.button5.Text = "Add";
+			this.button5.Click += new System.EventHandler(this.button5_Click);
 			// 
 			// button6
 			// 
@@ -680,6 +697,7 @@ namespace ModStudio
 			this.button6.Size = new System.Drawing.Size(120, 20);
 			this.button6.TabIndex = 34;
 			this.button6.Text = "Edit";
+			this.button6.Click += new System.EventHandler(this.button6_Click);
 			// 
 			// button7
 			// 
@@ -689,12 +707,14 @@ namespace ModStudio
 			this.button7.Size = new System.Drawing.Size(120, 20);
 			this.button7.TabIndex = 33;
 			this.button7.Text = "Delete";
+			this.button7.Click += new System.EventHandler(this.button7_Click);
 			// 
 			// tabPageActions
 			// 
 			this.tabPageActions.BackColor = System.Drawing.SystemColors.Control;
 			this.tabPageActions.Controls.Add(this.modDisplayBox2);
 			this.tabPageActions.Controls.Add(this.toolBar1);
+			this.tabPageActions.Controls.Add(this.modActionEditor1);
 			this.tabPageActions.Location = new System.Drawing.Point(4, 25);
 			this.tabPageActions.Name = "tabPageActions";
 			this.tabPageActions.Size = new System.Drawing.Size(784, 537);
@@ -846,22 +866,36 @@ namespace ModStudio
 			// 
 			this.toolBarButtonDelete.Text = "Delete Action";
 			// 
+			// modActionEditor1
+			// 
+			this.modActionEditor1.Location = new System.Drawing.Point(10, 10);
+			this.modActionEditor1.Name = "modActionEditor1";
+			this.modActionEditor1.Size = new System.Drawing.Size(480, 320);
+			this.modActionEditor1.TabIndex = 2;
+			this.modActionEditor1.Visible = false;
+			this.modActionEditor1.Return += new ModFormControls.ModActionEditor.ModActionEditorReturnHandler(this.modActionEditor1_Return);
+			// 
 			// saveFileDialog1
 			// 
 			this.saveFileDialog1.FileName = "untitled.mod";
 			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
 			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
-			//
-			// openActionDialogBox1
-			//
-			this.openActionDialogBox1.Visible = false;
-			this.openActionDialogBox1.SaveNew += new ModStudio.OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler(openActionDialogBox1_SaveNew);
-			//
-			// modActionEditor1
-			//
-			this.modActionEditor1.Location = new Point(10,10);
-			this.modActionEditor1.Visible = false;
-			this.modActionEditor1.Return += new ModFormControls.ModActionEditor.ModActionEditorReturnHandler(modActionEditor1_Return);
+			// 
+			// openActionDialog1
+			// 
+			this.openActionDialog1.SaveNew += new ModStudio.OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler(this.openActionDialogBox1_SaveNew);
+			// 
+			// authorEditorDialog1
+			// 
+			this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(this.authorEditorDialog1_Save);
+			// 
+			// historyEditorDialog1
+			// 
+			this.historyEditorDialog1.Save += new ModStudio.HistoryEditorDialogBox.HistoryEditorDialogBoxSaveHandler(this.historyEditorDialog1_Save);
+			// 
+			// noteEditorDialog1
+			// 
+			this.noteEditorDialog1.Save += new ModStudio.NoteEditorDialogBox.NoteEditorDialogBoxSaveHandler(this.noteEditorDialog1_Save);
 			// 
 			// ModEditor
 			// 
@@ -879,7 +913,6 @@ namespace ModStudio
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevisionNumericUpDown)).EndInit();
-			this.tabPageActions.Controls.Add(modActionEditor1);
 			this.tabPageActions.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -938,7 +971,7 @@ namespace ModStudio
 					}
 					if (ThisMod.Header.ModIncludedFiles != null)
 					{
-						labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Length));
+						labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Count));
 					}
 					else
 					{
@@ -953,7 +986,21 @@ namespace ModStudio
 						MODAuthorListBox.Items.Add(a.UserName);
 					}
 					MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
-					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.pValue;
+					MODDescriptionLabel.Text = ThisMod.Header.ModDescription.GetValue();
+					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.GetValue();
+					MODHistoryListView.Items.Clear();
+					// TODO: properly handle the exception given by this when no MOD History is included
+					try
+					{
+						foreach (PhpbbMod.ModHistoryEntry h in ThisMod.Header.ModHistory.History)
+						{
+							string[] tempItem = {h.HistoryVersion.ToString(), h.HistoryDate.ToString(), h.HistoryChanges.GetValue()};
+							MODHistoryListView.Items.Add(new ListViewItem(tempItem));
+						}
+					}
+					catch
+					{
+					}
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1229,7 +1276,7 @@ namespace ModStudio
 
 		private void menuItemAddActionOpen_Click(object sender, System.EventArgs e)
 		{
-			openActionDialogBox1.ShowDialog(this);
+			openActionDialog1.ShowDialog(this);
 		}
 
 		private void AddAction(string actionType)
@@ -1324,10 +1371,154 @@ namespace ModStudio
 			}
 			SetModified();
 		}
+		
+		private void noteEditorDialog1_Save(object sender, NoteEditorDialogBoxSaveEventArgs e)
+		{
+			switch (e.Type)
+			{
+				case "Desc":
+					ThisMod.Header.ModDescription.SetValue(e.Note);
+					break;
+				case "Auth":
+					ThisMod.Header.ModAuthorNotes.SetValue(e.Note);
+					break;
+			}
+			SetModified();
+			MODDescriptionLabel.Text = ThisMod.Header.ModDescription.GetValue();
+			MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.GetValue();
+		}
 
 		private void button9_Click(object sender, System.EventArgs e)
 		{
-			openActionDialogBox1.ShowDialog(this);
+			openActionDialog1.ShowDialog(this);
+			tabControlEditor_SelectedIndexChanged(null, null);
+		}
+
+		private void historyEditorDialog1_Save(object sender, HistoryEditorDialogBoxSaveEventArgs e)
+		{
+			if (historyEditorDialog1.Index == -1)
+			{
+				ThisMod.Header.ModHistory.AddEntry(e.Entry);
+			}
+			else
+			{
+				ThisMod.Header.ModHistory.History[historyEditorDialog1.Index] = e.Entry;
+			}
+			tabControlEditor_SelectedIndexChanged(null, null);
+		}
+
+		private void button5_Click(object sender, System.EventArgs e)
+		{
+			historyEditorDialog1.Reset();
+			historyEditorDialog1.ShowDialog(this);
+		}
+
+		private void authorEditorDialog1_Save(object sender, AuthorEditorDialogBoxSaveEventArgs e)
+		{
+			if (authorEditorDialog1.Index == -1)
+			{
+				ThisMod.Header.ModAuthor.AddEntry(e.Entry);
+			}
+			else
+			{
+				ThisMod.Header.ModAuthor.Authors[authorEditorDialog1.Index] = e.Entry;
+			}
+			tabControlEditor_SelectedIndexChanged(null, null);
+		}
+
+		private void Button16_Click(object sender, System.EventArgs e)
+		{
+			noteEditorDialog1.Type = "Desc";
+			noteEditorDialog1.Note = ThisMod.Header.ModDescription.GetValue();
+			noteEditorDialog1.ShowDialog(this);
+		}
+
+		private void button4_Click(object sender, System.EventArgs e)
+		{
+			noteEditorDialog1.Type = "Auth";
+			noteEditorDialog1.Note = ThisMod.Header.ModAuthorNotes.GetValue();
+			noteEditorDialog1.ShowDialog(this);
+		}
+
+		private void button6_Click(object sender, System.EventArgs e)
+		{
+			if (MODHistoryListView.SelectedItems.Count > 0)
+			{
+				historyEditorDialog1.Index = MODHistoryListView.SelectedItems[0].Index;
+				historyEditorDialog1.Entry = ThisMod.Header.ModHistory.History[historyEditorDialog1.Index];
+				historyEditorDialog1.ShowDialog(this);
+			}
+		}
+
+		private void MODHistoryListView_DoubleClick(object sender, System.EventArgs e)
+		{
+			button6_Click(null, null);
+		}
+
+		private void button1_Click(object sender, System.EventArgs e)
+		{
+			authorEditorDialog1.Reset();
+			authorEditorDialog1.ShowDialog(this);
+		}
+
+		private void button7_Click(object sender, System.EventArgs e)
+		{
+			if (MODHistoryListView.SelectedItems.Count > 0)
+			{
+				ThisMod.Header.ModHistory.RemoveEntry(MODHistoryListView.SelectedItems[0].Index);
+				tabControlEditor_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void button2_Click(object sender, System.EventArgs e)
+		{
+			try
+			{
+				authorEditorDialog1.Index = MODAuthorListBox.SelectedIndex;
+				authorEditorDialog1.Entry = ThisMod.Header.ModAuthor.Authors[authorEditorDialog1.Index];
+				authorEditorDialog1.ShowDialog(this);
+			}
+			catch
+			{
+			}
+		}
+
+		private void button3_Click(object sender, System.EventArgs e)
+		{
+			if (ThisMod.Header.ModAuthor.Authors.Length > 1)
+			{
+				ThisMod.Header.ModAuthor.RemoveEntry(MODAuthorListBox.SelectedIndex);
+				tabControlEditor_SelectedIndexChanged(null, null);
+			}
+			else
+			{
+				MessageBox.Show(this, "A MOD must always have at least one author");
+			}
+		}
+
+		private void MODAuthorListBox_DoubleClick(object sender, System.EventArgs e)
+		{
+			button2_Click(null, null);
+		}
+
+		private void button8_Click(object sender, System.EventArgs e)
+		{
+			ThisMod.Header.ModIncludedFiles.Clear();
+			char[] trimChars = {' ', '\t'};
+			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
+			{
+				if (ThisMod.Actions.Actions[i].ActionType == "COPY")
+				{
+					string[] lines = ThisMod.Actions.Actions[i].ActionBody.Split('\n');
+						foreach (string line in lines)
+						{
+							if (line.TrimStart(trimChars).ToLower().StartsWith("COPY"))
+							{
+								ThisMod.Header.ModIncludedFiles.Add(Regex.Match(line.Trim(trimChars), "copy .+ to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
+							}
+						}
+				}
+			}
 			tabControlEditor_SelectedIndexChanged(null, null);
 		}
 	}

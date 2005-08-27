@@ -1,11 +1,11 @@
 /***************************************************************************
- *                           HistoryEditorDialog.cs
+ *                            OpenActionDialog.cs
  *                            -------------------
  *   begin                : Wednesday, Jun 29, 2005
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialog.cs,v 1.2 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: OpenActionDialog.cs,v 1.1 2005-08-27 12:10:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,7 +22,6 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools;
 
 /*
  * Inspired by:
@@ -33,47 +32,30 @@ namespace ModStudio
 	/// <summary>
 	/// 
 	/// </summary>
-	public class HistoryEditorDialog : System.Windows.Forms.CommonDialog
+	public class OpenActionDialog : System.Windows.Forms.CommonDialog
 	{
-		private ModTemplateTools.PhpbbMod.ModHistoryEntry entry = new ModTemplateTools.PhpbbMod.ModHistoryEntry(true);
+		private string filename = null;
 		/// <summary>
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public ModTemplateTools.PhpbbMod.ModHistoryEntry Entry
+		public string fileName
 		{
 			get
 			{
-				return entry;
+				return filename;
 			}
 
 			set
 			{
-				entry = value;
-			}
-		}
-
-		private int index = -1;
-		/// <summary>
-		/// 
-		/// </summary>
-		[DefaultValue(-1)]
-		public int Index
-		{
-			get
-			{
-				return index;
-			}
-			set
-			{
-				index = value;
+				filename = value;
 			}
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public HistoryEditorDialog() 
+		public OpenActionDialog() 
 		{
 
 		}
@@ -81,7 +63,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public event HistoryEditorDialogBox.HistoryEditorDialogBoxSaveHandler Save;
+		public event OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler SaveNew;
 
 		/// <summary>
 		/// 
@@ -90,18 +72,18 @@ namespace ModStudio
 		/// <returns></returns>
 		protected override bool RunDialog(IntPtr hWndOwner)
 		{
-			HistoryEditorDialogBox dialogInstance = null;
+			OpenActionDialogBox dialogInstance = null;
 			bool okTriggered = false;
 			try
 			{
-				dialogInstance = new HistoryEditorDialogBox();
+				dialogInstance = new OpenActionDialogBox();
 				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
-				dialogInstance.HistoryEntry = this.entry;
+				dialogInstance.textBoxFile.Text = this.fileName;
 				if (dialogInstance.ShowDialog() == DialogResult.OK)
 				{
 					okTriggered = true;
-					this.entry = dialogInstance.HistoryEntry; 
-					this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(entry));
+					this.fileName = dialogInstance.textBoxFile.Text; 
+					this.SaveNew(this, new OpenActionDialogBoxSaveNewEventArgs(dialogInstance.textBoxFile.Text));
 				}
 			}
 
@@ -120,7 +102,7 @@ namespace ModStudio
 		/// </summary>
 		public override void Reset()
 		{
-			this.entry = new ModTemplateTools.PhpbbMod.ModHistoryEntry(true);
+			this.fileName = null;
 
 		}
 	}
