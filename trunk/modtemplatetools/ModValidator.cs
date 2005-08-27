@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.7 2005-08-20 03:03:47 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.8 2005-08-27 12:14:44 smithydll Exp $
  *
  *
  ***************************************************************************/
