@@ -96,7 +96,7 @@
                 />
                 <Reference
                     Name = "icsharpcode.texteditor"
-                    AssemblyName = "icsharpcode.texteditor"
+                    AssemblyName = "ICSharpCode.TextEditor"
                     HintPath = "bin\debug\icsharpcode.texteditor.dll"
                 />
             </References>
@@ -105,6 +105,7 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
