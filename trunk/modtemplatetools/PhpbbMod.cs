@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.6 2005-08-27 12:14:45 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.7 2005-08-28 02:58:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -148,7 +148,7 @@ namespace ModTemplateTools
 						}
 					}
 				}
-				return null;
+				return "";
 			}
 
 			/// <summary>
@@ -1268,6 +1268,7 @@ namespace ModTemplateTools
 								StartOffset = i + 1;
 								e++;
 								i = TextModLines.Length;
+								break;
 							}
 							if (TextModLines[i].ToUpper().StartsWith("## AUTHOR NOTE")) 
 							{
@@ -1347,12 +1348,12 @@ namespace ModTemplateTools
 			string[] ModTextLines = TextMod.Split('\n');
 
 			bool InMODAction = false;
-			string ThisMODActionBody = null;
-			string ThisMODActionType = null;
-			string ThisMODActionComm = null;
-			string NextMODActionComm = null;
-			bool IsFirstMALine = false;
-			bool IsFirstTCLine = false;
+			string ThisMODActionBody = "";
+			string ThisMODActionType = "";
+			string ThisMODActionComm = "";
+			string NextMODActionComm = "";
+			bool IsFirstMALine = true;
+			bool IsFirstTCLine = true;
 			int IntFirstMALine = 0;
 			bool FirstActionFound = false;
 
@@ -1373,6 +1374,9 @@ namespace ModTemplateTools
 				{
 					if (ModTextLines[i].StartsWith("#") && ModTextLines[i + 1].StartsWith("#-----[") && FirstActionFound) 
 					{
+						NextMODActionComm = NextMODActionComm.TrimStart('\n');
+						ThisMODActionComm = ThisMODActionComm.TrimStart('\n');
+						//ThisMODActionBody = ThisMODActionBody.TrimStart('\n');
 						Actions.AddEntry(new ModAction(ThisMODActionType, ThisMODActionBody, NextMODActionComm, ThisMODActionComm, IntFirstMALine));
 						ThisMODActionBody = "";
 						ThisMODActionType = "";
@@ -1492,7 +1496,7 @@ namespace ModTemplateTools
 			switch (Format)
 			{
 				case ModFormats.TextMOD:
-					SaveTextFile(WriteText(), FileName);
+					SaveTextFile(WriteText().Replace("\r","").Replace("\n","\r\n"), FileName);
 					break;
 				case ModFormats.XMLMOD:
 					SaveTextFile(WriteXml(), FileName);
@@ -1564,39 +1568,49 @@ namespace ModTemplateTools
 			{
 				BlankTemplate = BlankTemplate.Replace("<mod.license/>", Newline + "## License: " + Header.License);
 			}
+			else
+			{
+				BlankTemplate = BlankTemplate.Replace("<mod.license/>", "");
+			}
 			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
 			string MyMODHistory;
 			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
-			for (int i = 0; i < Header.ModHistory.History.Length; i++) 
+			try
 			{
-				if (i == 0 && !((Header.ModHistory.History[i].HistoryChanges.GetValue() == null))) 
+				for (int i = 0; i < Header.ModHistory.History.Length; i++) 
 				{
-					NewMyMODHistory.Append("##############################################################");
-					NewMyMODHistory.Append(Newline + "## MOD History:");
-					NewMyMODHistory.Append(Newline + "## ");
-					NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
-					if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+					if (i == 0 && !((Header.ModHistory.History[i].HistoryChanges.GetValue() == null))) 
 					{
-						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+						NewMyMODHistory.Append("##############################################################");
+						NewMyMODHistory.Append(Newline + "## MOD History:");
+						NewMyMODHistory.Append(Newline + "## ");
+						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
+						if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+						{
+							NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+						} 
+						else 
+						{
+							NewMyMODHistory.Append(Newline + "## - ");
+						}
 					} 
 					else 
 					{
-						NewMyMODHistory.Append(Newline + "## - ");
-					}
-				} 
-				else 
-				{
-					NewMyMODHistory.Append(Newline + "## ");
-					NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
-					if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
-					{
-						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
-					} 
-					else 
-					{
-						NewMyMODHistory.Append(Newline + "## - ");
+						NewMyMODHistory.Append(Newline + "## ");
+						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
+						if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+						{
+							NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+						} 
+						else 
+						{
+							NewMyMODHistory.Append(Newline + "## - ");
+						}
 					}
 				}
+			}
+			catch
+			{
 			}
 			MyMODHistory = NewMyMODHistory.ToString();
 			if (!(MyMODHistory.Length == 0)) 
@@ -1629,7 +1643,7 @@ namespace ModTemplateTools
 							string[] ACsplit = MA.AfterComment.Replace("\r", "").Split(Newline);
 							for (int j = 0; j <= ACsplit.GetUpperBound(0); j++) 
 							{
-								if (!((ACsplit[j] == "" & j == 0))) 
+								if (!((ACsplit[j] == "" && j == 0))) 
 								{
 									NewModBody.Append(Newline);
 									NewModBody.Append("# " + ACsplit[j]);
