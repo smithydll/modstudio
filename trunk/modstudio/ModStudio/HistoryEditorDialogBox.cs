@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.1 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.2 2005-08-28 02:59:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -69,7 +69,7 @@ namespace ModStudio
 		/// <param name="entry"></param>
 		public void SetEntry(ModTemplateTools.PhpbbMod.ModHistoryEntry entry)
 		{
-			textBoxEntry.Text = entry.HistoryChanges.pValue;
+			textBoxEntry.Text = entry.HistoryChanges.GetValue().Replace("\r","").Replace("\n", "\r\n");
 			MODVersionMajor.Value = entry.HistoryVersion.VersionMajor;
 			MODVersionMinor.Value = entry.HistoryVersion.VersionMinor;
 			MODVersionRevision.Value = entry.HistoryVersion.VersionRevision;
@@ -257,7 +257,7 @@ namespace ModStudio
 		{
 			get
 			{
-				return new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text));
+				return new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text.Replace("\r", "")));
 			}
 			set
 			{

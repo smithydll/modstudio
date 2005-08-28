@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = "phpBB.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "ModStudio"
                 AssemblyOriginatorKeyFile = ""

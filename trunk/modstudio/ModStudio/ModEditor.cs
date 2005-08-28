@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.9 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.10 2005-08-28 02:59:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -124,10 +124,11 @@ namespace ModStudio
 
 			ThisMod = new PhpbbMod(Application.StartupPath);
 
-			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "Email", "Homepage"));
+			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "invalid@invalid.invalid", "http://invalid.invalid/"));
 			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
-			ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("SAVE/CLOSE ALL FILES", "", "# EoM", ""));
+			ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("SAVE/CLOSE ALL FILES", "", "EoM", ""));
 			ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
+			ThisMod.Header.License = "http://opensource.org/licenses/gpl-license.php GNU General Public License v2";
 		}
 
 		/// <summary>
@@ -902,6 +903,7 @@ namespace ModStudio
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(792, 566);
 			this.Controls.Add(this.tabControlEditor);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "ModEditor";
 			this.Text = "untitled";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -928,6 +930,20 @@ namespace ModStudio
 		{
 		}
 
+		private void UpdateHeader()
+		{
+			ThisMod.Header.ModTitle.SetValue(MODTitleTextBox.Text);
+			if (MODVersionReleaseDomainUpDown.Text.ToCharArray().Length > 0)
+			{
+				ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value, MODVersionReleaseDomainUpDown.Text.ToCharArray()[0]);
+			}
+			else
+			{
+				ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value);
+			}
+			ThisMod.Header.ModInstallationLevel = PhpbbMod.ModInstallationLevelParse(MODInstallationLevelComboBox.Text);
+		}
+
 		private int LastSelectedIndex = 0;
 		private void tabControlEditor_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
@@ -936,16 +952,7 @@ namespace ModStudio
 				case 0: // Overview
 					break;
 				case 1: // Header
-					ThisMod.Header.ModTitle.SetValue(MODTitleTextBox.Text);
-					if (MODVersionReleaseDomainUpDown.Text.ToCharArray().Length > 0)
-					{
-						ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value, MODVersionReleaseDomainUpDown.Text.ToCharArray()[0]);
-					}
-					else
-					{
-						ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value);
-					}
-					ThisMod.Header.ModInstallationLevel = PhpbbMod.ModInstallationLevelParse(MODInstallationLevelComboBox.Text);
+					UpdateHeader();
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1001,6 +1008,10 @@ namespace ModStudio
 					catch
 					{
 					}
+					MODVersionMajorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMajor;
+					MODVersionMinorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMinor;
+					MODVersionRevisionNumericUpDown.Value = ThisMod.Header.ModVersion.VersionRevision;
+					MODVersionReleaseDomainUpDown.Text = ThisMod.Header.ModVersion.VersionRelease.ToString();
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1086,6 +1097,9 @@ namespace ModStudio
 		/// </summary>
 		public void SaveFile()
 		{
+			UpdateModFilesToEdit();
+			UpdateModInstallTime();
+			UpdateHeader();
 			if (this.Text.EndsWith("*")) // the file has been modified
 			{
 				if (this.Text.StartsWith("untitled")) // hasn't been saved before
@@ -1105,6 +1119,9 @@ namespace ModStudio
 		/// </summary>
 		public void SaveFileAs()
 		{
+			UpdateModFilesToEdit();
+			UpdateModInstallTime();
+			UpdateHeader();
 			saveFileDialog1.ShowDialog(this);
 		}
 
@@ -1405,6 +1422,7 @@ namespace ModStudio
 				ThisMod.Header.ModHistory.History[historyEditorDialog1.Index] = e.Entry;
 			}
 			tabControlEditor_SelectedIndexChanged(null, null);
+			SetModified();
 		}
 
 		private void button5_Click(object sender, System.EventArgs e)
@@ -1424,6 +1442,7 @@ namespace ModStudio
 				ThisMod.Header.ModAuthor.Authors[authorEditorDialog1.Index] = e.Entry;
 			}
 			tabControlEditor_SelectedIndexChanged(null, null);
+			SetModified();
 		}
 
 		private void Button16_Click(object sender, System.EventArgs e)
@@ -1468,6 +1487,7 @@ namespace ModStudio
 				ThisMod.Header.ModHistory.RemoveEntry(MODHistoryListView.SelectedItems[0].Index);
 				tabControlEditor_SelectedIndexChanged(null, null);
 			}
+			SetModified();
 		}
 
 		private void button2_Click(object sender, System.EventArgs e)
@@ -1494,6 +1514,7 @@ namespace ModStudio
 			{
 				MessageBox.Show(this, "A MOD must always have at least one author");
 			}
+			SetModified();
 		}
 
 		private void MODAuthorListBox_DoubleClick(object sender, System.EventArgs e)
@@ -1503,6 +1524,16 @@ namespace ModStudio
 
 		private void button8_Click(object sender, System.EventArgs e)
 		{
+			UpdateModIncludedFiles();
+			tabControlEditor_SelectedIndexChanged(null, null);
+			SetModified();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void UpdateModIncludedFiles()
+		{
 			ThisMod.Header.ModIncludedFiles.Clear();
 			char[] trimChars = {' ', '\t'};
 			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
@@ -1510,16 +1541,72 @@ namespace ModStudio
 				if (ThisMod.Actions.Actions[i].ActionType == "COPY")
 				{
 					string[] lines = ThisMod.Actions.Actions[i].ActionBody.Split('\n');
-						foreach (string line in lines)
+					foreach (string line in lines)
+					{
+						if (line.TrimStart(trimChars).ToLower().StartsWith("COPY"))
 						{
-							if (line.TrimStart(trimChars).ToLower().StartsWith("COPY"))
-							{
-								ThisMod.Header.ModIncludedFiles.Add(Regex.Match(line.Trim(trimChars), "copy .+ to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
-							}
+							ThisMod.Header.ModIncludedFiles.Add(Regex.Match(line.Trim(trimChars), "copy .+ to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
 						}
+					}
 				}
 			}
-			tabControlEditor_SelectedIndexChanged(null, null);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void UpdateModFilesToEdit()
+		{
+			ThisMod.Header.ModFilesToEdit.Clear();
+			char[] trimChars = {' ', '\t', '\n', '\r'};
+			foreach (PhpbbMod.ModAction e in ThisMod.Actions.Actions)
+			{
+				if (e.ActionType == "OPEN")
+				{
+					ThisMod.Header.ModFilesToEdit.Add(e.ActionBody.Trim(trimChars));
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void UpdateModInstallTime()
+		{
+			int totalinstalltime = 126;
+			foreach (PhpbbMod.ModAction e in ThisMod.Actions.Actions)
+			{
+				switch (e.ActionType)
+				{
+					case "OPEN":
+						totalinstalltime += 27;
+						break;
+					case "SQL":
+						totalinstalltime += 50;
+						break;
+					case "COPY":
+						totalinstalltime += e.ActionBody.Split('n').Length * 5;
+						break;
+					case "FIND":
+					case "IN-LINE FIND":
+						totalinstalltime += 12;
+						break;
+					case "AFTER, ADD":
+					case "BEFORE, ADD":
+					case "REPLACE WITH":
+					case "INCREMENT":
+					case "IN-LINE AFTER, ADD":
+					case "IN-LINE BEFORE, ADD":
+					case "IN-LINE REPLACE WITH":
+					case "IN-LINE INCREMENT":
+						totalinstalltime += 18;
+						break;
+					case "DIY INSTRUCTION":
+						totalinstalltime += 60;
+						break;
+				}
+			}
+			ThisMod.Header.ModInstallationTime = totalinstalltime;
 		}
 	}
 }
