@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.6 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: Studio.cs,v 1.7 2005-08-28 02:59:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -80,11 +80,16 @@ namespace ModStudio
 			// TODO: Add any constructor code after InitializeComponent call
 			//
 
-			ModEditors = new ModEditor[1];
+			/*ModEditors = new ModEditor[1];
 			ModEditors[0] = new ModEditor();
 			ModEditors[0].ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
 			ModEditors[0].MdiParent = this;
-			ModEditors[0].Show();
+			ModEditors[0].Show();*/
+
+			ModEditor newEditor = new ModEditor();
+			newEditor.MdiParent = this;
+			newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+			newEditor.Show();
 
 		}
 
@@ -185,6 +190,7 @@ namespace ModStudio
 			this.menuItemFileNew.ShowShortcut = ((bool)(resources.GetObject("menuItemFileNew.ShowShortcut")));
 			this.menuItemFileNew.Text = resources.GetString("menuItemFileNew.Text");
 			this.menuItemFileNew.Visible = ((bool)(resources.GetObject("menuItemFileNew.Visible")));
+			this.menuItemFileNew.Click += new System.EventHandler(this.menuItemFileNew_Click);
 			// 
 			// menuItemFileOpen
 			// 
@@ -204,6 +210,7 @@ namespace ModStudio
 			this.menuItemFileClose.ShowShortcut = ((bool)(resources.GetObject("menuItemFileClose.ShowShortcut")));
 			this.menuItemFileClose.Text = resources.GetString("menuItemFileClose.Text");
 			this.menuItemFileClose.Visible = ((bool)(resources.GetObject("menuItemFileClose.Visible")));
+			this.menuItemFileClose.Click += new System.EventHandler(this.menuItemFileClose_Click);
 			// 
 			// menuItemSep1
 			// 
@@ -377,6 +384,7 @@ namespace ModStudio
 			this.menuItemHelpAbout.ShowShortcut = ((bool)(resources.GetObject("menuItemHelpAbout.ShowShortcut")));
 			this.menuItemHelpAbout.Text = resources.GetString("menuItemHelpAbout.Text");
 			this.menuItemHelpAbout.Visible = ((bool)(resources.GetObject("menuItemHelpAbout.Visible")));
+			this.menuItemHelpAbout.Click += new System.EventHandler(this.menuItemHelpAbout_Click);
 			// 
 			// openFileDialog1
 			// 
@@ -511,6 +519,13 @@ namespace ModStudio
 
 		private void OpenFile(string filename)
 		{
+			if (this.MdiChildren.Length > 0)
+			{
+				if (((ModEditor)this.ActiveMdiChild).Text == "untitled")
+				{
+					this.ActiveMdiChild.Close();
+				}
+			}
 			ModEditor newEditor = new ModEditor(filename);
 			newEditor.MdiParent = this;
 			newEditor.Text = filename;
@@ -532,6 +547,7 @@ namespace ModStudio
 			switch (toolBar1.Buttons.IndexOf(e.Button))
 			{
 				case 0: // new
+					menuItemFileNew_Click(null, null);
 					break;
 				case 1: // open
 					menuItemFileOpen_Click(null, null);
@@ -574,6 +590,27 @@ namespace ModStudio
 					ms.SaveFile();
 				}
 			}
+		}
+
+		private void menuItemFileClose_Click(object sender, System.EventArgs e)
+		{
+			if (this.MdiChildren.Length > 0)
+			{
+				this.ActiveMdiChild.Close();
+			}
+		}
+
+		private void menuItemFileNew_Click(object sender, System.EventArgs e)
+		{
+			ModEditor newEditor = new ModEditor();
+			newEditor.MdiParent = this;
+			newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+			newEditor.Show();
+		}
+
+		private void menuItemHelpAbout_Click(object sender, System.EventArgs e)
+		{
+			MessageBox.Show(this, "MOD Studio v4 (0.1) Copyright 2005 David Smith (smithy_dll).\nTextbox component from http://icsharpcode.net/");
 		}
 	}
 }

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.4 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.5 2005-08-28 02:59:59 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -148,7 +148,9 @@ namespace ModStudio
 			// 
 			// OpenActionDialogBox
 			// 
+			this.AcceptButton = this.buttonOk;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(456, 198);
 			this.ControlBox = false;
 			this.Controls.Add(this.listBoxFiles);
@@ -252,7 +254,8 @@ namespace ModStudio
 		{
 			if (e.KeyCode == System.Windows.Forms.Keys.Enter)
 			{
-				buttonOk_Click(null, null);
+				//buttonOk_Click(null, null);
+				
 			}
 		}
 

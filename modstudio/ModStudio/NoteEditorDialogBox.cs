@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialogBox.cs,v 1.1 2005-08-27 12:10:47 smithydll Exp $
+ *   $Id: NoteEditorDialogBox.cs,v 1.2 2005-08-28 02:59:59 smithydll Exp $
  *
  *
  ***************************************************************************/
