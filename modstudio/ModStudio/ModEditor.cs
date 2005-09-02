@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.10 2005-08-28 02:59:59 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.11 2005-09-02 14:12:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -245,7 +245,6 @@ namespace ModStudio
 			// 
 			// tabControlEditor
 			// 
-			this.tabControlEditor.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.tabControlEditor.Controls.Add(this.tabPageOverview);
 			this.tabControlEditor.Controls.Add(this.tabPageHeader);
 			this.tabControlEditor.Controls.Add(this.tabPageActions);
@@ -271,15 +270,15 @@ namespace ModStudio
 			this.tabPageOverview.Controls.Add(this.label4);
 			this.tabPageOverview.Controls.Add(this.labelIncludedFiles);
 			this.tabPageOverview.Controls.Add(this.label10);
-			this.tabPageOverview.Location = new System.Drawing.Point(4, 25);
+			this.tabPageOverview.Location = new System.Drawing.Point(4, 22);
 			this.tabPageOverview.Name = "tabPageOverview";
-			this.tabPageOverview.Size = new System.Drawing.Size(784, 537);
+			this.tabPageOverview.Size = new System.Drawing.Size(784, 540);
 			this.tabPageOverview.TabIndex = 0;
 			this.tabPageOverview.Text = "Overview";
 			// 
 			// button9
 			// 
-			this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button9.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button9.Location = new System.Drawing.Point(56, 176);
 			this.button9.Name = "button9";
 			this.button9.TabIndex = 6;
@@ -296,7 +295,7 @@ namespace ModStudio
 			// 
 			// button8
 			// 
-			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button8.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button8.Location = new System.Drawing.Point(216, 108);
 			this.button8.Name = "button8";
 			this.button8.Size = new System.Drawing.Size(120, 20);
@@ -400,9 +399,9 @@ namespace ModStudio
 			this.tabPageHeader.Controls.Add(this.button5);
 			this.tabPageHeader.Controls.Add(this.button6);
 			this.tabPageHeader.Controls.Add(this.button7);
-			this.tabPageHeader.Location = new System.Drawing.Point(4, 25);
+			this.tabPageHeader.Location = new System.Drawing.Point(4, 22);
 			this.tabPageHeader.Name = "tabPageHeader";
-			this.tabPageHeader.Size = new System.Drawing.Size(784, 537);
+			this.tabPageHeader.Size = new System.Drawing.Size(784, 540);
 			this.tabPageHeader.TabIndex = 1;
 			this.tabPageHeader.Text = "Header";
 			// 
@@ -439,10 +438,10 @@ namespace ModStudio
 			// 
 			// button1
 			// 
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button1.Location = new System.Drawing.Point(416, 144);
+			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button1.Location = new System.Drawing.Point(8, 168);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(32, 40);
+			this.button1.Size = new System.Drawing.Size(56, 20);
 			this.button1.TabIndex = 37;
 			this.button1.Text = "Add";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -451,7 +450,7 @@ namespace ModStudio
 			// 
 			this.MODAuthorListBox.Location = new System.Drawing.Point(136, 144);
 			this.MODAuthorListBox.Name = "MODAuthorListBox";
-			this.MODAuthorListBox.Size = new System.Drawing.Size(272, 43);
+			this.MODAuthorListBox.Size = new System.Drawing.Size(448, 69);
 			this.MODAuthorListBox.TabIndex = 31;
 			this.MODAuthorListBox.DoubleClick += new System.EventHandler(this.MODAuthorListBox_DoubleClick);
 			// 
@@ -514,7 +513,7 @@ namespace ModStudio
 			// 
 			// Button16
 			// 
-			this.Button16.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.Button16.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.Button16.Location = new System.Drawing.Point(104, 48);
 			this.Button16.Name = "Button16";
 			this.Button16.Size = new System.Drawing.Size(24, 16);
@@ -607,35 +606,35 @@ namespace ModStudio
 			// 
 			// button2
 			// 
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button2.Location = new System.Drawing.Point(456, 144);
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button2.Location = new System.Drawing.Point(72, 168);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(40, 40);
+			this.button2.Size = new System.Drawing.Size(56, 20);
 			this.button2.TabIndex = 35;
 			this.button2.Text = "Edit";
 			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// button3
 			// 
-			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button3.Location = new System.Drawing.Point(504, 144);
+			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button3.Location = new System.Drawing.Point(8, 192);
 			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(48, 40);
+			this.button3.Size = new System.Drawing.Size(120, 20);
 			this.button3.TabIndex = 36;
 			this.button3.Text = "Delete";
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
 			// MODAuthorNotesLabel
 			// 
-			this.MODAuthorNotesLabel.Location = new System.Drawing.Point(136, 200);
+			this.MODAuthorNotesLabel.Location = new System.Drawing.Point(136, 216);
 			this.MODAuthorNotesLabel.Name = "MODAuthorNotesLabel";
 			this.MODAuthorNotesLabel.Size = new System.Drawing.Size(448, 80);
 			this.MODAuthorNotesLabel.TabIndex = 22;
 			// 
 			// button4
 			// 
-			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.button4.Location = new System.Drawing.Point(104, 224);
+			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button4.Location = new System.Drawing.Point(104, 240);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(24, 16);
 			this.button4.TabIndex = 24;
@@ -646,7 +645,7 @@ namespace ModStudio
 			// label9
 			// 
 			this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label9.Location = new System.Drawing.Point(8, 200);
+			this.label9.Location = new System.Drawing.Point(8, 216);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(120, 23);
 			this.label9.TabIndex = 18;
@@ -655,7 +654,7 @@ namespace ModStudio
 			// 
 			// MODInstallationTimeLabel
 			// 
-			this.MODInstallationTimeLabel.Location = new System.Drawing.Point(136, 288);
+			this.MODInstallationTimeLabel.Location = new System.Drawing.Point(136, 304);
 			this.MODInstallationTimeLabel.Name = "MODInstallationTimeLabel";
 			this.MODInstallationTimeLabel.Size = new System.Drawing.Size(104, 16);
 			this.MODInstallationTimeLabel.TabIndex = 21;
@@ -663,7 +662,7 @@ namespace ModStudio
 			// label11
 			// 
 			this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label11.Location = new System.Drawing.Point(8, 288);
+			this.label11.Location = new System.Drawing.Point(8, 304);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(120, 23);
 			this.label11.TabIndex = 16;
@@ -673,7 +672,7 @@ namespace ModStudio
 			// label12
 			// 
 			this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label12.Location = new System.Drawing.Point(8, 320);
+			this.label12.Location = new System.Drawing.Point(8, 328);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(120, 23);
 			this.label12.TabIndex = 17;
@@ -682,7 +681,7 @@ namespace ModStudio
 			// 
 			// button5
 			// 
-			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button5.Location = new System.Drawing.Point(8, 352);
 			this.button5.Name = "button5";
 			this.button5.Size = new System.Drawing.Size(120, 20);
@@ -692,7 +691,7 @@ namespace ModStudio
 			// 
 			// button6
 			// 
-			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button6.Location = new System.Drawing.Point(8, 376);
 			this.button6.Name = "button6";
 			this.button6.Size = new System.Drawing.Size(120, 20);
@@ -702,7 +701,7 @@ namespace ModStudio
 			// 
 			// button7
 			// 
-			this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button7.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button7.Location = new System.Drawing.Point(8, 400);
 			this.button7.Name = "button7";
 			this.button7.Size = new System.Drawing.Size(120, 20);
@@ -716,9 +715,9 @@ namespace ModStudio
 			this.tabPageActions.Controls.Add(this.modDisplayBox2);
 			this.tabPageActions.Controls.Add(this.toolBar1);
 			this.tabPageActions.Controls.Add(this.modActionEditor1);
-			this.tabPageActions.Location = new System.Drawing.Point(4, 25);
+			this.tabPageActions.Location = new System.Drawing.Point(4, 22);
 			this.tabPageActions.Name = "tabPageActions";
-			this.tabPageActions.Size = new System.Drawing.Size(784, 537);
+			this.tabPageActions.Size = new System.Drawing.Size(784, 540);
 			this.tabPageActions.TabIndex = 2;
 			this.tabPageActions.Text = "Actions";
 			// 
@@ -728,7 +727,7 @@ namespace ModStudio
 			this.modDisplayBox2.Location = new System.Drawing.Point(0, 28);
 			this.modDisplayBox2.Name = "modDisplayBox2";
 			this.modDisplayBox2.SelectedIndex = 0;
-			this.modDisplayBox2.Size = new System.Drawing.Size(784, 509);
+			this.modDisplayBox2.Size = new System.Drawing.Size(784, 512);
 			this.modDisplayBox2.TabIndex = 0;
 			this.modDisplayBox2.Click += new System.EventHandler(this.modDisplayBox2_Click);
 			this.modDisplayBox2.ItemDoubleClick += new ModFormControls.ModActionItem.ActionItemClickHandler(this.modDisplayBox2_ItemDoubleClick);
@@ -860,7 +859,7 @@ namespace ModStudio
 			// menuItemAddActionDiyInstruction
 			// 
 			this.menuItemAddActionDiyInstruction.Index = 13;
-			this.menuItemAddActionDiyInstruction.Text = "DIY INSTRUCTION";
+			this.menuItemAddActionDiyInstruction.Text = "DIY INSTRUCTIONS";
 			this.menuItemAddActionDiyInstruction.Click += new System.EventHandler(this.menuItemAddActionDiyInstruction_Click);
 			// 
 			// toolBarButtonDelete
@@ -874,6 +873,7 @@ namespace ModStudio
 			this.modActionEditor1.Size = new System.Drawing.Size(480, 320);
 			this.modActionEditor1.TabIndex = 2;
 			this.modActionEditor1.Visible = false;
+			this.modActionEditor1.VisibleChanged += new System.EventHandler(this.modActionEditor1_VisibleChanged);
 			this.modActionEditor1.Return += new ModFormControls.ModActionEditor.ModActionEditorReturnHandler(this.modActionEditor1_Return);
 			// 
 			// saveFileDialog1
@@ -979,6 +979,17 @@ namespace ModStudio
 					if (ThisMod.Header.ModIncludedFiles != null)
 					{
 						labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Count));
+						if (ThisMod.Header.ModIncludedFiles.Count > 0)
+						{
+							if (ThisMod.Header.ModIncludedFiles[0] == "" || ThisMod.Header.ModIncludedFiles[0].ToLower() == "n/a")
+							{
+								labelIncludedFiles.Text = "0 files";
+							}
+						}
+						if (labelIncludedFiles.Text == "1 files")
+						{
+							labelIncludedFiles.Text = "1 file";
+						}
 					}
 					else
 					{
@@ -1012,6 +1023,7 @@ namespace ModStudio
 					MODVersionMinorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMinor;
 					MODVersionRevisionNumericUpDown.Value = ThisMod.Header.ModVersion.VersionRevision;
 					MODVersionReleaseDomainUpDown.Text = ThisMod.Header.ModVersion.VersionRelease.ToString();
+					MODInstallationTimeLabel.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1070,6 +1082,7 @@ namespace ModStudio
 			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionBody, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].AfterComment);
 			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
 			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
+			toolBar1.Enabled = false;
 			modActionEditor1.Show();
 			modActionEditor1.BringToFront();
 			modActionEditor1.Select();
@@ -1082,9 +1095,11 @@ namespace ModStudio
 			ThisMod.Actions.Actions[e.Index].AfterComment = e.ActionComment;
 
 			//modDisplayBox2.ModActions = ThisMod.Actions;
-			modDisplayBox2.UpdateLayout();
+			//modDisplayBox2.UpdateLayout();
+			modDisplayBox2.UpdateText();
 			//modDisplayBox2.Select();
 			SetModified();
+			toolBar1.Enabled = true;
 		}
 
 		private void modDisplayBox2_Click(object sender, System.EventArgs e)
@@ -1303,7 +1318,7 @@ namespace ModStudio
 
 		private void menuItemAddActionDiyInstruction_Click(object sender, System.EventArgs e)
 		{
-			AddAction("DIY INSTRUCTION");
+			AddAction("DIY INSTRUCTIONS");
 		}
 
 		private void menuItemAddActionInLineIncrement_Click(object sender, System.EventArgs e)
@@ -1535,7 +1550,7 @@ namespace ModStudio
 		public void UpdateModIncludedFiles()
 		{
 			ThisMod.Header.ModIncludedFiles.Clear();
-			char[] trimChars = {' ', '\t'};
+			char[] trimChars = {' ', '\t', '\r'};
 			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
 			{
 				if (ThisMod.Actions.Actions[i].ActionType == "COPY")
@@ -1543,9 +1558,9 @@ namespace ModStudio
 					string[] lines = ThisMod.Actions.Actions[i].ActionBody.Split('\n');
 					foreach (string line in lines)
 					{
-						if (line.TrimStart(trimChars).ToLower().StartsWith("COPY"))
+						if (line.TrimStart(trimChars).ToLower().StartsWith("copy"))
 						{
-							ThisMod.Header.ModIncludedFiles.Add(Regex.Match(line.Trim(trimChars), "copy .+ to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
+							ThisMod.Header.ModIncludedFiles.Add(Regex.Match(line.Trim(trimChars), "copy (.+) to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
 						}
 					}
 				}
@@ -1601,12 +1616,21 @@ namespace ModStudio
 					case "IN-LINE INCREMENT":
 						totalinstalltime += 18;
 						break;
-					case "DIY INSTRUCTION":
+					case "DIY INSTRUCTIONS":
 						totalinstalltime += 60;
 						break;
 				}
 			}
 			ThisMod.Header.ModInstallationTime = totalinstalltime;
+		}
+
+		private void modActionEditor1_VisibleChanged(object sender, System.EventArgs e)
+		{
+			if (modActionEditor1.Visible == false)
+			{
+				toolBar1.Enabled = true;
+				modDisplayBox2.Select();
+			}
 		}
 	}
 }

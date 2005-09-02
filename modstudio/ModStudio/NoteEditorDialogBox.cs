@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialogBox.cs,v 1.2 2005-08-28 02:59:59 smithydll Exp $
+ *   $Id: NoteEditorDialogBox.cs,v 1.3 2005-09-02 14:12:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -98,7 +98,7 @@ namespace ModStudio
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonCancel.Location = new System.Drawing.Point(344, 8);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.TabIndex = 3;
@@ -108,7 +108,7 @@ namespace ModStudio
 			// buttonOk
 			// 
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonOk.Location = new System.Drawing.Point(424, 8);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.TabIndex = 2;

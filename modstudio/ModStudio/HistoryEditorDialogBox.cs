@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.2 2005-08-28 02:59:59 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.3 2005-09-02 14:12:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -103,12 +103,12 @@ namespace ModStudio
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOk = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.textBoxEntry = new System.Windows.Forms.TextBox();
 			this.MODVersionRelease = new System.Windows.Forms.TextBox();
 			this.MODVersionMajor = new System.Windows.Forms.NumericUpDown();
 			this.MODVersionMinor = new System.Windows.Forms.NumericUpDown();
 			this.MODVersionRevision = new System.Windows.Forms.NumericUpDown();
 			this.MODHistorydtp = new System.Windows.Forms.DateTimePicker();
+			this.textBoxEntry = new System.Windows.Forms.TextBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajor)).BeginInit();
@@ -129,7 +129,7 @@ namespace ModStudio
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonCancel.Location = new System.Drawing.Point(344, 8);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.TabIndex = 3;
@@ -139,7 +139,7 @@ namespace ModStudio
 			// buttonOk
 			// 
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonOk.Location = new System.Drawing.Point(424, 8);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.TabIndex = 2;
@@ -158,16 +158,6 @@ namespace ModStudio
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(504, 40);
 			this.panel2.TabIndex = 3;
-			// 
-			// textBoxEntry
-			// 
-			this.textBoxEntry.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxEntry.Location = new System.Drawing.Point(0, 40);
-			this.textBoxEntry.Multiline = true;
-			this.textBoxEntry.Name = "textBoxEntry";
-			this.textBoxEntry.Size = new System.Drawing.Size(504, 112);
-			this.textBoxEntry.TabIndex = 4;
-			this.textBoxEntry.Text = "";
 			// 
 			// MODVersionRelease
 			// 
@@ -220,7 +210,17 @@ namespace ModStudio
 			this.MODHistorydtp.Name = "MODHistorydtp";
 			this.MODHistorydtp.TabIndex = 8;
 			// 
-			// HistoryEditorDialog
+			// textBoxEntry
+			// 
+			this.textBoxEntry.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxEntry.Location = new System.Drawing.Point(0, 40);
+			this.textBoxEntry.Multiline = true;
+			this.textBoxEntry.Name = "textBoxEntry";
+			this.textBoxEntry.Size = new System.Drawing.Size(504, 112);
+			this.textBoxEntry.TabIndex = 4;
+			this.textBoxEntry.Text = "";
+			// 
+			// HistoryEditorDialogBox
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(504, 192);
@@ -231,7 +231,7 @@ namespace ModStudio
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "HistoryEditorDialog";
+			this.Name = "HistoryEditorDialogBox";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "History Entry";

@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "phpBB.ico"
+                ApplicationIcon = "studio.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "ModStudio"
                 AssemblyOriginatorKeyFile = ""
@@ -104,6 +104,16 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AboutBox.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AboutBox.resx"
+                    DependentUpon = "AboutBox.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
                 />
@@ -150,6 +160,10 @@
                 <File
                     RelPath = "ModEditor.resx"
                     DependentUpon = "ModEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "mot.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -200,6 +214,14 @@
                 <File
                     RelPath = "Studio.resx"
                     DependentUpon = "Studio.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "text.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "xml.ico"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

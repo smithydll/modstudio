@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.5 2005-08-28 02:59:59 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.6 2005-09-02 14:12:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -107,7 +107,7 @@ namespace ModStudio
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonCancel.Location = new System.Drawing.Point(296, 8);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.TabIndex = 1;
@@ -117,7 +117,7 @@ namespace ModStudio
 			// buttonOk
 			// 
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.buttonOk.Location = new System.Drawing.Point(376, 8);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.TabIndex = 0;
