@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.7 2005-08-28 02:58:06 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.8 2005-09-02 14:13:33 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -582,7 +582,7 @@ namespace ModTemplateTools
 			{
 				char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 				ModVersion MVersion = new ModVersion();
-				input = Regex.Replace(input.Trim(TrimChars), "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)", "$1.$2.$4.$5");
+				input = Regex.Replace(input.Trim(TrimChars), "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$1.$2.$4.$5");
 				string[] MV = input.Split('.');
 				if (MV.Length >= 1) 
 				{
@@ -1316,7 +1316,9 @@ namespace ModTemplateTools
 								{
 									if (Regex.IsMatch(TextModLines[i], " - Version", RegexOptions.IgnoreCase)) 
 									{
-										ModVersion HVersion = ModVersion.Parse(Regex.Match(TextModLines[i], "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?)([a-zA-Z]{1}?|)").Value);
+										//ModVersion HVersion = ModVersion.Parse(Regex.Match(TextModLines[i], "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{1}?|)([ \\t]|)$").Value);
+										//Console.WriteLine(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
+										ModVersion HVersion = ModVersion.Parse(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
 										Header.ModHistory.AddEntry(HVersion,System.DateTime.Parse(Regex.Match(TextModLines[i], "([0-9]+)(\\/|\\\\|\\-)([0-9]+)(\\/|\\\\|\\-)([0-9]+)").Value),"");
 									} 
 									else 

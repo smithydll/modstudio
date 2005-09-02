@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionEditor.cs,v 1.3 2005-08-27 12:12:25 smithydll Exp $
+ *   $Id: ModActionEditor.cs,v 1.4 2005-09-02 14:12:35 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -179,7 +179,7 @@ namespace ModFormControls
 			// 
 			this.button1.BackColor = System.Drawing.SystemColors.Control;
 			this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button1.Location = new System.Drawing.Point(0, 0);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(88, 40);
@@ -191,7 +191,7 @@ namespace ModFormControls
 			// 
 			this.button2.BackColor = System.Drawing.SystemColors.Control;
 			this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.button2.Location = new System.Drawing.Point(0, 40);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(88, 40);
@@ -274,7 +274,6 @@ namespace ModFormControls
 
 		private void ModActionEditor_Leave(object sender, System.EventArgs e)
 		{
-			this.Return(this, new ModActionEditorReturnEventArgs(actionIndex, comboBoxActionType.Text, textEditorControlActionBody.Text, textEditorControlComment.Text));
 			this.Hide();
 		}
 
@@ -285,15 +284,16 @@ namespace ModFormControls
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
-			ModActionEditor_Leave(sender, e);
+			this.Return(this, new ModActionEditorReturnEventArgs(actionIndex, string.Copy(comboBoxActionType.Text), string.Copy(textEditorControlActionBody.Text), string.Copy(textEditorControlComment.Text)));
+			this.Hide();
 		}
 
 		public void SetModAction(int index, string actionType, string actionBody, string actionComment)
 		{
 			actionIndex = index;
-			comboBoxActionType.Text = actionType;
-			textEditorControlActionBody.Text = actionBody;
-			textEditorControlComment.Text = actionComment;
+			comboBoxActionType.Text = string.Copy(actionType);
+			textEditorControlActionBody.Text = string.Copy(actionBody);
+			textEditorControlComment.Text = string.Copy(actionComment);
 		}
 	}
 

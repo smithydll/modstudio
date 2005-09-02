@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.6 2005-08-27 12:12:25 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.7 2005-09-02 14:12:35 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -190,6 +190,7 @@ namespace ModFormControls
 							break;
 						case "COPY":
 						case "SAVE/CLOSE ALL FILES":
+						case "DIY INSTRUCTIONS":
 							ActionItems[i].BackColor = Color.LightCyan;
 							break;
 						case "OPEN":
@@ -215,11 +216,13 @@ namespace ModFormControls
 						case "REPLACE WITH":
 						case "AFTER, ADD":
 						case "BEFORE, ADD":
+						case "INCREMENT":
 							ActionItems[i].BackColor = Color.LightGoldenrodYellow;
 							break;
 						case "IN-LINE REPLACE WITH":
 						case "IN-LINE AFTER, ADD":
 						case "IN-LINE BEFORE, ADD":
+						case "IN-LINE INCREMENT":
 							ActionItems[i].BackColor = Color.LemonChiffon;
 							break;
 
@@ -255,6 +258,7 @@ namespace ModFormControls
 						case "COPY":
 						case "SAVE/CLOSE ALL FILES":
 						case "OPEN":
+						case "DIY INSTRUCTIONS":
 							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
 							break;
 						case "FIND":
@@ -264,11 +268,13 @@ namespace ModFormControls
 						case "REPLACE WITH":
 						case "AFTER, ADD":
 						case "BEFORE, ADD":
+						case "INCREMENT":
 							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
 							break;
 						case "IN-LINE REPLACE WITH":
 						case "IN-LINE AFTER, ADD":
 						case "IN-LINE BEFORE, ADD":
+						case "IN-LINE INCREMENT":
 							ActionItems[i].Width = this.Width - 80 - ModBoxScrollBar.Width;
 							break;
 
@@ -278,6 +284,23 @@ namespace ModFormControls
 			}
 			this.ModDisplayPanel.ResumeLayout();
 			this.ResumeLayout();
+		}
+
+		public void UpdateText()
+		{
+			if (Actions.Actions != null)
+			{
+				ModBoxScrollBar.Maximum = Actions.Actions.Length * 100;
+
+				ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
+				for (int i = 0; i < ActionItems.Length; i++)
+				{
+					ActionItems[i].SuspendLayout();
+					ActionItems[i].ActionTitle = Actions.Actions[i].ActionType;
+					ActionItems[i].ActionBody = Actions.Actions[i].ActionBody;
+					ActionItems[i].ResumeLayout();
+				}
+			}
 		}
 
 		public void UpdateLayout()
@@ -306,6 +329,7 @@ namespace ModFormControls
 							break;
 						case "COPY":
 						case "SAVE/CLOSE ALL FILES":
+						case "DIY INSTRUCTIONS":
 							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
 							ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
 							ActionItems[i].BackColor = Color.LightCyan;
@@ -341,6 +365,7 @@ namespace ModFormControls
 						case "REPLACE WITH":
 						case "AFTER, ADD":
 						case "BEFORE, ADD":
+						case "INCREMENT":
 							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
 							ActionItems[i].Location = new Point(50, i * 100 + 10 - ModBoxScrollBar.Value);
 							ActionItems[i].BackColor = Color.LightGoldenrodYellow;
@@ -348,6 +373,7 @@ namespace ModFormControls
 						case "IN-LINE REPLACE WITH":
 						case "IN-LINE AFTER, ADD":
 						case "IN-LINE BEFORE, ADD":
+						case "IN-LINE INCREMENT":
 							ActionItems[i].Width = this.Width - 80 - ModBoxScrollBar.Width;
 							ActionItems[i].Location = new Point(70, i * 100 + 10 - ModBoxScrollBar.Value);
 							ActionItems[i].BackColor = Color.LemonChiffon;
