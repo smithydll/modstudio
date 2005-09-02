@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.7 2005-08-28 02:59:59 smithydll Exp $
+ *   $Id: Studio.cs,v 1.8 2005-09-02 14:12:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -69,7 +69,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public Studio()
+		public Studio(string[] args)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -86,11 +86,23 @@ namespace ModStudio
 			ModEditors[0].MdiParent = this;
 			ModEditors[0].Show();*/
 
-			ModEditor newEditor = new ModEditor();
-			newEditor.MdiParent = this;
-			newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
-			newEditor.Show();
-
+			if (args.Length > 0)
+			{
+				if (args[0].ToLower().EndsWith(".mod") || args[0].ToLower().EndsWith(".txt") || args[0].ToLower().EndsWith(".xml"))
+				{
+					ModEditor newEditor = new ModEditor(args[0]);
+					newEditor.MdiParent = this;
+					newEditor.Text = args[0];
+					newEditor.Show();
+				}
+			}
+			else
+			{
+				ModEditor newEditor = new ModEditor();
+				newEditor.MdiParent = this;
+				newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+				newEditor.Show();
+			}
 		}
 
 		/// <summary>
@@ -485,6 +497,7 @@ namespace ModStudio
 			this.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("$this.RightToLeft")));
 			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
 			this.Text = resources.GetString("$this.Text");
+			this.Load += new System.EventHandler(this.Studio_Load);
 			this.Closed += new System.EventHandler(this.Studio_Closed);
 			this.ResumeLayout(false);
 
@@ -495,9 +508,11 @@ namespace ModStudio
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main() 
+		static void Main(string[] args) 
 		{
-			Application.Run(new Studio());
+			Application.EnableVisualStyles();
+			Application.DoEvents();
+			Application.Run(new Studio(args));
 		}
 
 		/// <summary>
@@ -610,7 +625,14 @@ namespace ModStudio
 
 		private void menuItemHelpAbout_Click(object sender, System.EventArgs e)
 		{
-			MessageBox.Show(this, "MOD Studio v4 (0.1) Copyright 2005 David Smith (smithy_dll).\nTextbox component from http://icsharpcode.net/");
+			//MessageBox.Show(this, "MOD Studio v4 (0.1) Copyright 2005 David Smith (smithy_dll).\nTextbox component from http://icsharpcode.net/");
+			AboutBox aboutBox1 = new AboutBox();
+			aboutBox1.ShowDialog(this);
+		}
+
+		private void Studio_Load(object sender, System.EventArgs e)
+		{
+			
 		}
 	}
 }
