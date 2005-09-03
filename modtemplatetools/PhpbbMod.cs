@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.8 2005-09-02 14:13:33 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.9 2005-09-03 12:10:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -1203,7 +1203,7 @@ namespace ModTemplateTools
 							} 
 							else 
 							{
-								if (TextModLines[i].ToUpper().StartsWith("## IN")) 
+								if (TextModLines[i].ToUpper().StartsWith("## INCLUDED ")) 
 								{
 									StartOffset = i;
 									e++;
@@ -1236,7 +1236,7 @@ namespace ModTemplateTools
 							} 
 							else 
 							{
-								if (TextModLines[i].ToUpper().StartsWith("####") || TextModLines[i].ToUpper().StartsWith("## GEN") || TextModLines[i].ToUpper().StartsWith("## LICENSE")) 
+								if (TextModLines[i].ToUpper().StartsWith("######") || TextModLines[i].ToUpper().StartsWith("## GEN") || TextModLines[i].ToUpper().StartsWith("## LICENSE")) 
 								{
 									StartOffset = i;
 									e++;
@@ -1547,7 +1547,7 @@ namespace ModTemplateTools
 				} 
 				else 
 				{
-					MyMODFTE += Newline + "## " + Header.ModFilesToEdit[i];
+					MyMODFTE += Newline + "##                " + Header.ModFilesToEdit[i];
 				}
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.files_to_edit/>", MyMODFTE);
@@ -1561,7 +1561,7 @@ namespace ModTemplateTools
 				} 
 				else 
 				{
-					MyMODIC += Newline + "## " + Header.ModIncludedFiles[i];
+					MyMODIC += Newline + "##                 " + Header.ModIncludedFiles[i];
 				}
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.inc_files/>", MyMODIC);
