@@ -99,6 +99,27 @@
                     AssemblyName = "ModTemplateTools"
                     HintPath = "..\..\phpBBMOD\bin\Debug\ModTemplateTools.dll"
                 />
+                <Reference
+                    Name = "ICSharpCode.TextEditor"
+                    AssemblyName = "ICSharpCode.TextEditor"
+                    HintPath = "..\ModFormControls\bin\debug\ICSharpCode.TextEditor.dll"
+                />
+                <Reference
+                    Name = "SHDocVw"
+                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
+                    VersionMajor = "1"
+                    VersionMinor = "1"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "AxSHDocVw"
+                    Guid = "{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}"
+                    VersionMajor = "1"
+                    VersionMinor = "1"
+                    Lcid = "0"
+                    WrapperTool = "aximp"
+                />
             </References>
         </Build>
         <Files>
@@ -197,6 +218,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "OptionsDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OptionsDialog.resx"
+                    DependentUpon = "OptionsDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Studio.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -218,6 +249,16 @@
                 />
                 <File
                     RelPath = "text.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ValidationResult.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ValidationResult.resx"
+                    DependentUpon = "ValidationResult.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

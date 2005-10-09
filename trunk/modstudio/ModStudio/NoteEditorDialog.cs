@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialog.cs,v 1.4 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: NoteEditorDialog.cs,v 1.5 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -23,6 +23,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 /*
  * Inspired by:
@@ -35,13 +36,31 @@ namespace ModStudio
 	/// </summary>
 	public class NoteEditorDialog : System.Windows.Forms.CommonDialog
 	{
-		private string note = null;
+		private PropertyLang note = null;
 		private string type = null;
+		private bool localised = false;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[DefaultValue(false)]
+		public bool Localised 
+		{
+			get 
+			{
+				return localised;
+			}
+			set
+			{
+				localised = value;
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public string Note
+		public PropertyLang Note
 		{
 			get
 			{
@@ -97,6 +116,7 @@ namespace ModStudio
 				dialogInstance = new NoteEditorDialogBox();
 				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
 				dialogInstance.Note = this.note;
+				dialogInstance.textBoxNote.LanguageSelectorVisible = localised;
 				if (dialogInstance.ShowDialog() == DialogResult.OK)
 				{
 					okTriggered = true;

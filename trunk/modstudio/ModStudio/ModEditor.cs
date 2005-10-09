@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.11 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.12 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,8 +25,10 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 using ModStudio;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace ModStudio
 {
@@ -40,7 +42,6 @@ namespace ModStudio
 		private System.Windows.Forms.TabPage tabPageHeader;
 		private System.Windows.Forms.TabPage tabPageActions;
 		private System.Windows.Forms.Label labelOverviewTitle;
-		private System.Windows.Forms.PictureBox pictureBox1;
 		private ModFormControls.ModDisplayBox modDisplayBox1;
 		private System.Windows.Forms.ListView MODHistoryListView;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -53,7 +54,6 @@ namespace ModStudio
 		private System.Windows.Forms.NumericUpDown MODVersionMajorNumericUpDown;
 		internal System.Windows.Forms.Button Button16;
 		private System.Windows.Forms.Label MODDescriptionLabel;
-		private System.Windows.Forms.TextBox MODTitleTextBox;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label5;
@@ -107,6 +107,9 @@ namespace ModStudio
 		private System.Windows.Forms.MenuItem menuItemAddActionInLineIncrement;
 		private System.Windows.Forms.MenuItem menuItemAddActionDiyInstruction;
 		private System.Windows.Forms.ToolBarButton toolBarButtonDelete;
+		private ModFormControls.LocalisedTextBox MODTitleTextBox;
+		private System.Windows.Forms.PictureBox pictureBoxTextMod;
+		private System.Windows.Forms.PictureBox pictureBoxXmlMod;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -124,9 +127,15 @@ namespace ModStudio
 
 			ThisMod = new PhpbbMod(Application.StartupPath);
 
-			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "invalid@invalid.invalid", "http://invalid.invalid/"));
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
+			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry(
+				reg.GetValue("author_username", "UserName").ToString(),
+				reg.GetValue("author_realname", "RealName").ToString(),
+				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),
+				reg.GetValue("author_homepage", "http://invalid.invalid/").ToString()));
+			//ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "invalid@invalid.invalid", "http://invalid.invalid/"));
 			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
-			ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("SAVE/CLOSE ALL FILES", "", "EoM", ""));
+			ThisMod.Actions.Add(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM", ""));
 			ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
 			ThisMod.Header.License = "http://opensource.org/licenses/gpl-license.php GNU General Public License v2";
 		}
@@ -166,17 +175,19 @@ namespace ModStudio
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ModEditor));
 			this.tabControlEditor = new System.Windows.Forms.TabControl();
 			this.tabPageOverview = new System.Windows.Forms.TabPage();
+			this.pictureBoxXmlMod = new System.Windows.Forms.PictureBox();
 			this.button9 = new System.Windows.Forms.Button();
 			this.listBoxFileEdits = new System.Windows.Forms.ListBox();
 			this.button8 = new System.Windows.Forms.Button();
 			this.labelModInstallationTime = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.pictureBoxTextMod = new System.Windows.Forms.PictureBox();
 			this.labelOverviewTitle = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelIncludedFiles = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.tabPageHeader = new System.Windows.Forms.TabPage();
+			this.MODTitleTextBox = new ModFormControls.LocalisedTextBox();
 			this.MODHistoryListView = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -188,7 +199,6 @@ namespace ModStudio
 			this.MODVersionMajorNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.Button16 = new System.Windows.Forms.Button();
 			this.MODDescriptionLabel = new System.Windows.Forms.Label();
-			this.MODTitleTextBox = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -260,12 +270,13 @@ namespace ModStudio
 			// tabPageOverview
 			// 
 			this.tabPageOverview.BackColor = System.Drawing.Color.White;
+			this.tabPageOverview.Controls.Add(this.pictureBoxXmlMod);
 			this.tabPageOverview.Controls.Add(this.button9);
 			this.tabPageOverview.Controls.Add(this.listBoxFileEdits);
 			this.tabPageOverview.Controls.Add(this.button8);
 			this.tabPageOverview.Controls.Add(this.labelModInstallationTime);
 			this.tabPageOverview.Controls.Add(this.label1);
-			this.tabPageOverview.Controls.Add(this.pictureBox1);
+			this.tabPageOverview.Controls.Add(this.pictureBoxTextMod);
 			this.tabPageOverview.Controls.Add(this.labelOverviewTitle);
 			this.tabPageOverview.Controls.Add(this.label4);
 			this.tabPageOverview.Controls.Add(this.labelIncludedFiles);
@@ -275,6 +286,15 @@ namespace ModStudio
 			this.tabPageOverview.Size = new System.Drawing.Size(784, 540);
 			this.tabPageOverview.TabIndex = 0;
 			this.tabPageOverview.Text = "Overview";
+			// 
+			// pictureBoxXmlMod
+			// 
+			this.pictureBoxXmlMod.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxXmlMod.Image")));
+			this.pictureBoxXmlMod.Location = new System.Drawing.Point(8, 48);
+			this.pictureBoxXmlMod.Name = "pictureBoxXmlMod";
+			this.pictureBoxXmlMod.Size = new System.Drawing.Size(48, 16);
+			this.pictureBoxXmlMod.TabIndex = 7;
+			this.pictureBoxXmlMod.TabStop = false;
 			// 
 			// button9
 			// 
@@ -321,15 +341,15 @@ namespace ModStudio
 			this.label1.Text = "Installation Time";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// pictureBox1
+			// pictureBoxTextMod
 			// 
-			this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-			this.pictureBox1.Location = new System.Drawing.Point(8, 48);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(48, 16);
-			this.pictureBox1.TabIndex = 1;
-			this.pictureBox1.TabStop = false;
-			this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+			this.pictureBoxTextMod.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxTextMod.Image")));
+			this.pictureBoxTextMod.Location = new System.Drawing.Point(8, 48);
+			this.pictureBoxTextMod.Name = "pictureBoxTextMod";
+			this.pictureBoxTextMod.Size = new System.Drawing.Size(48, 16);
+			this.pictureBoxTextMod.TabIndex = 1;
+			this.pictureBoxTextMod.TabStop = false;
+			this.pictureBoxTextMod.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
 			// 
 			// labelOverviewTitle
 			// 
@@ -372,6 +392,7 @@ namespace ModStudio
 			// tabPageHeader
 			// 
 			this.tabPageHeader.BackColor = System.Drawing.Color.LightYellow;
+			this.tabPageHeader.Controls.Add(this.MODTitleTextBox);
 			this.tabPageHeader.Controls.Add(this.MODHistoryListView);
 			this.tabPageHeader.Controls.Add(this.button1);
 			this.tabPageHeader.Controls.Add(this.MODAuthorListBox);
@@ -380,7 +401,6 @@ namespace ModStudio
 			this.tabPageHeader.Controls.Add(this.MODVersionMajorNumericUpDown);
 			this.tabPageHeader.Controls.Add(this.Button16);
 			this.tabPageHeader.Controls.Add(this.MODDescriptionLabel);
-			this.tabPageHeader.Controls.Add(this.MODTitleTextBox);
 			this.tabPageHeader.Controls.Add(this.label2);
 			this.tabPageHeader.Controls.Add(this.label3);
 			this.tabPageHeader.Controls.Add(this.label5);
@@ -404,6 +424,15 @@ namespace ModStudio
 			this.tabPageHeader.Size = new System.Drawing.Size(784, 540);
 			this.tabPageHeader.TabIndex = 1;
 			this.tabPageHeader.Text = "Header";
+			// 
+			// MODTitleTextBox
+			// 
+			this.MODTitleTextBox.LanguageSelectorVisible = false;
+			this.MODTitleTextBox.Location = new System.Drawing.Point(136, 8);
+			this.MODTitleTextBox.Multiline = false;
+			this.MODTitleTextBox.Name = "MODTitleTextBox";
+			this.MODTitleTextBox.Size = new System.Drawing.Size(448, 20);
+			this.MODTitleTextBox.TabIndex = 39;
 			// 
 			// MODHistoryListView
 			// 
@@ -528,15 +557,6 @@ namespace ModStudio
 			this.MODDescriptionLabel.Name = "MODDescriptionLabel";
 			this.MODDescriptionLabel.Size = new System.Drawing.Size(448, 64);
 			this.MODDescriptionLabel.TabIndex = 23;
-			// 
-			// MODTitleTextBox
-			// 
-			this.MODTitleTextBox.Location = new System.Drawing.Point(136, 8);
-			this.MODTitleTextBox.Name = "MODTitleTextBox";
-			this.MODTitleTextBox.Size = new System.Drawing.Size(448, 20);
-			this.MODTitleTextBox.TabIndex = 20;
-			this.MODTitleTextBox.Text = "";
-			this.MODTitleTextBox.TextChanged += new System.EventHandler(this.MODTitleTextBox_TextChanged);
 			// 
 			// label2
 			// 
@@ -908,6 +928,7 @@ namespace ModStudio
 			this.Text = "untitled";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Resize += new System.EventHandler(this.ModEditor_Resize);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.ModEditor_Closing);
 			this.Load += new System.EventHandler(this.ModEditor_Load);
 			this.tabControlEditor.ResumeLayout(false);
 			this.tabPageOverview.ResumeLayout(false);
@@ -965,9 +986,9 @@ namespace ModStudio
 					labelOverviewTitle.Text = ThisMod.Header.ModTitle.pValue;
 					labelModInstallationTime.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
 					listBoxFileEdits.Items.Clear();
-					if (ThisMod.Actions.Actions != null)
+					if (ThisMod.Actions != null)
 					{
-						foreach (PhpbbMod.ModAction a in ThisMod.Actions.Actions)
+						foreach (ModAction a in ThisMod.Actions)
 						{
 							char[] TrimChars = {' ', '\t', '\n', '\r'};
 							if (a.ActionType == "OPEN")
@@ -995,9 +1016,20 @@ namespace ModStudio
 					{
 						labelIncludedFiles.Text = "0 files";
 					}
+					if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
+					{
+						pictureBoxXmlMod.Visible = false;
+						pictureBoxTextMod.Visible = true;
+					}
+					else
+					{
+						pictureBoxXmlMod.Visible = true;
+						pictureBoxTextMod.Visible = false;
+					}
 					break;
 				case 1: // Header
 					MODTitleTextBox.Text = ThisMod.Header.ModTitle.pValue;
+					MODTitleTextBox.TextLang = ThisMod.Header.ModTitle;
 					MODAuthorListBox.Items.Clear();
 					foreach (PhpbbMod.ModAuthorEntry a in ThisMod.Header.ModAuthor.Authors)
 					{
@@ -1024,6 +1056,15 @@ namespace ModStudio
 					MODVersionRevisionNumericUpDown.Value = ThisMod.Header.ModVersion.VersionRevision;
 					MODVersionReleaseDomainUpDown.Text = ThisMod.Header.ModVersion.VersionRelease.ToString();
 					MODInstallationTimeLabel.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
+
+					if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
+					{
+						MODTitleTextBox.LanguageSelectorVisible = false;
+					}
+					else
+					{
+						MODTitleTextBox.LanguageSelectorVisible = true;
+					}
 					break;
 				case 2: // Actions
 					modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1045,12 +1086,12 @@ namespace ModStudio
 		private void listBoxFileEdits_DoubleClick(object sender, System.EventArgs e)
 		{
 			tabControlEditor.SelectedIndex = 2;
-			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
+			for (int i = 0; i < ThisMod.Actions.Count; i++)
 			{
 				char[] TrimChars = {' ', '\t', '\n', '\r'};
-				if (ThisMod.Actions.Actions[i].ActionType == "OPEN")
+				if (((ModAction)ThisMod.Actions[i]).ActionType == "OPEN")
 				{
-					if (ThisMod.Actions.Actions[i].ActionBody.Trim(TrimChars) == listBoxFileEdits.Items[listBoxFileEdits.SelectedIndex].ToString())
+					if (((ModAction)ThisMod.Actions[i]).ActionBody.Trim(TrimChars) == listBoxFileEdits.Items[listBoxFileEdits.SelectedIndex].ToString())
 					{
 						modDisplayBox2.SelectedIndex = i;
 					}
@@ -1079,7 +1120,7 @@ namespace ModStudio
 			this.tabPageActions.Controls.Add(abc);*/
 
 			modActionEditor1.actionIndex = modDisplayBox2.SelectedIndex;
-			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionBody, ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].AfterComment);
+			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionBody, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).AfterComment);
 			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
 			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
 			toolBar1.Enabled = false;
@@ -1090,9 +1131,11 @@ namespace ModStudio
 
 		private void modActionEditor1_Return(object sender, ModFormControls.ModActionEditorReturnEventArgs e)
 		{
-			ThisMod.Actions.Actions[e.Index].ActionType = e.ActionType;
-			ThisMod.Actions.Actions[e.Index].ActionBody = e.ActionBody;
-			ThisMod.Actions.Actions[e.Index].AfterComment = e.ActionComment;
+			ModAction tempAction = ((ModAction)ThisMod.Actions[e.Index]);
+			tempAction.ActionType = e.ActionType;
+			tempAction.ActionBody = e.ActionBody;
+			tempAction.AfterComment = e.ActionComment;
+			ThisMod.Actions[e.Index] = tempAction;
 
 			//modDisplayBox2.ModActions = ThisMod.Actions;
 			//modDisplayBox2.UpdateLayout();
@@ -1209,7 +1252,7 @@ namespace ModStudio
 				case 1: // add action
 					break;
 				case 2: // delete action
-					if (ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType != "SAVE/CLOSE ALL FILES")
+					if (((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType != "SAVE/CLOSE ALL FILES")
 					{
 						ThisMod.Actions.RemoveEntry(modDisplayBox2.SelectedIndex);
 						modDisplayBox2.ModActions = ThisMod.Actions;
@@ -1223,7 +1266,7 @@ namespace ModStudio
 
 		private void modDisplayBox2_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			switch (ThisMod.Actions.Actions[modDisplayBox2.SelectedIndex].ActionType)
+			switch (((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType)
 			{
 				case "OPEN":
 					menuItemAddActionAfterAdd.Enabled = false;
@@ -1379,11 +1422,11 @@ namespace ModStudio
 		private void AddAction(string actionType, string actionBody)
 		{
 			int addBefore = modDisplayBox2.SelectedIndex;
-			if (addBefore + 1 < ThisMod.Actions.Actions.Length) 
+			if (addBefore + 1 < ThisMod.Actions.Count) 
 			{
 				addBefore++;
 			}
-			ThisMod.Actions.AddEntry(new ModTemplateTools.PhpbbMod.ModAction(actionType, actionBody, ""), addBefore);
+			ThisMod.Actions.AddEntry(new ModAction(actionType, actionBody, ""), addBefore);
 			modDisplayBox2.ModActions = ThisMod.Actions;
 			modDisplayBox2.UpdateLayout();
 			modDisplayBox2.Select();
@@ -1399,7 +1442,7 @@ namespace ModStudio
 			}
 			else
 			{
-				ThisMod.Actions.AddEntry(new PhpbbMod.ModAction("OPEN", e.FileName, ""), ThisMod.Actions.Actions.GetUpperBound(0));
+				ThisMod.Actions.AddEntry(new ModAction("OPEN", e.FileName, ""), ThisMod.Actions.Count - 1);
 			}
 			SetModified();
 		}
@@ -1409,10 +1452,10 @@ namespace ModStudio
 			switch (e.Type)
 			{
 				case "Desc":
-					ThisMod.Header.ModDescription.SetValue(e.Note);
+					ThisMod.Header.ModDescription = e.Note;
 					break;
 				case "Auth":
-					ThisMod.Header.ModAuthorNotes.SetValue(e.Note);
+					ThisMod.Header.ModAuthorNotes = e.Note;
 					break;
 			}
 			SetModified();
@@ -1463,14 +1506,16 @@ namespace ModStudio
 		private void Button16_Click(object sender, System.EventArgs e)
 		{
 			noteEditorDialog1.Type = "Desc";
-			noteEditorDialog1.Note = ThisMod.Header.ModDescription.GetValue();
+			noteEditorDialog1.Note = ThisMod.Header.ModDescription;
+			noteEditorDialog1.Localised = (ThisMod.lastReadFormat == PhpbbMod.ModFormats.XMLMOD);
 			noteEditorDialog1.ShowDialog(this);
 		}
 
 		private void button4_Click(object sender, System.EventArgs e)
 		{
 			noteEditorDialog1.Type = "Auth";
-			noteEditorDialog1.Note = ThisMod.Header.ModAuthorNotes.GetValue();
+			noteEditorDialog1.Note = ThisMod.Header.ModAuthorNotes;
+			noteEditorDialog1.Localised = (ThisMod.lastReadFormat == PhpbbMod.ModFormats.XMLMOD);
 			noteEditorDialog1.ShowDialog(this);
 		}
 
@@ -1551,11 +1596,11 @@ namespace ModStudio
 		{
 			ThisMod.Header.ModIncludedFiles.Clear();
 			char[] trimChars = {' ', '\t', '\r'};
-			for (int i = 0; i < ThisMod.Actions.Actions.Length; i++)
+			for (int i = 0; i < ThisMod.Actions.Count; i++)
 			{
-				if (ThisMod.Actions.Actions[i].ActionType == "COPY")
+				if (((ModAction)ThisMod.Actions[i]).ActionType == "COPY")
 				{
-					string[] lines = ThisMod.Actions.Actions[i].ActionBody.Split('\n');
+					string[] lines = ((ModAction)ThisMod.Actions[i]).ActionBody.Split('\n');
 					foreach (string line in lines)
 					{
 						if (line.TrimStart(trimChars).ToLower().StartsWith("copy"))
@@ -1574,7 +1619,7 @@ namespace ModStudio
 		{
 			ThisMod.Header.ModFilesToEdit.Clear();
 			char[] trimChars = {' ', '\t', '\n', '\r'};
-			foreach (PhpbbMod.ModAction e in ThisMod.Actions.Actions)
+			foreach (ModAction e in ThisMod.Actions)
 			{
 				if (e.ActionType == "OPEN")
 				{
@@ -1589,7 +1634,7 @@ namespace ModStudio
 		public void UpdateModInstallTime()
 		{
 			int totalinstalltime = 126;
-			foreach (PhpbbMod.ModAction e in ThisMod.Actions.Actions)
+			foreach (ModAction e in ThisMod.Actions)
 			{
 				switch (e.ActionType)
 				{
@@ -1630,6 +1675,25 @@ namespace ModStudio
 			{
 				toolBar1.Enabled = true;
 				modDisplayBox2.Select();
+			}
+		}
+
+		private void ModEditor_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (this.Text.EndsWith("*"))
+			{
+				switch (MessageBox.Show(this, "Do you want to save the current MOD?", "Save?", System.Windows.Forms.MessageBoxButtons.YesNoCancel))
+				{
+					case DialogResult.Yes:
+						this.SaveFile();
+						break;
+					case DialogResult.No:
+						// do nothing, let it close
+						break;
+					case DialogResult.Cancel:
+						e.Cancel = true;
+						break;
+				}
 			}
 		}
 	}

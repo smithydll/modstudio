@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.8 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: Studio.cs,v 1.9 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,10 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
+using Microsoft.Win32;
+using ModTemplateTools;
+using ModTemplateTools.DataStructures;
+using System.IO;
 
 namespace ModStudio
 {
@@ -66,6 +70,9 @@ namespace ModStudio
 		private System.Windows.Forms.ImageList imageList1;
 		private System.ComponentModel.IContainer components;
 
+		private Point lastCoOrdinates;
+		private System.Windows.Forms.OpenFileDialog openFileDialog2;
+		private Size lastSize;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -100,7 +107,8 @@ namespace ModStudio
 			{
 				ModEditor newEditor = new ModEditor();
 				newEditor.MdiParent = this;
-				newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+				//newEditor.ThisMod.Header.ModTitle = new PropertyLang();
+				newEditor.ThisMod.Header.ModTitle.SetValue("Untitled Mod"); //AddLanguage("Untitled Mod", "en-GB");
 				newEditor.Show();
 			}
 		}
@@ -159,6 +167,7 @@ namespace ModStudio
 			this.toolBarButtonSave = new System.Windows.Forms.ToolBarButton();
 			this.toolBarButtonSaveAll = new System.Windows.Forms.ToolBarButton();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
 			this.SuspendLayout();
 			// 
 			// mainMenu
@@ -289,6 +298,7 @@ namespace ModStudio
 			this.menuItemFileValidate.ShowShortcut = ((bool)(resources.GetObject("menuItemFileValidate.ShowShortcut")));
 			this.menuItemFileValidate.Text = resources.GetString("menuItemFileValidate.Text");
 			this.menuItemFileValidate.Visible = ((bool)(resources.GetObject("menuItemFileValidate.Visible")));
+			this.menuItemFileValidate.Click += new System.EventHandler(this.menuItemFileValidate_Click);
 			// 
 			// menuItemSep2
 			// 
@@ -346,6 +356,7 @@ namespace ModStudio
 			this.menuItemToolsOptions.ShowShortcut = ((bool)(resources.GetObject("menuItemToolsOptions.ShowShortcut")));
 			this.menuItemToolsOptions.Text = resources.GetString("menuItemToolsOptions.Text");
 			this.menuItemToolsOptions.Visible = ((bool)(resources.GetObject("menuItemToolsOptions.Visible")));
+			this.menuItemToolsOptions.Click += new System.EventHandler(this.menuItemToolsOptions_Click);
 			// 
 			// menuItemWindow
 			// 
@@ -473,6 +484,12 @@ namespace ModStudio
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
+			// openFileDialog2
+			// 
+			this.openFileDialog2.Filter = resources.GetString("openFileDialog2.Filter");
+			this.openFileDialog2.Title = resources.GetString("openFileDialog2.Title");
+			this.openFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog2_FileOk);
+			// 
 			// Studio
 			// 
 			this.AccessibleDescription = resources.GetString("$this.AccessibleDescription");
@@ -497,7 +514,10 @@ namespace ModStudio
 			this.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("$this.RightToLeft")));
 			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
 			this.Text = resources.GetString("$this.Text");
+			this.Resize += new System.EventHandler(this.Studio_Resize);
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.Studio_Closing);
 			this.Load += new System.EventHandler(this.Studio_Load);
+			this.LocationChanged += new System.EventHandler(this.Studio_LocationChanged);
 			this.Closed += new System.EventHandler(this.Studio_Closed);
 			this.ResumeLayout(false);
 
@@ -632,7 +652,105 @@ namespace ModStudio
 
 		private void Studio_Load(object sender, System.EventArgs e)
 		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio");
+			this.lastSize = new Size(int.Parse(reg.GetValue("window-width",this.Width).ToString()), int.Parse(reg.GetValue("window-height",this.Height).ToString()));
+			this.lastCoOrdinates = new Point(int.Parse(reg.GetValue("window-left",this.Left).ToString()), int.Parse(reg.GetValue("window-top",this.Top).ToString()));
+			if (reg.GetValue("window-state", this.WindowState).ToString() == "Maximized")
+			{
+				this.WindowState = FormWindowState.Maximized;
+			}
+			else if (reg.GetValue("window-state", this.WindowState).ToString() == "Normal")
+			{
+				this.WindowState = FormWindowState.Normal;
+				this.Location = this.lastCoOrdinates;
+				this.Size = this.lastSize;
+			}
+		}
+
+		private void Studio_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio", true);
+			reg.SetValue("window-state", this.WindowState);
+			reg.SetValue("window-width", this.Width);
+			reg.SetValue("window-height", this.Height);
+			reg.SetValue("window-left", this.Left);
+			reg.SetValue("window-top", this.Top);
+		}
+
+		private void menuItemToolsOptions_Click(object sender, System.EventArgs e)
+		{
+			OptionsDialog options = new OptionsDialog();
+			options.ShowDialog(this);
+		}
+
+		private void Studio_LocationChanged(object sender, System.EventArgs e)
+		{
+			if (this.WindowState == FormWindowState.Normal)
+			{
+				this.lastCoOrdinates = this.Location;
+			}
+		}
+
+		private void Studio_Resize(object sender, System.EventArgs e)
+		{
+			if (this.WindowState == FormWindowState.Normal)
+			{
+				this.lastSize = this.Size;
+			}
+		}
+
+		private void menuItemFileValidate_Click(object sender, System.EventArgs e)
+		{
+			if (openFileDialog2.ShowDialog(this) == DialogResult.OK)
+			{
+				if (openFileDialog2.FileName.ToLower().EndsWith(".txt") || openFileDialog2.FileName.ToLower().EndsWith(".mod"))
+				{
+					ModTemplateTools.ModValidator validator = new ModTemplateTools.ModValidator(Application.StartupPath);
+					ModTemplateTools.ModValidator.ModValidationReport validationReport = validator.ValidateTextMod(OpenTextFile(openFileDialog2.FileName));
+					SaveTextFile(validationReport.ToString(ModValidator.ModValidationReport.ModValidationReportFormat.HTML), Application.UserAppDataPath + @"\validationReport.html");
+					ValidationResult validationResultWindow = new ValidationResult();
+					validationResultWindow.ShowDialog(this);
+				}
+			}
+		}
+
+		private void openFileDialog2_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
 			
+		}
+
+		/// <summary>
+		/// Open a text file
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		private static string OpenTextFile(string filename)
+		{
+			StreamReader myStreamReader;
+			string temp;
+			try 
+			{
+				myStreamReader = File.OpenText(filename);
+				temp = myStreamReader.ReadToEnd();
+				myStreamReader.Close();
+			} 
+			catch
+			{
+				temp = "";
+			}
+			return temp;
+		}
+
+		/// <summary>
+		/// Save a text file
+		/// </summary>
+		/// <param name="filetosave"></param>
+		/// <param name="filename"></param>
+		private static void SaveTextFile(string filetosave, string filename)
+		{
+			StreamWriter myStreamWriter = File.CreateText(filename);
+			myStreamWriter.Write(filetosave);
+			myStreamWriter.Close();
 		}
 	}
 }

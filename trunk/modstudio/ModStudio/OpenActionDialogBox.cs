@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.6 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.7 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
