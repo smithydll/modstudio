@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.11 2005-09-03 12:10:58 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.12 2005-10-09 11:19:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,6 +22,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using ModTemplateTools.DataStructures;
 
 namespace ModTemplateTools
 {
@@ -728,60 +729,60 @@ namespace ModTemplateTools
 			//{
 			//}
 
-			if (Modification.Actions.Actions != null)
+			if (Modification.Actions != null)
 			{
 				LoadPhpbbFileList(); // Load the phpBB file list for comparison in the OPEN check
-				for (int i = 0; i < Modification.Actions.Actions.Length; i++) 
+				for (int i = 0; i < Modification.Actions.Count; i++) 
 				{
-					if (ModActions.Parse(Modification.Actions.Actions[i].ActionType).Type == ModActions.ModActionType.Edit ||
-						ModActions.Parse(Modification.Actions.Actions[i].ActionType).Type == ModActions.ModActionType.InLineEdit) 
+					if (ModActions.Parse(((ModAction)Modification.Actions[i]).ActionType).Type == ModActions.ModActionType.Edit ||
+						ModActions.Parse(((ModAction)Modification.Actions[i]).ActionType).Type == ModActions.ModActionType.InLineEdit) 
 					{
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "<font(.*?)>")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "<font(.*?)>")) 
 						{
 							Report.HTMLReport += string.Format("Unauthorised usage of the FONT tag. Please use the span tag, starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "<font(.*?)>", "[b]<font$1>[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "<font(.*?)>", "[b]<font$1>[/b]"));
 							ValidateFlag = false;
 						}
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "<br>")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "<br>")) 
 						{
 							Report.HTMLReport += string.Format("Unauthorised usage of the <br> tag. Please use the <br /> tag., starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "<br>", "[b]<br>[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "<br>", "[b]<br>[/b]"));
 							ValidateFlag = false;
 						}
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "mysql_connect\\((.*?)\\)")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "mysql_connect\\((.*?)\\)")) 
 						{
 							Report.DBALReport += string.Format("Unauthorised usage of mysql_connect, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
 							ValidateFlag = false;
 						}
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "mysql_error\\((.*?)\\)")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "mysql_error\\((.*?)\\)")) 
 						{
 							Report.DBALReport += string.Format("Unauthorised usage of mysql_error, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
 							ValidateFlag = false;
 						}
 					}
-					if (ModActions.Parse(Modification.Actions.Actions[i].ActionType).Type == ModActions.ModActionType.File) 
+					if (ModActions.Parse(((ModAction)Modification.Actions[i]).ActionType).Type == ModActions.ModActionType.File) 
 					{
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "\\.phpex")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "\\.phpex")) 
 						{
 							Report.ActionsReport += string.Format("Unauthorised usage of path names (usage of .phpex rather than .php), starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "\\.phpex", "[b].phpex[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "\\.phpex", "[b].phpex[/b]"));
 							ValidateFlag = false;
 						}
-						if (Regex.IsMatch(Modification.Actions.Actions[i].ActionBody, "(\\/|)?php(BB|bb)(2|)\\/")) 
+						if (Regex.IsMatch(((ModAction)Modification.Actions[i]).ActionBody, "(\\/|)?php(BB|bb)(2|)\\/")) 
 						{
 							Report.ActionsReport += string.Format("Unauthorised usage of /phpBB2/, starting line: {0}\n[quote]{1}[/quote]\n",
-								Modification.Actions.Actions[i].StartLine, Regex.Replace(Modification.Actions.Actions[i].ToString(), "(\\/|)?php(BB|bb)(2|)\\/", "[b]$1php$2$3/[/b]"));
+								((ModAction)Modification.Actions[i]).StartLine, Regex.Replace(((ModAction)Modification.Actions[i]).ToString(), "(\\/|)?php(BB|bb)(2|)\\/", "[b]$1php$2$3/[/b]"));
 							ValidateFlag = false;
 						}
-						if (Modification.Actions.Actions[i].ActionType == "OPEN")
+						if (((ModAction)Modification.Actions[i]).ActionType == "OPEN")
 						{
 							bool OpenFound = false;
 							// TODO: speed up with a non linear search algorithm on a sorted list.
 							for (int j = 0; j < PhpbbFileList.Length; j++) 
 							{
-								if (PhpbbFileList[j] == Modification.Actions.Actions[i].ActionBody.Trim(TrimChars)) 
+								if (PhpbbFileList[j] == ((ModAction)Modification.Actions[i]).ActionBody.Trim(TrimChars)) 
 								{
 									OpenFound = true;
 								}
@@ -789,14 +790,14 @@ namespace ModTemplateTools
 							if (!OpenFound) 
 							{
 								Report.ActionsReport += string.Format("File to OPEN does not exist in phpBB standard installation package, starting line: {0}\n[quote]{1}[/quote]\n",
-									Modification.Actions.Actions[i].StartLine, Modification.Actions.Actions[i].ToString());
+									((ModAction)Modification.Actions[i]).StartLine, ((ModAction)Modification.Actions[i]).ToString());
 								ValidateFlag = false;
 							}
 						}
-						if (Modification.Actions.Actions[i].ActionType == "COPY")
+						if (((ModAction)Modification.Actions[i]).ActionType == "COPY")
 						{
 							bool CopyFlag = true;
-							string[] CopyLines = Modification.Actions.Actions[i].ActionBody.Replace("\r\n", "\n").Split('\n');
+							string[] CopyLines = ((ModAction)Modification.Actions[i]).ActionBody.Replace("\r\n", "\n").Split('\n');
 							for (int j = 0; j < CopyLines.Length; j++) 
 							{
 								if (CopyLines[j].Length > 5) 
@@ -810,7 +811,7 @@ namespace ModTemplateTools
 							if (!CopyFlag) 
 							{
 								Report.ActionsReport += string.Format("Unauthorised usage of COPY tag syntax, starting line: {0}\n[quote]{1}[/quote]\n",
-									Modification.Actions.Actions[i].StartLine, Modification.Actions.Actions[i].ToString());
+									((ModAction)Modification.Actions[i]).StartLine, ((ModAction)Modification.Actions[i]).ToString());
 								ValidateFlag = false;
 							}
 						}
@@ -819,26 +820,26 @@ namespace ModTemplateTools
 					// considering how small amoung of actions to sort
 					for (int j = 0; j < Actions.Length; j++) 
 					{
-						if (Modification.Actions.Actions[i].ActionType == Actions[j].Action) 
+						if (((ModAction)Modification.Actions[i]).ActionType == Actions[j].Action) 
 						{
 							ActionValidate = true;
 						}
 					}
-					if (Modification.Actions.Actions[i].ActionType == "IN-LINE FIND") // TODO: make sure this is correct, should be #6
+					if (((ModAction)Modification.Actions[i]).ActionType == "IN-LINE FIND") // TODO: make sure this is correct, should be #6
 					{
 						// TODO: make sure #2 is FIND
-						if (!((Modification.Actions.Actions[i - 1].ActionType == "FIND" || 
-							ModActions.Parse(Modification.Actions.Actions[i - 1].ActionType).Type == ModActions.ModActionType.InLineEdit || 
-							ModActions.Parse(Modification.Actions.Actions[i - 1].ActionType).Type == ModActions.ModActionType.Edit))) 
+						if (!((((ModAction)Modification.Actions[i - 1]).ActionType == "FIND" || 
+							ModActions.Parse(((ModAction)Modification.Actions[i - 1]).ActionType).Type == ModActions.ModActionType.InLineEdit || 
+							ModActions.Parse(((ModAction)Modification.Actions[i - 1]).ActionType).Type == ModActions.ModActionType.Edit))) 
 						{
 							findINLineFlag = false;
 						}
 					}
-					if (ModActions.Parse(Modification.Actions.Actions[i].ActionType).Type == ModActions.ModActionType.Edit) // TODO: make sure this is correct #4
+					if (ModActions.Parse(((ModAction)Modification.Actions[i]).ActionType).Type == ModActions.ModActionType.Edit) // TODO: make sure this is correct #4
 					{
-						if (ModActions.Parse(Modification.Actions.Actions[i - 1].ActionType).Type != ModActions.ModActionType.Edit) // TODO: #4
+						if (ModActions.Parse(((ModAction)Modification.Actions[i - 1]).ActionType).Type != ModActions.ModActionType.Edit) // TODO: #4
 						{
-							if (ModActions.Parse(Modification.Actions.Actions[i - 1].ActionType).Type != ModActions.ModActionType.Find) // TODO: #2
+							if (ModActions.Parse(((ModAction)Modification.Actions[i - 1]).ActionType).Type != ModActions.ModActionType.Find) // TODO: #2
 							{
 								editINLineFlag = false;
 							}
@@ -847,13 +848,13 @@ namespace ModTemplateTools
 					if (!ActionValidate) 
 					{
 						Report.ActionsReport += string.Format("Unauthorised action, {0} please only use the official actions, starting line: {1}\n[quote]{2}[/quote]\n",
-							Modification.Actions.Actions[i].ActionType, Modification.Actions.Actions[i].StartLine, Modification.Actions.Actions[i].ToString());
+							((ModAction)Modification.Actions[i]).ActionType, ((ModAction)Modification.Actions[i]).StartLine, ((ModAction)Modification.Actions[i]).ToString());
 						ValidateFlag = false;
 					}
 					if (!findINLineFlag) 
 					{
 						Report.ActionsReport += string.Format("Unauthorised action, {0}. This action must be preceded by a FIND, 'edit' or an IN-LINE 'edit' action, starting line: {1}\n[quote]{2}\n{3}[/quote]\n",
-							Modification.Actions.Actions[i].ActionType, Modification.Actions.Actions[i].StartLine, Modification.Actions.Actions[i - 1].ToString(), Modification.Actions.Actions[i].ToString());
+							((ModAction)Modification.Actions[i]).ActionType, ((ModAction)Modification.Actions[i]).StartLine, ((ModAction)Modification.Actions[i - 1]).ToString(), ((ModAction)Modification.Actions[i]).ToString());
 						ValidateFlag = false;
 					}
 					ActionValidate = false;
@@ -938,10 +939,10 @@ namespace ModTemplateTools
 			input = input.Replace("[quote]","<blockquote>");
 			input = input.Replace("[/quote]","</blockquote>");
 
-			input = Regex.Replace(input, "\\[color\\=([A-Fa-f0-9]+?]\\]", "<span style=\"color: $0\">");
+			input = Regex.Replace(input, "\\[color\\=(([A-Fa-f0-9]+?)|green|orange|red)\\]", "<span style=\"color: $1\">");
 			input = input.Replace("[/color]","</span>");
 
-			input = Regex.Replace(input, "\\[size\\=([0-9]+?]\\]", "<span style=\"font-size: $0pt\">");
+			input = Regex.Replace(input, "\\[size\\=([0-9]+?)\\]", "<span style=\"font-size: $1pt\">");
 			input = input.Replace("[/size]","</span>");
 
 			input = input.Replace("\n", "<br />\n");
