@@ -109,6 +109,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LocalisedTextBox.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LocalisedTextBox.resx"
+                    DependentUpon = "LocalisedTextBox.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ModActionEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"

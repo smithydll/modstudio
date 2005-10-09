@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialogBox.cs,v 1.3 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: NoteEditorDialogBox.cs,v 1.4 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ModTemplateTools.DataStructures;
 
 namespace ModStudio
 {
@@ -35,7 +36,7 @@ namespace ModStudio
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOk;
-		private System.Windows.Forms.TextBox textBoxNote;
+		internal ModFormControls.LocalisedTextBox textBoxNote;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -81,7 +82,7 @@ namespace ModStudio
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOk = new System.Windows.Forms.Button();
-			this.textBoxNote = new System.Windows.Forms.TextBox();
+			this.textBoxNote = new ModFormControls.LocalisedTextBox();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -118,12 +119,13 @@ namespace ModStudio
 			// textBoxNote
 			// 
 			this.textBoxNote.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxNote.LanguageSelectorVisible = true;
 			this.textBoxNote.Location = new System.Drawing.Point(0, 0);
 			this.textBoxNote.Multiline = true;
 			this.textBoxNote.Name = "textBoxNote";
 			this.textBoxNote.Size = new System.Drawing.Size(504, 214);
-			this.textBoxNote.TabIndex = 1;
-			this.textBoxNote.Text = "";
+			this.textBoxNote.TabIndex = 0;
+			this.textBoxNote.TextLang = null;
 			// 
 			// NoteEditorDialogBox
 			// 
@@ -170,15 +172,15 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public string Note
+		public PropertyLang Note
 		{
 			get
 			{
-				return textBoxNote.Text.Replace("\r","");
+				return textBoxNote.TextLang;
 			}
 			set
 			{
-				textBoxNote.Text = value.Replace("\r","").Replace("\n","\r\n");
+				textBoxNote.TextLang = value;
 			}
 		}
 
@@ -187,9 +189,9 @@ namespace ModStudio
 		/// </summary>
 		/// <param name="note"></param>
 		/// <param name="type"></param>
-		public void SetNote(string note, string type)
+		public void SetNote(PropertyLang note, string type)
 		{
-			this.textBoxNote.Text = note;
+			this.textBoxNote.TextLang = note;
 			notetype = type;
 		}
 	}
@@ -202,7 +204,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public string Note;
+		public PropertyLang Note;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -212,7 +214,7 @@ namespace ModStudio
 		/// </summary>
 		/// <param name="note"></param>
 		/// <param name="type"></param>
-		public NoteEditorDialogBoxSaveEventArgs(string note, string type)
+		public NoteEditorDialogBoxSaveEventArgs(PropertyLang note, string type)
 		{
 			this.Note = note;
 			this.Type = type;

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.3 2005-09-02 14:12:48 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.4 2005-10-09 11:22:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 namespace ModStudio
 {
@@ -257,7 +258,7 @@ namespace ModStudio
 		{
 			get
 			{
-				return new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text.Replace("\r", "")));
+				return new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new PropertyLang(textBoxEntry.Text.Replace("\r", "")));
 			}
 			set
 			{
