@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.9 2005-09-03 12:10:58 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.10 2005-10-09 11:19:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,7 +22,13 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Collections.Specialized;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Xsl;
+using System.Data;
+using ModTemplateTools.DataStructures;
 
 namespace ModTemplateTools
 {
@@ -33,7 +39,23 @@ namespace ModTemplateTools
 	public class PhpbbMod
 	{
 
-		private const string DefaultLanguage = "en-GB";
+		private static string defaultLanguage = "en-GB";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static string DefaultLanguage
+		{
+			get
+			{
+				return defaultLanguage;
+			}
+			set
+			{
+				defaultLanguage = value;
+			}
+		}
+
 		private const char Newline = '\n';
 		private const string WinNewLine = "\r\n";
 
@@ -67,379 +89,14 @@ namespace ModTemplateTools
 		}
 
 		/// <summary>
-		/// Instead of using Strings directly, we have to support a multitude of language in the MOD Template.
-		/// Therefore we have to start using this structure.
-		/// </summary>
-		public struct PropertyLang
-		{
-			/// <summary>
-			/// The target language for this version. Default is en-GB as specified in phpBB3.0 documentation.
-			/// </summary>
-			private string[] Language;
-			private string[] Value;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="_value"></param>
-			/// <param name="_language"></param>
-			public PropertyLang(string _value, string _language)
-			{
-				this.Language = new string[1];
-				this.Language[0] = _language;
-				this.Value = new string[1];
-				this.Value[0] = _value;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="_value"></param>
-			public PropertyLang(string _value)
-			{
-				this.Language = new string[1];
-				this.Language[0] = DefaultLanguage;
-				this.Value = new string[1];
-				this.Value[0] = _value;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="_value"></param>
-			/// <param name="_language"></param>
-			public void AddLanguage(string _value, string _language)
-			{
-				if (Language != null)
-				{
-					string[] tempL = this.Language;
-					string[] tempV = this.Value;
-
-					this.Language = new string[tempL.Length + 1];
-					tempL.CopyTo(this.Language,0);
-					this.Language[Language.GetUpperBound(0)] = _language;
-					this.Value = new string[tempV.Length + 1];
-					tempV.CopyTo(this.Value,0);
-					this.Value[Value.GetUpperBound(0)] = _value;
-				}
-				else
-				{
-					Language = new string[1];
-					Language[0] = _language;
-					Value = new string[1];
-					Value[0] = _value;
-				}
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="_language"></param>
-			/// <returns></returns>
-			public string GetValue(string _language)
-			{
-				if (Language != null)
-				{
-					for (int i = 0; i < this.Language.Length; i++)
-					{
-						if (_language == this.Language[i])
-						{
-							return this.Value[i];
-						}
-					}
-				}
-				return "";
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public string GetValue()
-			{
-				return GetValue(DefaultLanguage);
-			}
-
-			/// <summary>
-			/// Set the default language value
-			/// </summary>
-			public void SetValue(string _value)
-			{
-				if (Language != null)
-				{
-					for (int i = 0; i < this.Language.Length; i++)
-					{
-						if (DefaultLanguage == this.Language[i])
-						{
-							this.Value[i] = _value;
-						}
-					}
-				}
-				else
-				{
-					Language = new string[1];
-					Language[0] = DefaultLanguage;
-					Value = new string[1];
-					Value[0] = _value;
-				}
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public string pValue
-			{
-				get
-				{
-					return GetValue();
-				}
-				set
-				{
-					SetValue(value);
-				}
-			}
-		}
-
-		/// <summary>
-		/// <p>I suppose an explanation is in order.</p>
-		/// <p>In the text format the following holds true.</p>
-		/// <code>#
-		/// # Before Comment
-		/// #
-		/// #-----[ ACTION:modifier ]---------------------
-		/// #
-		/// # After Comment
-		/// #
-		/// Action Body</code>
-		/// <p>Use of the Before Comment is not recommended as it is not segregated from the 
-		/// after comment and threrefore incompatible with the XML format. Also for technical
-		/// reasons the Before Comment is not parsed by this parser and will be permanently lost.</p>
-		/// <p>It is therefore recommended that if you wish to leave comments that the After 
-		/// Comment or the Author Notes be used.</p>
-		/// <p>The modifier is not an official element of the text format, however it is used
-		/// as a compatibility measure between the text and XML formats in this parser.</p>
-		/// </summary>
-		public struct ModAction
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public string ActionType;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string ActionBody;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string BeforeComment;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string AfterComment;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int StartLine;
-			/// <summary>
-			/// Modifier is a variable that modifies the behaviour of an actions, for example regex can
-			/// modify a FIND to do a regular expression based find.
-			/// </summary>
-			public string Modifier;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="actiontype">Type</param>
-			/// <param name="actionbody">Body</param>
-			/// <param name="beforecomment">Before Comment</param>
-			/// <param name="aftercomment">After Comment</param>
-			/// <param name="startline">Start line</param>
-			/// <param name="modifier">Modifier</param>
-			public ModAction(string actiontype, string actionbody, string beforecomment, string aftercomment, int startline, string modifier)
-			{
-				this.ActionType = actiontype;
-				this.ActionBody = actionbody;
-				this.BeforeComment = beforecomment;
-				this.AfterComment = aftercomment;
-				this.StartLine = startline;
-				this.Modifier = modifier;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="actiontype">Type</param>
-			/// <param name="actionbody">Body</param>
-			/// <param name="beforecomment">Before Comment</param>
-			/// <param name="aftercomment">After Comment</param>
-			/// <param name="startline">Start line</param>
-			public ModAction(string actiontype, string actionbody, string beforecomment, string aftercomment, int startline)
-			{
-				this.ActionType = actiontype;
-				this.ActionBody = actionbody;
-				this.BeforeComment = beforecomment;
-				this.AfterComment = aftercomment;
-				this.StartLine = startline;
-				this.Modifier = null;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="actiontype">Type</param>
-			/// <param name="actionbody">Body</param>
-			/// <param name="aftercomment">After Comment</param>
-			/// <param name="modifier">Modifier</param>
-			public ModAction(string actiontype, string actionbody, string aftercomment, string modifier)
-			{
-				this.ActionType = actiontype;
-				this.ActionBody = actionbody;
-				this.BeforeComment = null;
-				this.AfterComment = aftercomment;
-				this.StartLine = 0;
-				this.Modifier = modifier;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="actiontype">Type</param>
-			/// <param name="actionbody">Body</param>
-			/// <param name="aftercomment">After Comment</param>
-			public ModAction(string actiontype, string actionbody, string aftercomment)
-			{
-				this.ActionType = actiontype;
-				this.ActionBody = actionbody;
-				this.BeforeComment = null;
-				this.AfterComment = aftercomment;
-				this.StartLine = 0;
-				this.Modifier = null;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public override string ToString()
-			{
-				// TODO: niceify this
-				string MODBuild = "";
-				MODBuild += "#\n";
-				MODBuild += "#-----[ " + ActionType + " ]------------------------------------------\n";
-				MODBuild += "#\n";
-				if (!(AfterComment == null || AfterComment == "\n")) 
-				{
-					string[] ACsplit = AfterComment.Replace("\r\n", "\n").Split('\n');
-					for (int j = 0; j < ACsplit.Length; j++) 
-					{
-						if (!((ACsplit[j] == "" && j == 0))) 
-						{
-							//MODBuild += Newline;
-							MODBuild += "\n# " + ACsplit[j];
-						}
-					}
-				}
-				//MODBuild += Newline;
-				MODBuild += ActionBody;
-				return MODBuild;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public struct ModActions
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModAction[] Actions;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="newaction"></param>
-			public void AddEntry(ModAction newaction)
-			{
-				if (Actions != null)
-				{
-					ModAction[] tempArray = Actions;
-					Actions = new ModAction[tempArray.Length + 1];
-					tempArray.CopyTo(Actions, 0);
-				}
-				else
-				{
-					Actions = new ModAction[1];
-				}
-
-				Actions[Actions.GetUpperBound(0)] = newaction;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="newaction"></param>
-			/// <param name="BeforeAction"></param>
-			public void AddEntry(ModAction newaction, int BeforeAction)
-			{
-				if (-10 >= BeforeAction && BeforeAction <= -1) 
-				{
-					AddEntry(newaction);
-				} 
-				else 
-				{
-					ModAction[] intermitentActions;
-					intermitentActions = Actions;
-
-					ModAction[] tempActions = Actions;
-					Actions = new ModAction[tempActions.Length + 1];
-
-					for (int i = 0; i <= BeforeAction - 1; i++) 
-					{
-						Actions[i] = intermitentActions[i];
-					}
-
-					Actions[BeforeAction] = newaction;
-
-					for (int i = BeforeAction; i <= Actions.GetUpperBound(0) - 1; i++) 
-					{
-						Actions[i + 1] = intermitentActions[i];
-					}
-				}
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="index"></param>
-			public void RemoveEntry(int index)
-			{
-				ModAction[] tempActions = Actions;
-
-				Actions = new ModAction[Actions.Length -1];
-
-				for (int i = 0; i < index; i++) 
-				{
-					Actions[i] = tempActions[i];
-				}
-				for (int i = index; i < tempActions.Length - 1; i++) 
-				{
-					Actions[i] = tempActions[i + 1];
-				}
-				tempActions = null;
-			}
-		}
-
-		/// <summary>
 		/// Respresents a modification header section.
 		/// </summary>
-		public struct ModHeader
+		public class ModHeader
 		{
 			/// <summary>
 			/// 
 			/// </summary>
-			public PropertyLang ModTitle;
+			public PropertyLang ModTitle = new PropertyLang();
 			/// <summary>
 			/// 
 			/// </summary>
@@ -447,7 +104,7 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
-			public PropertyLang ModDescription;
+			public PropertyLang ModDescription = new PropertyLang();
 			/// <summary>
 			/// 
 			/// </summary>
@@ -479,7 +136,7 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
-			public PropertyLang ModAuthorNotes;
+			public PropertyLang ModAuthorNotes = new PropertyLang();
 			/// <summary>
 			/// 
 			/// </summary>
@@ -495,7 +152,7 @@ namespace ModTemplateTools
 			/// <summary>
 			/// 
 			/// </summary>
-			public string[] Meta;
+			public Hashtable Meta = new Hashtable();
 			/// <summary>
 			/// 
 			/// </summary>
@@ -728,7 +385,7 @@ namespace ModTemplateTools
 			{
 				this.HistoryVersion = HistoryVersion;
 				this.HistoryDate = HistoryDate;
-				this.HistoryChanges = new PropertyLang(HistoryChanges, DefaultLanguage);
+				this.HistoryChanges = new PropertyLang(HistoryChanges, PhpbbMod.DefaultLanguage);
 			}
 
 			/// <summary>
@@ -752,7 +409,7 @@ namespace ModTemplateTools
 			{
 				this.HistoryVersion = new ModVersion(0,0,0);
 				this.HistoryDate = DateTime.Now;
-				this.HistoryChanges = new PropertyLang("");
+				this.HistoryChanges = new PropertyLang();
 			}
 
 			/// <summary>
@@ -762,7 +419,7 @@ namespace ModTemplateTools
 			/// <param name="_language"></param>
 			public void AddLanguage(string _value, string _language)
 			{
-				HistoryChanges.AddLanguage(_value, _language);
+				HistoryChanges[_language] = _value;
 			}
 		}
 
@@ -1428,11 +1085,247 @@ namespace ModTemplateTools
 
 		/// <summary>
 		/// Read and parse an XML MOD.
+		/// I realise this is not the fastest code, but I am making sure this executes correctly.
+		/// As the files will be only a few hundred kB at most and this only happens once it shouldn't
+		/// be noticed too much. In future releases I will may implement XmlSerializer or filtering.
 		/// </summary>
-		/// <param name="XmlMod">A string containing the text of the MOD in XML format.</param>
-		public void ReadXml(string XmlMod)
+		/// <param name="FileName">A string containing the filename of the MOD to read.</param>
+		public void ReadXml(string FileName)
 		{
 			LastReadFormat = ModFormats.XMLMOD;
+			ModTemplateTools.mod XmlDataSet = new ModTemplateTools.mod();
+			XmlDataSet.ReadXml(FileName);
+
+			// MOD Author parsing
+			for (int i = 0; i < XmlDataSet._author_group.Rows.Count; i++)
+			{
+				for (int j = 0; j < XmlDataSet.author.Rows.Count; j++)
+				{
+					if (XmlDataSet.author.Rows[j]["author-group_Id"] == XmlDataSet._author_group.Rows[i]["author-group_Id"])
+					{
+						ModAuthorEntry tempAuthor = new ModAuthorEntry(XmlDataSet.author.Rows[j]["username"].ToString(), 
+							XmlDataSet.author.Rows[j]["realname"].ToString(),
+							XmlDataSet.author.Rows[j]["email"].ToString(),
+							XmlDataSet.author.Rows[j]["homepage"].ToString());
+						// TODO: contributions
+						Header.ModAuthor.AddEntry(tempAuthor);
+					}
+				}
+			}
+
+			// Multilingual MOD Title
+			Header.ModTitle = new PropertyLang();
+			for (int i = 0; i < XmlDataSet.title.Rows.Count; i++)
+			{
+				Header.ModTitle[XmlDataSet.title.Rows[i]["lang"].ToString()] = XmlDataSet.title.Rows[i]["title_Text"].ToString();
+			}
+
+			// MOD Description
+			Header.ModDescription = new PropertyLang();
+			for (int i = 0; i < XmlDataSet.description.Rows.Count; i++)
+			{
+				Header.ModDescription[XmlDataSet.description.Rows[i]["lang"].ToString()] = XmlDataSet.description.Rows[i]["description_Text"].ToString();
+			}
+
+			// Author Notes
+			Header.ModAuthorNotes = new PropertyLang();
+			for (int i = 0; i < XmlDataSet._author_notes.Rows.Count; i++)
+			{
+				Header.ModAuthorNotes[XmlDataSet._author_notes.Rows[i]["lang"].ToString()] = XmlDataSet._author_notes.Rows[i]["author-notes_Text"].ToString();
+			}
+
+			// MOD History entries
+			for (int i = 0; i < XmlDataSet.entry.Rows.Count; i++)
+			{
+				ModHistoryEntry tempHistory = new ModHistoryEntry();
+				for (int j = 0; j < XmlDataSet._rev_version.Rows.Count; j++)
+				{
+					if (XmlDataSet._rev_version.Rows[j]["entry_Id"] == XmlDataSet.entry.Rows[i]["entry_Id"])
+					{
+						ModVersion tempVersion;
+						tempVersion = new ModVersion(
+							int.Parse(XmlDataSet._rev_version.Rows[j]["major"].ToString()),
+							int.Parse(XmlDataSet._rev_version.Rows[j]["minor"].ToString()), 
+							int.Parse(XmlDataSet._rev_version.Rows[j]["revision"].ToString()));
+						if (XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray().Length == 1)
+						{
+							tempVersion.VersionRelease = XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray()[0];
+						}
+						tempHistory.HistoryVersion = tempVersion;
+					}
+				}
+				tempHistory.HistoryDate = DateTime.Parse(XmlDataSet.entry.Rows[i]["date"].ToString());
+				StringBuilder tempChangeLog = new StringBuilder();
+				for (int j = 0; j < XmlDataSet.changelog.Rows.Count; j++)
+				{
+					if (XmlDataSet.changelog.Rows[j]["entry_Id"] == XmlDataSet.entry.Rows[i]["entry_Id"])
+					{
+						for (int k = 0; k < XmlDataSet.change.Rows.Count; k++)
+						{
+							tempHistory.HistoryChanges = new PropertyLang();
+							if (XmlDataSet.change.Rows[k]["changelog_Id"] == XmlDataSet.changelog.Rows[j]["changelog_Id"])
+							{
+								tempHistory.HistoryChanges[XmlDataSet.changelog.Rows[k]["lang"].ToString()] = XmlDataSet.change.Rows[k]["change_Text"].ToString();
+							}
+						}
+					}
+				}
+				Header.ModHistory.AddEntry(tempHistory);
+			}
+
+			// meta
+			Header.Meta = new Hashtable();
+			for (int i = 0; i < XmlDataSet.meta.Rows.Count; i++)
+			{
+				Header.Meta.Add(XmlDataSet.meta.Rows[i]["name"],XmlDataSet.meta.Rows[i]["content"]);
+			}
+
+			// MOD Version
+			try
+			{
+				ModVersion tempVersion = new ModVersion();
+				tempVersion.VersionMajor = (int)XmlDataSet._mod_version.Rows[0]["major"];
+				tempVersion.VersionMinor = (int)XmlDataSet._mod_version.Rows[0]["minor"];
+				tempVersion.VersionRevision = (int)XmlDataSet._mod_version.Rows[0]["revision"];
+				if (XmlDataSet._mod_version.Rows[0]["revision"].ToString().ToCharArray().Length == 1)
+				{
+					tempVersion.VersionRelease = XmlDataSet._mod_version.Rows[0]["release"].ToString().ToCharArray()[0];
+				}
+				Header.ModVersion = tempVersion;
+			}
+			catch 
+			{
+				Header.ModVersion = new ModVersion(0,0,0);
+			}
+
+			// license
+			try { Header.License = XmlDataSet.header.Rows[0]["license"].ToString(); }
+			catch {}
+
+			// installation
+			try 
+			{ 
+				Header.ModInstallationLevel = ModInstallationLevelParse(XmlDataSet.installation.Rows[0]["level"].ToString());
+				Header.ModInstallationTime = (int)XmlDataSet.installation.Rows[0]["time"];
+				// TODO: easymod-compliant
+				//Header.ModEasymodCompatibility = (bool)XmlDataSet.installation.Rows[0]["easymod-compliant"];
+				// TODO: mod-config
+			}
+			catch {}
+
+			// TODO: target-version
+
+			// actions
+			// action-group
+			// sql
+			for (int i = 0; i < XmlDataSet.sql.Rows.Count; i++)
+			{
+				Actions.AddEntry(new ModAction("SQL", XmlDataSet.sql.Rows[i]["sql_Text"].ToString(), ""));
+			}
+
+			// copy
+			StringBuilder tempCopy = new StringBuilder();
+			for (int j = 0; j < XmlDataSet.file.Rows.Count; j++)
+			{
+				tempCopy.Append("copy ");
+				tempCopy.Append(XmlDataSet.file.Rows[j]["from"].ToString());
+				tempCopy.Append(" to ");
+				tempCopy.Append(XmlDataSet.file.Rows[j]["to"].ToString());
+				tempCopy.Append("\n");
+			}
+			if (tempCopy.Length > 0)
+			{
+				Actions.AddEntry(new ModAction("COPY", tempCopy.ToString(), ""));
+			}
+
+			// open
+			// this is very specific, the FINDs always go BEFORE the actions
+			// followed by IN-LINE actions, and lastly comments
+			for (int i = 0; i < XmlDataSet.open.Rows.Count; i++)
+			{
+				Actions.AddEntry(new ModAction("OPEN", XmlDataSet.open.Rows[i]["src"].ToString(), ""));
+				for (int j = 0; j < XmlDataSet.edit.Rows.Count; j++)
+				{
+					if (XmlDataSet.edit.Rows[j]["open_Id"] == XmlDataSet.open.Rows[i]["open_Id"])
+					{
+						for (int k = 0; k < XmlDataSet.find.Rows.Count; k++)
+						{
+							if (XmlDataSet.find.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							{
+								Actions.AddEntry(new ModAction("FIND", XmlDataSet.find.Rows[k]["find_Text"].ToString(), "", XmlDataSet.find.Rows[k]["type"].ToString()));
+							}
+						}
+						for (int k = 0; k < XmlDataSet.action.Rows.Count; k++)
+						{
+							if (XmlDataSet.action.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							{
+								string actionTitle = "";
+								switch (XmlDataSet.action.Rows[k]["type"].ToString())
+								{
+									case "after-add":
+										actionTitle = "AFTER, ADD";
+										break;
+									case "before-add":
+										actionTitle = "BEFORE, ADD";
+										break;
+									case "replace-with":
+										actionTitle = "REPLACE WITH";
+										break;
+									case "operation":
+										actionTitle = "INCREMENT";
+										break;
+								}
+								Actions.AddEntry(new ModAction(actionTitle, XmlDataSet.action.Rows[k]["action_Text"].ToString(), ""));
+							}
+						}
+						for (int k = 0; k < XmlDataSet._inline_edit.Rows.Count; k++)
+						{
+							if (XmlDataSet._inline_edit.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							{
+								for (int l = 0; l < XmlDataSet._inline_find.Rows.Count; l++)
+								{
+									if (XmlDataSet._inline_find.Rows[l]["_inline_edit_Id"] == XmlDataSet._inline_edit.Rows[k]["_inline_edit_Id"])
+									{
+										Actions.AddEntry(new ModAction("IN-LINE FIND", XmlDataSet._inline_find.Rows[l]["inline-find_Text"].ToString(), "", XmlDataSet._inline_find.Rows[l]["type"].ToString()));
+									}
+								}
+								for (int l = 0; l < XmlDataSet._inline_action.Rows.Count; l++)
+								{
+									if (XmlDataSet._inline_action.Rows[l]["_inline_edit_Id"] == XmlDataSet._inline_edit.Rows[k]["_inline_edit_Id"])
+									{
+										string actionTitle = "";
+										switch (XmlDataSet._inline_action.Rows[l]["type"].ToString())
+										{
+											case "after-add":
+												actionTitle = "AFTER, ADD";
+												break;
+											case "before-add":
+												actionTitle = "BEFORE, ADD";
+												break;
+											case "replace-with":
+												actionTitle = "REPLACE WITH";
+												break;
+											case "operation":
+												actionTitle = "INCREMENT";
+												break;
+										}
+										Actions.AddEntry(new ModAction(actionTitle, XmlDataSet._inline_action.Rows[l]["inline-action_Text"].ToString(), ""));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			// diy instructions
+			for (int i = 0; i < XmlDataSet._diy_instructions.Rows.Count; i++)
+			{
+				Actions.AddEntry(new ModAction("DIY INSTRUCTIONS", XmlDataSet._diy_instructions.Rows[i]["diy-instructions_Text"].ToString(),"", XmlDataSet._diy_instructions.Rows[i]["lang"].ToString()));
+			}
+
+			Actions.AddEntry(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM"));
+			//XmlDataSet.Dispose();
 		}
 
 		/// <summary>
@@ -1441,22 +1334,23 @@ namespace ModTemplateTools
 		/// <param name="FileName">A string containing the file path to the MOD.</param>
 		public void ReadFile(string FileName)
 		{
-			Read(OpenTextFile(FileName));
+			Read(FileName);
 		}
 
 		/// <summary>
 		/// Read and parse a MOD automatically deciding if it's an XML or Text based MOD.
 		/// </summary>
-		/// <param name="ModToRead">A string containing the text of the MOD.</param>
-		public void Read(string ModToRead)
+		/// <param name="FileName">A string containing the text of the MOD.</param>
+		public void Read(string FileName)
 		{
-			if (ModToRead.StartsWith("##"))
+			if (FileName.ToLower().EndsWith(".txt") || FileName.ToLower().EndsWith(".mod"))
 			{
-				ReadText(ModToRead);
+				string textFile = OpenTextFile(FileName);
+				if (textFile.StartsWith("##")) ReadText(textFile);
 			}
-			else
+			else if (FileName.ToLower().EndsWith(".xml"))
 			{
-				ReadXml(ModToRead);
+				 ReadXml(FileName);
 			}
 		}
 
@@ -1629,7 +1523,7 @@ namespace ModTemplateTools
 			NewModBody.Append(BlankTemplate);
 			try 
 			{
-				foreach (ModAction MA in Actions.Actions) 
+				foreach (ModAction MA in Actions) 
 				{
 					if (MA.ActionType != null) 
 					{
@@ -1670,6 +1564,12 @@ namespace ModTemplateTools
 		/// <returns>A string of the XML format of the MOD.</returns>
 		public string WriteXml()
 		{
+			ModTemplateTools.mod XmlDataSet = new ModTemplateTools.mod();
+			foreach (string Language in Header.ModTitle)
+			{
+				DataRow newRow = XmlDataSet.title.NewRow();
+				XmlDataSet.title.Rows.Add(newRow);
+			}
 			return "";
 		}
 

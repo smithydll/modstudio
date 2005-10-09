@@ -89,6 +89,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModDataStructures.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModValidator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -97,6 +102,25 @@
                     RelPath = "PhpbbMod.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xml-mod-1-0.xsd"
+                    BuildAction = "Content"
+                    Generator = "MSDataSetGenerator"
+                    LastGenOutput = "xml-mod-1-0.cs"
+                />
+                <File
+                    RelPath = "xml-mod-1-0.cs"
+                    DependentUpon = "xml-mod-1-0.xsd"
+                    SubType = "code"
+                    BuildAction = "Compile"
+                    DesignTime = "True"
+                    AutoGen = "True"
+                />
+                <File
+                    RelPath = "xml-mod-1-0.xsx"
+                    DependentUpon = "xml-mod-1-0.xsd"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>
