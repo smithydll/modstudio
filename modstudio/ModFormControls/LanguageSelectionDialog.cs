@@ -1,11 +1,11 @@
 /***************************************************************************
- *                            OpenActionDialog.cs
+ *                         LanguageSelectionDialog.cs
  *                            -------------------
  *   begin                : Wednesday, Jun 29, 2005
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialog.cs,v 1.5 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: LanguageSelectionDialog.cs,v 1.1 2005-12-09 00:50:05 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,40 +22,43 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 /*
  * Inspired by:
  * http://groups.google.com.au/group/microsoft.public.dotnet.framework.windowsforms/browse_thread/thread/50554a22d9d040d5/c88268fc037ccad9?lnk=st&q=c%23+CommonDialog+inherit&rnum=5&hl=en#c88268fc037ccad9
  */
-namespace ModStudio
+namespace ModFormControls
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class OpenActionDialog : System.Windows.Forms.CommonDialog
+	public class LanguageSelectionDialog : System.Windows.Forms.CommonDialog
 	{
-		private string filename = null;
+		private string language = null;
+
 		/// <summary>
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public string fileName
+		public string Language
 		{
 			get
 			{
-				return filename;
+				return language;
 			}
 
 			set
 			{
-				filename = value;
+				language = value;
 			}
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public OpenActionDialog() 
+		public LanguageSelectionDialog() 
 		{
 
 		}
@@ -63,7 +66,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public event OpenActionDialogBox.OpenActionDialogBoxSaveNewHandler SaveNew;
+		public event LanguageSelectionDialogBox.LanguageSelectionDialogBoxSaveHandler Save;
 
 		/// <summary>
 		/// 
@@ -72,18 +75,18 @@ namespace ModStudio
 		/// <returns></returns>
 		protected override bool RunDialog(IntPtr hWndOwner)
 		{
-			OpenActionDialogBox dialogInstance = null;
+			LanguageSelectionDialogBox dialogInstance = null;
 			bool okTriggered = false;
 			try
 			{
-				dialogInstance = new OpenActionDialogBox();
+				dialogInstance = new LanguageSelectionDialogBox();
 				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
-				dialogInstance.textBoxFile.Text = this.fileName;
+				dialogInstance.Language = this.language;
 				if (dialogInstance.ShowDialog() == DialogResult.OK)
 				{
 					okTriggered = true;
-					this.fileName = dialogInstance.textBoxFile.Text; 
-					this.SaveNew(this, new OpenActionDialogBoxSaveNewEventArgs(dialogInstance.textBoxFile.Text));
+					this.language = dialogInstance.Language; 
+					this.Save(this, new LanguageSelectionDialogBoxSaveEventArgs(language));
 				}
 			}
 
@@ -102,7 +105,7 @@ namespace ModStudio
 		/// </summary>
 		public override void Reset()
 		{
-			this.fileName = null;
+			this.language = null;
 
 		}
 	}

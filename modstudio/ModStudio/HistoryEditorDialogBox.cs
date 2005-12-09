@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.4 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.5 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -38,12 +38,18 @@ namespace ModStudio
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOk;
 		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.TextBox textBoxEntry;
 		internal System.Windows.Forms.TextBox MODVersionRelease;
 		internal System.Windows.Forms.NumericUpDown MODVersionMajor;
 		internal System.Windows.Forms.NumericUpDown MODVersionMinor;
 		internal System.Windows.Forms.NumericUpDown MODVersionRevision;
 		internal System.Windows.Forms.DateTimePicker MODHistorydtp;
+		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ListView listViewModChanges;
+		private System.Windows.Forms.ComboBox comboBoxLanguages;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button button2;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -62,20 +68,42 @@ namespace ModStudio
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
+			entry = new ModHistoryEntry();
+			entry.HistoryChangeLog = new ModHistoryChangeLogLocalised();
 		}
+
+		private ModHistoryEntry entry;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="entry"></param>
-		public void SetEntry(ModTemplateTools.PhpbbMod.ModHistoryEntry entry)
+		public void SetEntry(ModHistoryEntry entry)
 		{
-			textBoxEntry.Text = entry.HistoryChanges.GetValue().Replace("\r","").Replace("\n", "\r\n");
+			//TODO: 
+			//textBoxEntry.Text = entry.HistoryChanges.GetValue().Replace("\r","").Replace("\n", "\r\n");
 			MODVersionMajor.Value = entry.HistoryVersion.VersionMajor;
 			MODVersionMinor.Value = entry.HistoryVersion.VersionMinor;
 			MODVersionRevision.Value = entry.HistoryVersion.VersionRevision;
 			MODVersionRelease.Text = entry.HistoryVersion.VersionRelease.ToString();
 			MODHistorydtp.Value = entry.HistoryDate;
+
+			comboBoxLanguages.Items.Clear();
+			comboBoxLanguages.Text = "";
+			foreach (DictionaryEntry de in entry.HistoryChangeLog)
+			{
+				comboBoxLanguages.Items.Add((string)de.Key);
+				if (comboBoxLanguages.Items.Count == 1)
+				{
+					comboBoxLanguages.SelectedIndex = 0;
+					listViewModChanges.Clear();
+					foreach (string change in ((ModHistoryChangeLog)de.Value))
+					{
+						listViewModChanges.Items.Add(change.Split('\n')[0]);
+					}
+				}
+			}
+			this.entry = entry;
 		}
 
 		/// <summary>
@@ -109,12 +137,19 @@ namespace ModStudio
 			this.MODVersionMinor = new System.Windows.Forms.NumericUpDown();
 			this.MODVersionRevision = new System.Windows.Forms.NumericUpDown();
 			this.MODHistorydtp = new System.Windows.Forms.DateTimePicker();
-			this.textBoxEntry = new System.Windows.Forms.TextBox();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboBoxLanguages = new System.Windows.Forms.ComboBox();
+			this.listViewModChanges = new System.Windows.Forms.ListView();
+			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+			this.button1 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajor)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinor)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevision)).BeginInit();
+			this.panel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -122,7 +157,7 @@ namespace ModStudio
 			this.panel1.Controls.Add(this.buttonCancel);
 			this.panel1.Controls.Add(this.buttonOk);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 152);
+			this.panel1.Location = new System.Drawing.Point(0, 184);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(504, 40);
 			this.panel1.TabIndex = 2;
@@ -157,7 +192,7 @@ namespace ModStudio
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(504, 40);
+			this.panel2.Size = new System.Drawing.Size(504, 32);
 			this.panel2.TabIndex = 3;
 			// 
 			// MODVersionRelease
@@ -211,22 +246,80 @@ namespace ModStudio
 			this.MODHistorydtp.Name = "MODHistorydtp";
 			this.MODHistorydtp.TabIndex = 8;
 			// 
-			// textBoxEntry
+			// panel3
 			// 
-			this.textBoxEntry.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxEntry.Location = new System.Drawing.Point(0, 40);
-			this.textBoxEntry.Multiline = true;
-			this.textBoxEntry.Name = "textBoxEntry";
-			this.textBoxEntry.Size = new System.Drawing.Size(504, 112);
-			this.textBoxEntry.TabIndex = 4;
-			this.textBoxEntry.Text = "";
+			this.panel3.Controls.Add(this.button2);
+			this.panel3.Controls.Add(this.button1);
+			this.panel3.Controls.Add(this.label1);
+			this.panel3.Controls.Add(this.comboBoxLanguages);
+			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel3.Location = new System.Drawing.Point(0, 32);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(504, 24);
+			this.panel3.TabIndex = 4;
+			// 
+			// label1
+			// 
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label1.Location = new System.Drawing.Point(8, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(72, 23);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "Language:";
+			// 
+			// comboBoxLanguages
+			// 
+			this.comboBoxLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxLanguages.Location = new System.Drawing.Point(88, 0);
+			this.comboBoxLanguages.Name = "comboBoxLanguages";
+			this.comboBoxLanguages.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxLanguages.TabIndex = 0;
+			this.comboBoxLanguages.SelectedIndexChanged += new System.EventHandler(this.comboBoxLanguages_SelectedIndexChanged);
+			// 
+			// listViewModChanges
+			// 
+			this.listViewModChanges.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																								 this.columnHeader1});
+			this.listViewModChanges.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewModChanges.FullRowSelect = true;
+			this.listViewModChanges.GridLines = true;
+			this.listViewModChanges.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.listViewModChanges.Location = new System.Drawing.Point(0, 56);
+			this.listViewModChanges.MultiSelect = false;
+			this.listViewModChanges.Name = "listViewModChanges";
+			this.listViewModChanges.Size = new System.Drawing.Size(504, 128);
+			this.listViewModChanges.TabIndex = 5;
+			this.listViewModChanges.View = System.Windows.Forms.View.List;
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Changes";
+			// 
+			// button1
+			// 
+			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button1.Location = new System.Drawing.Point(216, 0);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(88, 23);
+			this.button1.TabIndex = 2;
+			this.button1.Text = "Add Language";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// button2
+			// 
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button2.Location = new System.Drawing.Point(312, 0);
+			this.button2.Name = "button2";
+			this.button2.TabIndex = 3;
+			this.button2.Text = "Add Change";
 			// 
 			// HistoryEditorDialogBox
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(504, 192);
+			this.ClientSize = new System.Drawing.Size(504, 224);
 			this.ControlBox = false;
-			this.Controls.Add(this.textBoxEntry);
+			this.Controls.Add(this.listViewModChanges);
+			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -236,11 +329,13 @@ namespace ModStudio
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "History Entry";
+			this.Load += new System.EventHandler(this.HistoryEditorDialogBox_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajor)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMinor)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionRevision)).EndInit();
+			this.panel3.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -254,11 +349,19 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public ModTemplateTools.PhpbbMod.ModHistoryEntry HistoryEntry
+		public ModHistoryEntry HistoryEntry
 		{
 			get
 			{
-				return new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new PropertyLang(textBoxEntry.Text.Replace("\r", "")));
+				entry.HistoryVersion.VersionMajor = (int)MODVersionMajor.Value;
+				entry.HistoryVersion.VersionMinor = (int)MODVersionMinor.Value;
+				entry.HistoryVersion.VersionRevision = (int)MODVersionRevision.Value;
+				entry.HistoryDate = MODHistorydtp.Value;
+				if (MODVersionRelease.Text.Length > 0)
+				{
+					entry.HistoryVersion.VersionRelease = MODVersionRelease.Text[0];
+				}
+				return entry;
 			}
 			set
 			{
@@ -269,15 +372,44 @@ namespace ModStudio
 
 		private void buttonOk_Click(object sender, System.EventArgs e)
 		{
-			/*if (MODVersionRelease.Text.Length > 0)
+			entry.HistoryVersion.VersionMajor = (int)MODVersionMajor.Value;
+			entry.HistoryVersion.VersionMinor = (int)MODVersionMinor.Value;
+			entry.HistoryVersion.VersionRevision = (int)MODVersionRevision.Value;
+			entry.HistoryDate = MODHistorydtp.Value;
+			if (MODVersionRelease.Text.Length > 0)
 			{
-				this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text))));
+				entry.HistoryVersion.VersionRelease = MODVersionRelease.Text[0];
+				//this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text))));
 			}
-			else
+			//this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(entry));
+			this.Hide();
+		}
+
+		private void HistoryEditorDialogBox_Load(object sender, System.EventArgs e)
+		{
+		
+		}
+
+		private void comboBoxLanguages_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			try
 			{
-				this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text))));
+				listViewModChanges.Items.Clear();
+				foreach (string change in entry.HistoryChangeLog[comboBoxLanguages.Text])
+				{
+					listViewModChanges.Items.Add(change.Split('\n')[0]);
+				}
 			}
-			this.Hide();*/
+			catch
+			{
+			}
+		}
+
+		private void button1_Click(object sender, System.EventArgs e)
+		{
+			entry.HistoryChangeLog.Add(new ModHistoryChangeLog(), "en-NZ");
+			comboBoxLanguages.Items.Add("en-NZ");
+			comboBoxLanguages.SelectedIndex = comboBoxLanguages.Items.Count - 1;
 		}
 
 		/// <summary>
@@ -300,12 +432,12 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public ModTemplateTools.PhpbbMod.ModHistoryEntry Entry;
+		public ModHistoryEntry Entry;
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="entry"></param>
-		public HistoryEditorDialogBoxSaveEventArgs(ModTemplateTools.PhpbbMod.ModHistoryEntry entry) 
+		public HistoryEditorDialogBoxSaveEventArgs(ModHistoryEntry entry) 
 		{
 			this.Entry = entry;
 		}

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.1 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.2 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -102,6 +102,7 @@ namespace ModStudio
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
+			this.authorEditorDialog1 = new ModStudio.AuthorEditorDialog();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -229,6 +230,10 @@ namespace ModStudio
 			this.button1.Text = "Cancel";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// authorEditorDialog1
+			// 
+			this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(this.authorEditorDialog1_Save);
+			// 
 			// OptionsDialog
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -285,7 +290,7 @@ namespace ModStudio
 		private void button3_Click(object sender, System.EventArgs e)
 		{
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
-			authorEditorDialog1.Entry = new PhpbbMod.ModAuthorEntry(
+			authorEditorDialog1.Entry = new ModAuthorEntry(
 				reg.GetValue("author_username", "UserName").ToString(),
 				reg.GetValue("author_realname", "RealName").ToString(),
 				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),

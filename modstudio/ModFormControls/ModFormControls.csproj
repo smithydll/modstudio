@@ -109,6 +109,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LanguageSelectionDialog.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LanguageSelectionDialogBox.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LanguageSelectionDialogBox.resx"
+                    DependentUpon = "LanguageSelectionDialogBox.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "LocalisedTextBox.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"

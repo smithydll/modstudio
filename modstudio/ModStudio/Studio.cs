@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.9 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: Studio.cs,v 1.10 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -87,6 +87,25 @@ namespace ModStudio
 			// TODO: Add any constructor code after InitializeComponent call
 			//
 
+			// Make sure the keys are created
+			string[] subKeys = Registry.CurrentUser.OpenSubKey("Software").GetSubKeyNames();
+			bool keyFound = false;
+			foreach (string key in subKeys)	if (key == "VB and VBA Program Settings") keyFound = true;
+			if (!keyFound) Registry.CurrentUser.OpenSubKey("Software", true).CreateSubKey("VB and VBA Program Settings");
+
+			subKeys = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").GetSubKeyNames();
+			keyFound = false;
+			foreach (string key in subKeys)	if (key == "MODStudio") keyFound = true;
+			if (!keyFound) Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings", true).CreateSubKey("MODStudio");
+
+			subKeys = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").GetSubKeyNames();
+			keyFound = false;
+			foreach (string key in subKeys)	if (key == "mod-settings") keyFound = true;
+			if (!keyFound) Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio", true).CreateSubKey("mod-settings");
+
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
+			string defaultLanguage = reg.GetValue("language", "en-GB").ToString();
+
 			/*ModEditors = new ModEditor[1];
 			ModEditors[0] = new ModEditor();
 			ModEditors[0].ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
@@ -108,7 +127,7 @@ namespace ModStudio
 				ModEditor newEditor = new ModEditor();
 				newEditor.MdiParent = this;
 				//newEditor.ThisMod.Header.ModTitle = new PropertyLang();
-				newEditor.ThisMod.Header.ModTitle.SetValue("Untitled Mod"); //AddLanguage("Untitled Mod", "en-GB");
+				newEditor.ThisMod.Header.ModTitle[defaultLanguage] = "Untitled Mod";
 				newEditor.Show();
 			}
 		}
@@ -639,7 +658,7 @@ namespace ModStudio
 		{
 			ModEditor newEditor = new ModEditor();
 			newEditor.MdiParent = this;
-			newEditor.ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+			newEditor.ThisMod.Header.ModTitle.Add("Untitled Mod", "en-GB");
 			newEditor.Show();
 		}
 

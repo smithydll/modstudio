@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialog.cs,v 1.5 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: HistoryEditorDialog.cs,v 1.6 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -23,6 +23,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 /*
  * Inspired by:
@@ -35,12 +36,12 @@ namespace ModStudio
 	/// </summary>
 	public class HistoryEditorDialog : System.Windows.Forms.CommonDialog
 	{
-		private ModTemplateTools.PhpbbMod.ModHistoryEntry entry = new ModTemplateTools.PhpbbMod.ModHistoryEntry(true);
+		private ModHistoryEntry entry = new ModHistoryEntry();
 		/// <summary>
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public ModTemplateTools.PhpbbMod.ModHistoryEntry Entry
+		public ModHistoryEntry Entry
 		{
 			get
 			{
@@ -102,6 +103,7 @@ namespace ModStudio
 					okTriggered = true;
 					this.entry = dialogInstance.HistoryEntry; 
 					this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(entry));
+					//this.Reset(); // reset the entry after it's been finished with
 				}
 			}
 
@@ -120,7 +122,8 @@ namespace ModStudio
 		/// </summary>
 		public override void Reset()
 		{
-			this.entry = new ModTemplateTools.PhpbbMod.ModHistoryEntry(true);
+			this.entry = new ModHistoryEntry();
+			this.index = -1;
 
 		}
 	}
