@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LocalisedTextBox.cs,v 1.1 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: LocalisedTextBox.cs,v 1.2 2005-12-09 00:50:05 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -40,8 +40,9 @@ namespace ModFormControls
 		private System.Windows.Forms.ContextMenu contextMenuLanguages;
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuItem2;
-		private PropertyLang textLang;
+		private StringLocalised textLang;
 		private System.Windows.Forms.MenuItem[] menuItems;
+		private LanguageSelectionDialog languageSelectionDialog1;
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -83,6 +84,7 @@ namespace ModFormControls
 			this.contextMenuLanguages = new System.Windows.Forms.ContextMenu();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
+			this.languageSelectionDialog1 = new ModFormControls.LanguageSelectionDialog();
 			this.SuspendLayout();
 			// 
 			// textBox1
@@ -124,6 +126,11 @@ namespace ModFormControls
 			this.menuItem2.Index = 1;
 			this.menuItem2.Text = "-";
 			// 
+			// languageSelectionDialog1
+			// 
+			this.languageSelectionDialog1.Language = "en-GB";
+			this.languageSelectionDialog1.Save += new ModFormControls.LanguageSelectionDialogBox.LanguageSelectionDialogBoxSaveHandler(this.languageSelectionDialog1_Save);
+			// 
 			// LocalisedTextBox
 			// 
 			this.Controls.Add(this.textBox1);
@@ -142,7 +149,7 @@ namespace ModFormControls
 
 		private void menuItem1_Click(object sender, System.EventArgs e)
 		{
-		
+			languageSelectionDialog1.ShowDialog(this);
 		}
 
 		public void menuItems_Click(object sender, System.EventArgs e)
@@ -150,6 +157,12 @@ namespace ModFormControls
 			textLang[label1.Text] = textBox1.Text;
 			textBox1.Text = textLang[((MenuItem)sender).Text]; //textLang.GetValue(((MenuItem)sender).Text);
 			label1.Text = ((MenuItem)sender).Text;
+		}
+
+		private void languageSelectionDialog1_Save(object sender, ModFormControls.LanguageSelectionDialogBoxSaveEventArgs e)
+		{
+			textLang.Add("",e.Language);
+			UpdateDisplay();
 		}
 
 		public override string Text
@@ -164,7 +177,7 @@ namespace ModFormControls
 			}
 		}
 
-		public PropertyLang TextLang
+		public StringLocalised TextLang
 		{
 			get
 			{
@@ -174,22 +187,34 @@ namespace ModFormControls
 			set
 			{
 				textLang = value;
-				if (textLang != null)
+				UpdateDisplay();
+			}
+		}
+
+		private void UpdateDisplay()
+		{
+			if (textLang != null)
+			{
+				if (menuItems != null)
 				{
-					menuItems = new MenuItem[textLang.Count];
-					int i = 0;
-					foreach (string Language in textLang)
+					foreach (MenuItem mi in menuItems)
 					{
-						menuItems[i] = new MenuItem(Language);
-						menuItems[i].Click += new System.EventHandler(this.menuItems_Click);
-						contextMenuLanguages.MenuItems.Add(menuItems[i]);
-						i++;
+						contextMenuLanguages.MenuItems.Remove(mi);
 					}
-					if (textLang.Count > 0)
-					{
-						textBox1.Text = textLang[menuItems[0].Text];
-						label1.Text = menuItems[0].Text;
-					}
+				}
+				menuItems = new MenuItem[textLang.Count];
+				int i = 0;
+				foreach (string Language in textLang)
+				{
+					menuItems[i] = new MenuItem(Language);
+					menuItems[i].Click += new System.EventHandler(this.menuItems_Click);
+					contextMenuLanguages.MenuItems.Add(menuItems[i]);
+					i++;
+				}
+				if (textLang.Count > 0)
+				{
+					textBox1.Text = textLang[menuItems[0].Text];
+					label1.Text = menuItems[0].Text;
 				}
 			}
 		}

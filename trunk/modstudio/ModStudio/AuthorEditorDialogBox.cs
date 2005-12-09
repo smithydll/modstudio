@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: AuthorEditorDialogBox.cs,v 1.4 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: AuthorEditorDialogBox.cs,v 1.5 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 namespace ModStudio
 {
@@ -273,11 +274,11 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public ModTemplateTools.PhpbbMod.ModAuthorEntry Entry
+		public ModAuthorEntry Entry
 		{
 			get
 			{
-				return new ModTemplateTools.PhpbbMod.ModAuthorEntry(textBoxUserName.Text, textBoxRealName.Text, textBoxEmail.Text, textBoxWebpage.Text);
+				return new ModAuthorEntry(textBoxUserName.Text, textBoxRealName.Text, textBoxEmail.Text, textBoxWebpage.Text);
 			}
 			set
 			{
@@ -298,7 +299,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public ModTemplateTools.PhpbbMod.ModAuthorEntry Entry;
+		public ModAuthorEntry Entry;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -308,14 +309,14 @@ namespace ModStudio
 		/// <param name="website"></param>
 		public AuthorEditorDialogBoxSaveEventArgs(string username, string realname, string email, string website) 
 		{
-			Entry = new ModTemplateTools.PhpbbMod.ModAuthorEntry(username, realname, email, website);
+			Entry = new ModAuthorEntry(username, realname, email, website);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="entry"></param>
-		public AuthorEditorDialogBoxSaveEventArgs(ModTemplateTools.PhpbbMod.ModAuthorEntry entry)
+		public AuthorEditorDialogBoxSaveEventArgs(ModAuthorEntry entry)
 		{
 			Entry = entry;
 		}

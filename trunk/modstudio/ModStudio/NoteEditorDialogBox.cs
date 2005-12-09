@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialogBox.cs,v 1.4 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: NoteEditorDialogBox.cs,v 1.5 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -172,7 +172,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public PropertyLang Note
+		public StringLocalised Note
 		{
 			get
 			{
@@ -189,7 +189,7 @@ namespace ModStudio
 		/// </summary>
 		/// <param name="note"></param>
 		/// <param name="type"></param>
-		public void SetNote(PropertyLang note, string type)
+		public void SetNote(StringLocalised note, string type)
 		{
 			this.textBoxNote.TextLang = note;
 			notetype = type;
@@ -204,7 +204,7 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		public PropertyLang Note;
+		public StringLocalised Note;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -214,7 +214,7 @@ namespace ModStudio
 		/// </summary>
 		/// <param name="note"></param>
 		/// <param name="type"></param>
-		public NoteEditorDialogBoxSaveEventArgs(PropertyLang note, string type)
+		public NoteEditorDialogBoxSaveEventArgs(StringLocalised note, string type)
 		{
 			this.Note = note;
 			this.Type = type;

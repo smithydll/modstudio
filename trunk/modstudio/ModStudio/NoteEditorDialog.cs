@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialog.cs,v 1.5 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: NoteEditorDialog.cs,v 1.6 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -36,7 +36,7 @@ namespace ModStudio
 	/// </summary>
 	public class NoteEditorDialog : System.Windows.Forms.CommonDialog
 	{
-		private PropertyLang note = null;
+		private StringLocalised note = null;
 		private string type = null;
 		private bool localised = false;
 
@@ -60,7 +60,7 @@ namespace ModStudio
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public PropertyLang Note
+		public StringLocalised Note
 		{
 			get
 			{

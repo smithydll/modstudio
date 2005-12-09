@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ValidationResult.cs,v 1.1 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: ValidationResult.cs,v 1.2 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.12 2005-10-09 11:22:28 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.13 2005-12-09 00:50:06 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -110,10 +110,8 @@ namespace ModStudio
 		private ModFormControls.LocalisedTextBox MODTitleTextBox;
 		private System.Windows.Forms.PictureBox pictureBoxTextMod;
 		private System.Windows.Forms.PictureBox pictureBoxXmlMod;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.ImageList imageListModEditor;
+		private System.ComponentModel.IContainer components;
 
 		/// <summary>
 		/// 
@@ -128,13 +126,13 @@ namespace ModStudio
 			ThisMod = new PhpbbMod(Application.StartupPath);
 
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
-			ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry(
+			ThisMod.Header.ModAuthor.Add(new ModAuthorEntry(
 				reg.GetValue("author_username", "UserName").ToString(),
 				reg.GetValue("author_realname", "RealName").ToString(),
 				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),
 				reg.GetValue("author_homepage", "http://invalid.invalid/").ToString()));
 			//ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "invalid@invalid.invalid", "http://invalid.invalid/"));
-			ThisMod.Header.ModVersion = new PhpbbMod.ModVersion(0,0,0);
+			ThisMod.Header.ModVersion = new ModVersion(0,0,0);
 			ThisMod.Actions.Add(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM", ""));
 			ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
 			ThisMod.Header.License = "http://opensource.org/licenses/gpl-license.php GNU General Public License v2";
@@ -172,6 +170,7 @@ namespace ModStudio
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ModEditor));
 			this.tabControlEditor = new System.Windows.Forms.TabControl();
 			this.tabPageOverview = new System.Windows.Forms.TabPage();
@@ -238,6 +237,7 @@ namespace ModStudio
 			this.menuItemAddActionInLineIncrement = new System.Windows.Forms.MenuItem();
 			this.menuItemAddActionDiyInstruction = new System.Windows.Forms.MenuItem();
 			this.toolBarButtonDelete = new System.Windows.Forms.ToolBarButton();
+			this.imageListModEditor = new System.Windows.Forms.ImageList(this.components);
 			this.modActionEditor1 = new ModFormControls.ModActionEditor();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.openActionDialog1 = new ModStudio.OpenActionDialog();
@@ -762,6 +762,7 @@ namespace ModStudio
 																						this.toolBarButtonDelete});
 			this.toolBar1.ButtonSize = new System.Drawing.Size(60, 22);
 			this.toolBar1.DropDownArrows = true;
+			this.toolBar1.ImageList = this.imageListModEditor;
 			this.toolBar1.Location = new System.Drawing.Point(0, 0);
 			this.toolBar1.Name = "toolBar1";
 			this.toolBar1.ShowToolTips = true;
@@ -884,7 +885,15 @@ namespace ModStudio
 			// 
 			// toolBarButtonDelete
 			// 
+			this.toolBarButtonDelete.ImageIndex = 0;
 			this.toolBarButtonDelete.Text = "Delete Action";
+			// 
+			// imageListModEditor
+			// 
+			this.imageListModEditor.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
+			this.imageListModEditor.ImageSize = new System.Drawing.Size(16, 16);
+			this.imageListModEditor.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListModEditor.ImageStream")));
+			this.imageListModEditor.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// modActionEditor1
 			// 
@@ -898,8 +907,8 @@ namespace ModStudio
 			// 
 			// saveFileDialog1
 			// 
-			this.saveFileDialog1.FileName = "untitled.mod";
-			this.saveFileDialog1.Filter = "phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt";
+			this.saveFileDialog1.FileName = "untitled";
+			this.saveFileDialog1.Filter = "phpBB2 MOD Files (*.mod,*.txt)|*.mod;*.txt|Xml MOD Format (*.xml)|*.xml";
 			this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
 			// 
 			// openActionDialog1
@@ -953,14 +962,14 @@ namespace ModStudio
 
 		private void UpdateHeader()
 		{
-			ThisMod.Header.ModTitle.SetValue(MODTitleTextBox.Text);
+			ThisMod.Header.ModTitle = MODTitleTextBox.TextLang;
 			if (MODVersionReleaseDomainUpDown.Text.ToCharArray().Length > 0)
 			{
-				ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value, MODVersionReleaseDomainUpDown.Text.ToCharArray()[0]);
+				ThisMod.Header.ModVersion = new ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value, MODVersionReleaseDomainUpDown.Text.ToCharArray()[0]);
 			}
 			else
 			{
-				ThisMod.Header.ModVersion = new PhpbbMod.ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value);
+				ThisMod.Header.ModVersion = new ModVersion((int)MODVersionMajorNumericUpDown.Value, (int)MODVersionMinorNumericUpDown.Value, (int)MODVersionRevisionNumericUpDown.Value);
 			}
 			ThisMod.Header.ModInstallationLevel = PhpbbMod.ModInstallationLevelParse(MODInstallationLevelComboBox.Text);
 		}
@@ -983,7 +992,7 @@ namespace ModStudio
 			switch (tabControlEditor.SelectedIndex)
 			{
 				case 0: // Overview
-					labelOverviewTitle.Text = ThisMod.Header.ModTitle.pValue;
+					labelOverviewTitle.Text = ThisMod.Header.ModTitle.GetValue();
 					labelModInstallationTime.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
 					listBoxFileEdits.Items.Clear();
 					if (ThisMod.Actions != null)
@@ -1028,10 +1037,10 @@ namespace ModStudio
 					}
 					break;
 				case 1: // Header
-					MODTitleTextBox.Text = ThisMod.Header.ModTitle.pValue;
+					MODTitleTextBox.Text = ThisMod.Header.ModTitle.GetValue();
 					MODTitleTextBox.TextLang = ThisMod.Header.ModTitle;
 					MODAuthorListBox.Items.Clear();
-					foreach (PhpbbMod.ModAuthorEntry a in ThisMod.Header.ModAuthor.Authors)
+					foreach (ModAuthorEntry a in ThisMod.Header.ModAuthor)
 					{
 						MODAuthorListBox.Items.Add(a.UserName);
 					}
@@ -1042,9 +1051,21 @@ namespace ModStudio
 					// TODO: properly handle the exception given by this when no MOD History is included
 					try
 					{
-						foreach (PhpbbMod.ModHistoryEntry h in ThisMod.Header.ModHistory.History)
+						foreach (ModHistoryEntry h in ThisMod.Header.ModHistory)
 						{
-							string[] tempItem = {h.HistoryVersion.ToString(), h.HistoryDate.ToString(), h.HistoryChanges.GetValue()};
+							// TODO: 
+							string sample = "";
+							foreach (DictionaryEntry de in h.HistoryChangeLog)
+							{
+								if ((string)de.Key == PhpbbMod.DefaultLanguage)
+								{
+									if (((ModHistoryChangeLog)de.Value).Count > 0)
+									{
+										sample = ((ModHistoryChangeLog)de.Value)[0];
+									}
+								}
+							}
+							string[] tempItem = {h.HistoryVersion.ToString(), h.HistoryDate.ToShortDateString(), sample};
 							MODHistoryListView.Items.Add(new ListViewItem(tempItem));
 						}
 					}
@@ -1180,11 +1201,23 @@ namespace ModStudio
 			UpdateModFilesToEdit();
 			UpdateModInstallTime();
 			UpdateHeader();
+			if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.XMLMOD) saveFileDialog1.FilterIndex = 2;
+			if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD) saveFileDialog1.FilterIndex = 1;
 			saveFileDialog1.ShowDialog(this);
 		}
 
 		private void saveFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
 		{
+			// Force it to save in the format of the extension given.
+			string fileNameLower = saveFileDialog1.FileName.ToLower();
+			if (fileNameLower.EndsWith(".xml") || fileNameLower.EndsWith(".modx"))
+			{
+				ThisMod.lastReadFormat = PhpbbMod.ModFormats.XMLMOD;
+			}
+			else if (fileNameLower.EndsWith(".mod") || fileNameLower.EndsWith(".txt"))
+			{
+				ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
+			}
 			ThisMod.WriteFile(saveFileDialog1.FileName);
 			this.Text = saveFileDialog1.FileName;
 			SetUnmodified();
@@ -1254,7 +1287,7 @@ namespace ModStudio
 				case 2: // delete action
 					if (((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType != "SAVE/CLOSE ALL FILES")
 					{
-						ThisMod.Actions.RemoveEntry(modDisplayBox2.SelectedIndex);
+						ThisMod.Actions.RemoveAt(modDisplayBox2.SelectedIndex);
 						modDisplayBox2.ModActions = ThisMod.Actions;
 						modDisplayBox2.UpdateLayout();
 						modDisplayBox2.Select();
@@ -1266,7 +1299,7 @@ namespace ModStudio
 
 		private void modDisplayBox2_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			switch (((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType)
+			switch (ThisMod.Actions[modDisplayBox2.SelectedIndex].ActionType)
 			{
 				case "OPEN":
 					menuItemAddActionAfterAdd.Enabled = false;
@@ -1426,7 +1459,7 @@ namespace ModStudio
 			{
 				addBefore++;
 			}
-			ThisMod.Actions.AddEntry(new ModAction(actionType, actionBody, ""), addBefore);
+			ThisMod.Actions.Insert(addBefore, new ModAction(actionType, actionBody, ""));
 			modDisplayBox2.ModActions = ThisMod.Actions;
 			modDisplayBox2.UpdateLayout();
 			modDisplayBox2.Select();
@@ -1442,7 +1475,7 @@ namespace ModStudio
 			}
 			else
 			{
-				ThisMod.Actions.AddEntry(new ModAction("OPEN", e.FileName, ""), ThisMod.Actions.Count - 1);
+				ThisMod.Actions.Insert(ThisMod.Actions.Count - 1, new ModAction("OPEN", e.FileName, ""));
 			}
 			SetModified();
 		}
@@ -1473,11 +1506,11 @@ namespace ModStudio
 		{
 			if (historyEditorDialog1.Index == -1)
 			{
-				ThisMod.Header.ModHistory.AddEntry(e.Entry);
+				ThisMod.Header.ModHistory.Add(e.Entry);
 			}
 			else
 			{
-				ThisMod.Header.ModHistory.History[historyEditorDialog1.Index] = e.Entry;
+				ThisMod.Header.ModHistory[historyEditorDialog1.Index] = e.Entry;
 			}
 			tabControlEditor_SelectedIndexChanged(null, null);
 			SetModified();
@@ -1493,7 +1526,7 @@ namespace ModStudio
 		{
 			if (authorEditorDialog1.Index == -1)
 			{
-				ThisMod.Header.ModAuthor.AddEntry(e.Entry);
+				ThisMod.Header.ModAuthor.Add(e.Entry);
 			}
 			else
 			{
@@ -1524,7 +1557,7 @@ namespace ModStudio
 			if (MODHistoryListView.SelectedItems.Count > 0)
 			{
 				historyEditorDialog1.Index = MODHistoryListView.SelectedItems[0].Index;
-				historyEditorDialog1.Entry = ThisMod.Header.ModHistory.History[historyEditorDialog1.Index];
+				historyEditorDialog1.Entry = ThisMod.Header.ModHistory[historyEditorDialog1.Index];
 				historyEditorDialog1.ShowDialog(this);
 			}
 		}
@@ -1544,7 +1577,7 @@ namespace ModStudio
 		{
 			if (MODHistoryListView.SelectedItems.Count > 0)
 			{
-				ThisMod.Header.ModHistory.RemoveEntry(MODHistoryListView.SelectedItems[0].Index);
+				ThisMod.Header.ModHistory.RemoveAt(MODHistoryListView.SelectedItems[0].Index);
 				tabControlEditor_SelectedIndexChanged(null, null);
 			}
 			SetModified();
@@ -1555,7 +1588,7 @@ namespace ModStudio
 			try
 			{
 				authorEditorDialog1.Index = MODAuthorListBox.SelectedIndex;
-				authorEditorDialog1.Entry = ThisMod.Header.ModAuthor.Authors[authorEditorDialog1.Index];
+				authorEditorDialog1.Entry = ((ModAuthorEntry)ThisMod.Header.ModAuthor[authorEditorDialog1.Index]);
 				authorEditorDialog1.ShowDialog(this);
 			}
 			catch
@@ -1565,9 +1598,9 @@ namespace ModStudio
 
 		private void button3_Click(object sender, System.EventArgs e)
 		{
-			if (ThisMod.Header.ModAuthor.Authors.Length > 1)
+			if (ThisMod.Header.ModAuthor.Authors.Count > 1)
 			{
-				ThisMod.Header.ModAuthor.RemoveEntry(MODAuthorListBox.SelectedIndex);
+				ThisMod.Header.ModAuthor.RemoveAt(MODAuthorListBox.SelectedIndex);
 				tabControlEditor_SelectedIndexChanged(null, null);
 			}
 			else
