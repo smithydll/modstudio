@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDataStructures.cs,v 1.1 2005-10-09 11:19:37 smithydll Exp $
+ *   $Id: ModDataStructures.cs,v 1.2 2005-12-09 00:51:10 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -36,7 +36,7 @@ namespace ModTemplateTools.DataStructures
 	/// Instead of using Strings directly, we have to support a multitude of language in the MOD Template.
 	/// Therefore we have to start using this structure.
 	/// </summary>
-	public class PropertyLang : System.Collections.IEnumerable
+	public class StringLocalised : System.Collections.IEnumerable
 	{
 		private StringDictionary keyList;
 
@@ -57,25 +57,13 @@ namespace ModTemplateTools.DataStructures
 		/// <returns></returns>
 		public System.Collections.IEnumerator GetEnumerator()
 		{
-			//return keyList.GetEnumerator();
 			return keyList.Keys.GetEnumerator();
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/*public string[] Languages
-		{
-			get
-			{
-				return (string[])((ArrayList)keyList.Keys).ToArray(System.Type.GetType("System.String"));
-			}
-		}*/
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public PropertyLang()
+		public StringLocalised()
 		{
 			keyList = new StringDictionary();
 		}
@@ -83,44 +71,32 @@ namespace ModTemplateTools.DataStructures
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="_value"></param>
-		/// <param name="_language"></param>
-		public PropertyLang(string _value, string _language)
+		/// <param name="value"></param>
+		/// <param name="language"></param>
+		public StringLocalised(string value, string language)
 		{
 			keyList = new StringDictionary();
-			keyList.Add(_language, _value);
+			keyList.Add(language, value);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="_value"></param>
-		public PropertyLang(string _value)
+		/// <param name="value"></param>
+		public StringLocalised(string value)
 		{
 			keyList = new StringDictionary();
-			keyList.Add(PhpbbMod.DefaultLanguage, _value);
+			keyList.Add(PhpbbMod.DefaultLanguage, value);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="_value"></param>
-		/// <param name="_language"></param>
-		public void AddLanguage(string _value, string _language)
+		/// <param name="value"></param>
+		/// <param name="language"></param>
+		public void Add(string value, string language)
 		{
-			keyList.Add(_language, _value);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="_language"></param>
-		/// <returns></returns>
-		public string GetValue(string _language)
-		{
-			if (keyList.ContainsKey(_language))
-				return keyList[_language];
-			return "";
+			keyList.Add(language, value);
 		}
 
 		/// <summary>
@@ -135,52 +111,19 @@ namespace ModTemplateTools.DataStructures
 		}
 
 		/// <summary>
-		/// Set the default language value
-		/// </summary>
-		public void SetValue(string _value)
-		{
-			keyList[PhpbbMod.DefaultLanguage] = _value;
-		}
-
-		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="_value"></param>
-		/// <param name="_language"></param>
-		public void SetValue(string _value, string _language)
-		{
-			keyList[_language] = _value;
-		}
-
-		/// <summary>
-		/// Property value
-		/// </summary>
-		public string pValue
+		public string this[string language]
 		{
 			get
 			{
-				return GetValue();
-			}
-			set
-			{
-				SetValue(value);
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public string this[string _language]
-		{
-			get
-			{
-				if (keyList.ContainsKey(_language))
-					return keyList[_language];
+				if (keyList.ContainsKey(language))
+					return keyList[language];
 				return "";
 			}
 			set
 			{
-				keyList[_language] = value;
+				keyList[language] = value;
 			}
 		}
 	}
@@ -334,7 +277,7 @@ namespace ModTemplateTools.DataStructures
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ModActions : System.Collections.IList
+	public class ModActions : System.Collections.IEnumerable, System.Collections.ICollection
 	{
 		/// <summary>
 		/// Legacy, please use the enumerator. This is considered depricated.
@@ -442,25 +385,16 @@ namespace ModTemplateTools.DataStructures
 		/// <summary>
 		/// 
 		/// </summary>
-		public object this[int index]
+		public ModAction this[int index]
 		{
 			get
 			{
-				return actions[index];
+				return (ModAction)actions[index];
 			}
 			set
 			{
-				actions[index] = value;
+				actions[index] = (ModAction)value;
 			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="o"></param>
-		public int Add(object o)
-		{
-			return Add((ModAction)o);
 		}
 
 		/// <summary>
@@ -470,26 +404,6 @@ namespace ModTemplateTools.DataStructures
 		public int Add(ModAction newaction)
 		{
 			return actions.Add(newaction);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="newAction"></param>
-		public void AddEntry(ModAction newAction)
-		{
-			actions.Add(newAction);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="BeforeAction"></param>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public void Insert(int BeforeAction, Object o)
-		{
-			Insert(BeforeAction, (ModAction)o);
 		}
 
 		/// <summary>
@@ -506,25 +420,6 @@ namespace ModTemplateTools.DataStructures
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="newaction"></param>
-		/// <param name="BeforeAction"></param>
-		public void AddEntry(ModAction newaction, int BeforeAction)
-		{
-			actions.Insert(BeforeAction, newaction);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="index"></param>
-		public void RemoveEntry(int index)
-		{
-			actions.RemoveAt(index);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="index"></param>
 		public void RemoveAt(int index)
 		{
@@ -535,19 +430,9 @@ namespace ModTemplateTools.DataStructures
 		/// 
 		/// </summary>
 		/// <param name="o"></param>
-		public void Remove(Object o)
+		public void Remove(ModAction o)
 		{
 			actions.Remove(o);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="o"></param>
-		/// <returns></returns>
-		public int IndexOf(Object o)
-		{
-			return IndexOf((ModAction)o);
 		}
 
 		/// <summary>
@@ -581,6 +466,998 @@ namespace ModTemplateTools.DataStructures
 				return false;
 			}
 		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class ModAuthor : System.Collections.IEnumerable, System.Collections.ICollection
+	{
+		private ArrayList authors;
+		//public ModAuthorEntry[] Authors;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModAuthor()
+		{
+			authors = new ArrayList();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ArrayList Authors
+		{
+			get
+			{
+				return authors;
+			}
+			set
+			{
+				authors = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsReadOnly
+		{
+			get
+			{
+				return authors.IsReadOnly;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModAuthorEntry this[int index]
+		{
+			get
+			{
+				return (ModAuthorEntry)authors[index];
+			}
+			set
+			{
+				authors[index] = (ModAuthorEntry)value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			authors.RemoveAt(index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="value"></param>
+		public void Insert(int index, ModAuthorEntry value)
+		{
+			authors.Insert(index, value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		public void Remove(ModAuthorEntry value)
+		{
+			authors.Remove((ModAuthorEntry)value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public bool Contains(ModAuthorEntry value)
+		{
+			return authors.Contains(value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Clear()
+		{
+			authors.Clear();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public int IndexOf(ModAuthorEntry value)
+		{
+			return authors.IndexOf(value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public int Add(ModAuthorEntry value)
+		{
+			return authors.Add((ModAuthorEntry)value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsFixedSize
+		{
+			get
+			{
+				return authors.IsFixedSize;
+			}
+		}
+
+		#region ICollection Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsSynchronized
+		{
+			get
+			{
+				return authors.IsSynchronized;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Count
+		{
+			get
+			{
+				return authors.Count;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public void CopyTo(Array array, int index)
+		{
+			authors.CopyTo(array, index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public object SyncRoot
+		{
+			get
+			{
+				return authors.SyncRoot;
+			}
+		}
+
+		#endregion
+
+		#region IEnumerable Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return authors.GetEnumerator();
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class ModAuthorEntry : IComparable
+	{
+		/// <summary>
+		/// phpBB.com username (or place of MOD origin, usually phpBB.com)
+		/// </summary>
+		public string UserName;
+		/// <summary>
+		/// The authors real name (optional)
+		/// </summary>
+		public string RealName;
+		/// <summary>
+		/// The authors e-mail address (optional)
+		/// </summary>
+		public string Email;
+		/// <summary>
+		/// The authors homepage (optional)
+		/// </summary>
+		public string Homepage;
+		/// <summary>
+		/// The date the author started working on the MOD.
+		/// </summary>
+		public int AuthorFrom;
+		/// <summary>
+		/// The last year the author started working on the MOD.
+		/// </summary>
+		public int AuthorTo;
+		/// <summary>
+		/// Is the author the present of a past developer of the MOD?
+		/// </summary>
+		public ModAuthorStatus Status;
+
+		/// <summary>
+		/// Construct an author object.
+		/// </summary>
+		public ModAuthorEntry()
+		{
+			this.UserName = "N/A";
+			this.RealName = "N/A";
+			this.Email = "N/A";
+			this.Homepage = "N/A";
+			this.AuthorFrom = -1;
+			this.AuthorTo = -1;
+			this.Status = ModAuthorStatus.NoneSelected;
+		}
+
+		/// <summary>
+		/// Construct an author object.
+		/// </summary>
+		/// <param name="UserName">username</param>
+		/// <param name="RealName">real name</param>
+		/// <param name="Email">e-mail</param>
+		/// <param name="Homepage">homepage</param>
+		public ModAuthorEntry(string UserName, string RealName, string Email, string Homepage)
+		{
+			this.UserName = UserName;
+			this.RealName = RealName;
+			this.Email = Email;
+			this.Homepage = Homepage;
+			this.AuthorFrom = -1;
+			this.AuthorTo = -1;
+			this.Status = ModAuthorStatus.NoneSelected;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="UserName">username</param>
+		/// <param name="RealName">real name</param>
+		/// <param name="Email">e-mail</param>
+		/// <param name="Homepage">homepage</param>
+		/// <param name="AuthorFrom">Date author started</param>
+		/// <param name="AuthorTo">Date author finished</param>
+		/// <param name="Status">The MOD Authors Status, Current or Past</param>
+		public ModAuthorEntry(string UserName, string RealName, string Email, string Homepage, int AuthorFrom, int AuthorTo, ModAuthorStatus Status)
+		{
+			this.UserName = UserName;
+			this.RealName = RealName;
+			this.Email = Email;
+			this.Homepage = Homepage;
+			this.AuthorFrom = AuthorFrom;
+			this.AuthorTo = AuthorTo;
+			this.Status = Status;
+		}
+
+		/// <summary>
+		/// Deprecated
+		/// </summary>
+		/// <param name="yes"></param>
+		public ModAuthorEntry(bool yes)
+		{
+			throw new NotSupportedException("This constructor has been deprecated, please use the default constructor");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return string.Format("{0} < {1} > ({2}) {3}", this.UserName, this.Email, this.RealName, this.Homepage);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static ModAuthorEntry Parse(string input)
+		{
+			string[] MODTempAuthor = Regex.Replace(input, "^(## MOD Author(|, secondary):|)([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
+			return new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]);
+		}
+
+		#region IComparable Members
+
+		/// <summary>
+		/// Compares two Authors based on their username, useful for ordering and making sure that no 
+		/// two authors have the same username.
+		/// </summary>
+		/// <param name="obj">Author Object to compare to</param>
+		/// <returns></returns>
+		public int CompareTo(object obj)
+		{
+			ModAuthorEntry a2 = (ModAuthorEntry)obj;
+			return this.UserName.CompareTo(a2.UserName);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			ModAuthorEntry a2 = (ModAuthorEntry)obj;
+			return this.UserName.Equals(a2.UserName);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode()
+		{
+			return base.GetHashCode ();
+		}
+
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum ModAuthorStatus
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		NoneSelected,
+		/// <summary>
+		/// 
+		/// </summary>
+		Current,
+		/// <summary>
+		/// 
+		/// </summary>
+		Past
+	}
+
+	/// <summary>
+	/// Respresents a modification header section.
+	/// </summary>
+	public class ModHeader
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public StringLocalised ModTitle = new StringLocalised();
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModAuthor ModAuthor;
+		/// <summary>
+		/// 
+		/// </summary>
+		public StringLocalised ModDescription = new StringLocalised();
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModVersion ModVersion;
+		/// <summary>
+		/// 
+		/// </summary>
+		public PhpbbMod.ModInstallationLevel ModInstallationLevel;
+		/// <summary>
+		/// 
+		/// </summary>
+		public int ModInstallationTime;
+		/// <summary>
+		/// 
+		/// </summary>
+		public int ModSuggestedInstallTime;
+		/// <summary>
+		/// 
+		/// </summary>
+		public System.Collections.Specialized.StringCollection ModFilesToEdit; //string[]
+		/// <summary>
+		/// 
+		/// </summary>
+		public System.Collections.Specialized.StringCollection ModIncludedFiles; //string[]
+		/// <summary>
+		/// 
+		/// </summary>
+		public string ModGenerator;
+		/// <summary>
+		/// 
+		/// </summary>
+		public StringLocalised ModAuthorNotes = new StringLocalised();
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModVersion ModEasymodCompatibility;
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistory ModHistory;
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModVersion ModphpBBVersion;
+		/// <summary>
+		/// 
+		/// </summary>
+		public Hashtable Meta = new Hashtable();
+		/// <summary>
+		/// 
+		/// </summary>
+		public string License;
+	}
+		
+	/// <summary>
+	/// 
+	/// </summary>
+	public class ModVersion
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public int VersionMajor;
+		/// <summary>
+		/// 
+		/// </summary>
+		public int VersionMinor;
+		/// <summary>
+		/// 
+		/// </summary>
+		public int VersionRevision;
+		/// <summary>
+		/// 
+		/// </summary>
+		public char VersionRelease;
+		/// <summary>
+		/// 
+		/// </summary>
+		public const char nullChar = '-';
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModVersion()
+		{
+			this.VersionMajor = 1;
+			this.VersionMinor = 0;
+			this.VersionRevision = 0;
+			this.VersionRelease = nullChar;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="VersionMajor"></param>
+		/// <param name="VersionMinor"></param>
+		/// <param name="VersionRevision"></param>
+		public ModVersion(int VersionMajor, int VersionMinor, int VersionRevision)
+		{
+			this.VersionMajor = VersionMajor;
+			this.VersionMinor = VersionMinor;
+			this.VersionRevision = VersionRevision;
+			this.VersionRelease = nullChar;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="VersionMajor"></param>
+		/// <param name="VersionMinor"></param>
+		/// <param name="VersionRevision"></param>
+		/// <param name="VersionRelease"></param>
+		public ModVersion(int VersionMajor, int VersionMinor, int VersionRevision, char VersionRelease)
+		{
+			this.VersionMajor = VersionMajor;
+			this.VersionMinor = VersionMinor;
+			this.VersionRevision = VersionRevision;
+			this.VersionRelease = VersionRelease;
+		}
+
+		/// <summary>
+		/// Convert the current MOD Version to a string.
+		/// </summary>
+		/// <returns>A string of the form x.y.za</returns>
+		public override string ToString()
+		{
+			if (this.VersionRelease == nullChar) 
+			{
+				return string.Format("{0}.{1}.{2}", this.VersionMajor.ToString(), this.VersionMinor.ToString(), this.VersionRevision.ToString());
+			} 
+			else 
+			{
+				return string.Format("{0}.{1}.{2}{3}", this.VersionMajor.ToString(), this.VersionMinor.ToString(), this.VersionRevision.ToString(), this.VersionRelease.ToString());
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static ModVersion Parse(string input)
+		{
+			char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
+			ModVersion MVersion = new ModVersion();
+			input = Regex.Replace(input.Trim(TrimChars), "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$1.$2.$4.$5");
+			string[] MV = input.Split('.');
+			if (MV.Length >= 1) 
+			{
+				MVersion.VersionMajor = int.Parse(MV[0]);
+			}
+			if (MV.Length >= 2) 
+			{
+				if (!(MV[1] == null)) 
+				{
+					MVersion.VersionMinor = int.Parse(MV[1]);
+				}
+			}
+			if (MV.Length >= 3) 
+			{
+				if (!(MV[2] == null)) 
+				{
+					MVersion.VersionRevision = int.Parse(MV[2]);
+				}
+			}
+			if (MV.Length >= 4) 
+			{
+				if (MV[3].Length > 0)
+				{
+					if (Regex.IsMatch(MV[3], "^([a-zA-Z])$") && MV[3] != "\b")
+					{
+						MVersion.VersionRelease = MV[3].ToCharArray()[0];
+					}
+					else
+					{
+						MVersion.VersionRelease = ModVersion.nullChar;
+					}
+				}
+				if (MVersion.VersionRelease.GetHashCode() == 0)
+				{
+					MVersion.VersionRelease = ModVersion.nullChar;
+				}
+			} 
+			else 
+			{
+				MVersion.VersionRelease = ModVersion.nullChar;
+			}
+			return MVersion;
+		}
+	}
+
+	/// <summary>
+	/// A list of changes for a given language in a MOD History Entry
+	/// </summary>
+	public class ModHistoryChangeLog : System.Collections.IEnumerable, System.Collections.ICollection
+	{
+		private ArrayList changeLog;
+		private string language;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryChangeLog()
+		{
+			changeLog = new ArrayList();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string Language
+		{
+			get
+			{
+				return language;
+			}
+			set
+			{
+				language = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string this[int index]
+		{
+			// TODO: 
+			get
+			{
+				try
+				{
+					return (string)changeLog[index];
+				}
+				catch
+				{
+					return "";
+				}
+			}
+			set
+			{
+				try
+				{
+					changeLog[index] = value;
+				}
+				catch
+				{
+					changeLog.Add(value);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="change"></param>
+		public void Add(string change)
+		{
+			changeLog.Add(change);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			changeLog.RemoveAt(index);
+		}
+
+		#region IEnumerable Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return changeLog.GetEnumerator();
+		}
+
+		#endregion
+
+		#region ICollection Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsSynchronized
+		{
+			get
+			{
+				return changeLog.IsSynchronized;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Count
+		{
+			get
+			{
+				return changeLog.Count;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public void CopyTo(Array array, int index)
+		{
+			changeLog.CopyTo(array, index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public object SyncRoot
+		{
+			get
+			{
+				return changeLog.SyncRoot;
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class ModHistoryChangeLogLocalised : System.Collections.IEnumerable
+	{
+		private Hashtable changeLogs;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryChangeLogLocalised()
+		{
+			changeLogs = new Hashtable();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryChangeLog this[string language]
+		{
+			get
+			{
+				((ModHistoryChangeLog)changeLogs[language]).Language = language;
+				return (ModHistoryChangeLog)changeLogs[language];
+			}
+			set
+			{
+				changeLogs[language] = value;
+				((ModHistoryChangeLog)changeLogs[language]).Language = language;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="language"></param>
+		public void Add(ModHistoryChangeLog value, string language)
+		{
+			changeLogs.Add(language, value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public int Count
+		{
+			get
+			{
+				return changeLogs.Count;
+			}
+		}
+
+		#region IEnumerable Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return changeLogs.GetEnumerator();
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// A MOD History Entry
+	/// </summary>
+	public class ModHistoryEntry
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModVersion HistoryVersion;
+		/// <summary>
+		/// 
+		/// </summary>
+		public System.DateTime HistoryDate;
+		//public StringLocalised HistoryChanges;
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryChangeLogLocalised HistoryChangeLog;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryEntry()
+		{
+			this.HistoryVersion = new ModVersion(0,0,0);
+			this.HistoryDate = DateTime.Now;
+			//this.HistoryChanges = new StringLocalised();
+			this.HistoryChangeLog = new ModHistoryChangeLogLocalised();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="HistoryVersion"></param>
+		/// <param name="HistoryDate"></param>
+		/// <param name="HistoryChanges"></param>
+		public ModHistoryEntry(ModVersion HistoryVersion, System.DateTime HistoryDate, string HistoryChanges)
+		{
+			this.HistoryVersion = HistoryVersion;
+			this.HistoryDate = HistoryDate;
+			//this.HistoryChanges = new StringLocalised(HistoryChanges, PhpbbMod.DefaultLanguage);
+			this.HistoryChangeLog = new ModHistoryChangeLogLocalised();
+			this.HistoryChangeLog.Add(new ModHistoryChangeLog(), PhpbbMod.DefaultLanguage);
+			this.HistoryChangeLog[PhpbbMod.DefaultLanguage].Add(HistoryChanges);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="HistoryVersion"></param>
+		/// <param name="HistoryDate"></param>
+		/// <param name="HistoryChanges"></param>
+		public ModHistoryEntry(ModVersion HistoryVersion, System.DateTime HistoryDate, ModHistoryChangeLogLocalised HistoryChanges)
+		{
+			this.HistoryVersion = HistoryVersion;
+			this.HistoryDate = HistoryDate;
+			this.HistoryChangeLog = HistoryChanges;
+		}
+	}
+
+	/// <summary>
+	/// A collection of useful methods for organising ModHistory entries.
+	/// </summary>
+	public class ModHistory : System.Collections.IEnumerable, System.Collections.ICollection
+	{
+		/// <summary>
+		/// The string which represents an empty MOD Author field.
+		/// </summary>
+		public const string Empty = "N/A";
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ArrayList History;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistory()
+		{
+			History = new ArrayList();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModHistoryEntry this[int index]
+		{
+			get
+			{
+				return (ModHistoryEntry)History[index];
+			}
+			set
+			{
+				History[index] = (ModHistoryEntry)value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="HistoryVersion"></param>
+		/// <param name="HistoryDate"></param>
+		/// <param name="HistoryChanges"></param>
+		public void Add(ModVersion HistoryVersion, System.DateTime HistoryDate, string HistoryChanges)
+		{
+			Add(new ModHistoryEntry(HistoryVersion, HistoryDate, HistoryChanges));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newhistory"></param>
+		public void Add(ModHistoryEntry newhistory)
+		{
+			if (History == null) History = new ArrayList();
+			History.Add(newhistory);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="value"></param>
+		public void Insert(int index, ModHistoryEntry value)
+		{
+			History.Insert(index, value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			History.RemoveAt(index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		public void Remove(ModHistoryEntry value)
+		{
+			History.Remove(value);
+		}
+
+		#region IEnumerable Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return History.GetEnumerator();
+		}
+
+		#endregion
+
+		#region ICollection Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsSynchronized
+		{
+			get
+			{
+				return History.IsSynchronized;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Count
+		{
+			get
+			{
+				return History.Count;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public void CopyTo(Array array, int index)
+		{
+			History.CopyTo(array, index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public object SyncRoot
+		{
+			get
+			{
+				return History.SyncRoot;
+			}
+		}
+
+		#endregion
 	}
 
 }
