@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.10 2005-10-09 11:19:37 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.11 2005-12-09 00:51:10 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -39,10 +39,14 @@ namespace ModTemplateTools
 	public class PhpbbMod
 	{
 
+		/// <summary>
+		/// This is the default language phpBB is released in.
+		/// </summary>
 		private static string defaultLanguage = "en-GB";
 
 		/// <summary>
-		/// 
+		/// This is the default language phpBB is released in. It can be overridden globally.<br />
+		/// <em>Expect this to change from static to non-static in the future.</em>
 		/// </summary>
 		public static string DefaultLanguage
 		{
@@ -62,12 +66,12 @@ namespace ModTemplateTools
 		private char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 
 		/// <summary>
-		/// 
+		/// The MODs header.
 		/// </summary>
 		public ModHeader Header;
 
 		/// <summary>
-		/// 
+		/// The MODs actions.
 		/// </summary>
 		public ModActions Actions;
 
@@ -86,203 +90,6 @@ namespace ModTemplateTools
 			/// A readable text based file format.
 			/// </summary>
 			TextMOD
-		}
-
-		/// <summary>
-		/// Respresents a modification header section.
-		/// </summary>
-		public class ModHeader
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public PropertyLang ModTitle = new PropertyLang();
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModAuthor ModAuthor;
-			/// <summary>
-			/// 
-			/// </summary>
-			public PropertyLang ModDescription = new PropertyLang();
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModVersion ModVersion;
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModInstallationLevel ModInstallationLevel;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int ModInstallationTime;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int ModSuggestedInstallTime;
-			/// <summary>
-			/// 
-			/// </summary>
-			public System.Collections.Specialized.StringCollection ModFilesToEdit; //string[]
-			/// <summary>
-			/// 
-			/// </summary>
-			public System.Collections.Specialized.StringCollection ModIncludedFiles; //string[]
-			/// <summary>
-			/// 
-			/// </summary>
-			public string ModGenerator;
-			/// <summary>
-			/// 
-			/// </summary>
-			public PropertyLang ModAuthorNotes = new PropertyLang();
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModVersion ModEasymodCompatibility;
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModHistory ModHistory;
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModVersion ModphpBBVersion;
-			/// <summary>
-			/// 
-			/// </summary>
-			public Hashtable Meta = new Hashtable();
-			/// <summary>
-			/// 
-			/// </summary>
-			public string License;
-		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		public struct ModVersion
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public int VersionMajor;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int VersionMinor;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int VersionRevision;
-			/// <summary>
-			/// 
-			/// </summary>
-			public char VersionRelease;
-			/// <summary>
-			/// 
-			/// </summary>
-			public const char nullChar = '-';
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="VersionMajor"></param>
-			/// <param name="VersionMinor"></param>
-			/// <param name="VersionRevision"></param>
-			public ModVersion(int VersionMajor, int VersionMinor, int VersionRevision)
-			{
-				this.VersionMajor = VersionMajor;
-				this.VersionMinor = VersionMinor;
-				this.VersionRevision = VersionRevision;
-				this.VersionRelease = nullChar;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="VersionMajor"></param>
-			/// <param name="VersionMinor"></param>
-			/// <param name="VersionRevision"></param>
-			/// <param name="VersionRelease"></param>
-			public ModVersion(int VersionMajor, int VersionMinor, int VersionRevision, char VersionRelease)
-			{
-				this.VersionMajor = VersionMajor;
-				this.VersionMinor = VersionMinor;
-				this.VersionRevision = VersionRevision;
-				this.VersionRelease = VersionRelease;
-			}
-
-			/// <summary>
-			/// Convert the current MOD Version to a string.
-			/// </summary>
-			/// <returns>A string of the form x.y.za</returns>
-			public override string ToString()
-			{
-				if (this.VersionRelease == nullChar) 
-				{
-					return string.Format("{0}.{1}.{2}", this.VersionMajor.ToString(), this.VersionMinor.ToString(), this.VersionRevision.ToString());
-				} 
-				else 
-				{
-					return string.Format("{0}.{1}.{2}{3}", this.VersionMajor.ToString(), this.VersionMinor.ToString(), this.VersionRevision.ToString(), this.VersionRelease.ToString());
-				}
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="input"></param>
-			/// <returns></returns>
-			public static ModVersion Parse(string input)
-			{
-				char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
-				ModVersion MVersion = new ModVersion();
-				input = Regex.Replace(input.Trim(TrimChars), "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$1.$2.$4.$5");
-				string[] MV = input.Split('.');
-				if (MV.Length >= 1) 
-				{
-					MVersion.VersionMajor = int.Parse(MV[0]);
-				}
-				if (MV.Length >= 2) 
-				{
-					if (!(MV[1] == null)) 
-					{
-						MVersion.VersionMinor = int.Parse(MV[1]);
-					}
-				}
-				if (MV.Length >= 3) 
-				{
-					if (!(MV[2] == null)) 
-					{
-						MVersion.VersionRevision = int.Parse(MV[2]);
-					}
-				}
-				if (MV.Length >= 4) 
-				{
-					if (MV[3].Length > 0)
-					{
-						if (Regex.IsMatch(MV[3], "^([a-zA-Z])$") && MV[3] != "\b")
-						{
-							MVersion.VersionRelease = MV[3].ToCharArray()[0];
-						}
-						else
-						{
-							MVersion.VersionRelease = ModVersion.nullChar;
-						}
-					}
-					if (MVersion.VersionRelease.GetHashCode() == 0)
-					{
-						MVersion.VersionRelease = ModVersion.nullChar;
-					}
-				} 
-				else 
-				{
-					MVersion.VersionRelease = ModVersion.nullChar;
-				}
-				return MVersion;
-			}
 		}
 
 		/// <summary>
@@ -357,336 +164,10 @@ namespace ModTemplateTools
 			return seconds;
 		}
 
-		/// <summary>
-		/// A MOD History Entry
-		/// </summary>
-		public struct ModHistoryEntry
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModVersion HistoryVersion;
-			/// <summary>
-			/// 
-			/// </summary>
-			public System.DateTime HistoryDate;
-			/// <summary>
-			/// 
-			/// </summary>
-			public PropertyLang HistoryChanges;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="HistoryVersion"></param>
-			/// <param name="HistoryDate"></param>
-			/// <param name="HistoryChanges"></param>
-			public ModHistoryEntry(ModVersion HistoryVersion, System.DateTime HistoryDate, string HistoryChanges)
-			{
-				this.HistoryVersion = HistoryVersion;
-				this.HistoryDate = HistoryDate;
-				this.HistoryChanges = new PropertyLang(HistoryChanges, PhpbbMod.DefaultLanguage);
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="HistoryVersion"></param>
-			/// <param name="HistoryDate"></param>
-			/// <param name="HistoryChanges"></param>
-			public ModHistoryEntry(ModVersion HistoryVersion, System.DateTime HistoryDate, PropertyLang HistoryChanges)
-			{
-				this.HistoryVersion = HistoryVersion;
-				this.HistoryDate = HistoryDate;
-				this.HistoryChanges = HistoryChanges;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="yes"></param>
-			public ModHistoryEntry(bool yes)
-			{
-				this.HistoryVersion = new ModVersion(0,0,0);
-				this.HistoryDate = DateTime.Now;
-				this.HistoryChanges = new PropertyLang();
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="_value"></param>
-			/// <param name="_language"></param>
-			public void AddLanguage(string _value, string _language)
-			{
-				HistoryChanges[_language] = _value;
-			}
-		}
-
-		/// <summary>
-		/// A collection of useful methods for organising ModHistory entries.
-		/// </summary>
-		public struct ModHistory
-		{
-			/// <summary>
-			/// The string which represents an empty MOD Author field.
-			/// </summary>
-			public const string Empty = "N/A";
-
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModHistoryEntry[] History;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="HistoryVersion"></param>
-			/// <param name="HistoryDate"></param>
-			/// <param name="HistoryChanges"></param>
-			public void AddEntry(ModVersion HistoryVersion, System.DateTime HistoryDate, string HistoryChanges)
-			{
-				AddEntry(new ModHistoryEntry(HistoryVersion, HistoryDate, HistoryChanges));
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="newhistory"></param>
-			public void AddEntry(ModHistoryEntry newhistory)
-			{
-				if (History != null)
-				{
-					ModHistoryEntry[] tempArray = History;
-					History = new ModHistoryEntry[tempArray.Length + 1];
-					tempArray.CopyTo(History, 0);
-				}
-				else
-				{
-					History = new ModHistoryEntry[1];
-				}
-
-				History[History.GetUpperBound(0)] = newhistory;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="index"></param>
-			public void RemoveEntry(int index)
-			{
-				ModHistoryEntry[] tempHistory = History;
-
-				History = new ModHistoryEntry[History.Length -1];
-
-				for (int i = 0; i < index; i++) 
-				{
-					History[i] = tempHistory[i];
-				}
-				for (int i = index; i < tempHistory.Length - 1; i++) 
-				{
-					History[i] = tempHistory[i + 1];
-				}
-				tempHistory = null;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public enum ModAuthorStatus
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			Current,
-			/// <summary>
-			/// 
-			/// </summary>
-			Past
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public struct ModAuthorEntry
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public string UserName;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string RealName;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string Email;
-			/// <summary>
-			/// 
-			/// </summary>
-			public string Homepage;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int AuthorFrom;
-			/// <summary>
-			/// 
-			/// </summary>
-			public int AuthorTo;
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModAuthorStatus Status;
-
-				/// <summary>
-				/// 
-				/// </summary>
-				/// <param name="UserName">username</param>
-				/// <param name="RealName">real name</param>
-				/// <param name="Email">e-mail</param>
-				/// <param name="Homepage">homepage</param>
-			public ModAuthorEntry(string UserName, string RealName, string Email, string Homepage)
-			{
-				this.UserName = UserName;
-				this.RealName = RealName;
-				this.Email = Email;
-				this.Homepage = Homepage;
-				this.AuthorFrom = DateTime.Now.Year;
-				this.AuthorTo = DateTime.Now.Year;
-				this.Status = ModAuthorStatus.Current;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="UserName">username</param>
-			/// <param name="RealName">real name</param>
-			/// <param name="Email">e-mail</param>
-			/// <param name="Homepage">homepage</param>
-			/// <param name="AuthorFrom">Date author started</param>
-			/// <param name="AuthorTo">Date author finished</param>
-			/// <param name="Status">The MOD Authors Status, Current or Past</param>
-			public ModAuthorEntry(string UserName, string RealName, string Email, string Homepage, int AuthorFrom, int AuthorTo, ModAuthorStatus Status)
-			{
-				this.UserName = UserName;
-				this.RealName = RealName;
-				this.Email = Email;
-				this.Homepage = Homepage;
-				this.AuthorFrom = AuthorFrom;
-				this.AuthorTo = AuthorTo;
-				this.Status = Status;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="yes"></param>
-			public ModAuthorEntry(bool yes)
-			{
-				this.UserName = "N/A";
-				this.RealName = "N/A";
-				this.Email = "N/A";
-				this.Homepage = "N/A";
-				this.AuthorFrom = DateTime.Now.Year;
-				this.AuthorTo = DateTime.Now.Year;
-				this.Status = ModAuthorStatus.Current;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns></returns>
-			public override string ToString()
-			{
-				return string.Format("{0} < {1} > ({2}) {3}", this.UserName, this.Email, this.RealName, this.Homepage);
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="input"></param>
-			/// <returns></returns>
-			public static ModAuthorEntry Parse(string input)
-			{
-				string[] MODTempAuthor = Regex.Replace(input, "^(## MOD Author(|, secondary):|)([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
-				return new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]);
-			}
-
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public struct ModAuthor
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public ModAuthorEntry[] Authors;
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="UserName"></param>
-			/// <param name="RealName"></param>
-			/// <param name="Email"></param>
-			/// <param name="Homepage"></param>
-			public void AddEntry(string UserName, string RealName, string Email, string Homepage)
-			{
-				AddEntry(new ModAuthorEntry(UserName, RealName, Email, Homepage));
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="newauthor"></param>
-			public void AddEntry(ModAuthorEntry newauthor)
-			{
-				if (Authors != null)
-				{
-					ModAuthorEntry[] tempArray = Authors;
-					Authors = new ModAuthorEntry[tempArray.Length + 1];
-					tempArray.CopyTo(Authors, 0);
-				}
-				else
-				{
-					Authors = new ModAuthorEntry[1];
-				}
-
-				Authors[Authors.GetUpperBound(0)] = newauthor;
-			}
-
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="index"></param>
-			public void RemoveEntry(int index)
-			{
-				ModAuthorEntry[] tempAuthors = Authors;
-
-				Authors = new ModAuthorEntry[Authors.Length -1];
-
-				for (int i = 0; i < index; i++) 
-				{
-					Authors[i] = tempAuthors[i];
-				}
-				for (int i = index; i < tempAuthors.Length - 1; i++) 
-				{
-					Authors[i] = tempAuthors[i + 1];
-				}
-				tempAuthors = null;
-			}
-		}
-
-		/// <summary>
-		/// A variable containing the last file format that was read used for saving purposes. Defaults to XML.
-		/// </summary>
 		private ModFormats LastReadFormat = ModFormats.XMLMOD;
 
 		/// <summary>
-		/// 
+		/// The format the MOD was last read into.
 		/// </summary>
 		public ModFormats lastReadFormat
 		{
@@ -701,11 +182,12 @@ namespace ModTemplateTools
 		}
 
 		/// <summary>
-		/// 
+		/// Constructor
 		/// </summary>
+		/// <param name="TemplatePath">Path to the templates folder.</param>
 		public PhpbbMod(string TemplatePath)
 		{
-			TextTemplate = OpenTextFile(TemplatePath + "\\MOD.mot");
+			TextTemplate = OpenTextFile(TemplatePath + Path.DirectorySeparatorChar + "MOD.mot");
 			try 
 			{
 				TextTemplate = Regex.Replace(TextTemplate, "^#(.*?)([\\s\\S]*?)(|\\r)\\n###END OF HEADER###(|\\r)\\n", "");
@@ -721,6 +203,83 @@ namespace ModTemplateTools
 			Header.ModIncludedFiles = new System.Collections.Specialized.StringCollection();
 			Header.ModFilesToEdit = new System.Collections.Specialized.StringCollection();
 			Actions = new ModActions();
+		}
+
+		/// <summary>
+		/// Estimate an Installation Time for this MOD.
+		/// </summary>
+		public void UpdateInstallationTime()
+		{
+			int totalinstalltime = 126;
+			foreach (ModAction e in Actions)
+			{
+				switch (e.ActionType)
+				{
+					case "OPEN":
+						totalinstalltime += 27;
+						break;
+					case "SQL":
+						totalinstalltime += 50;
+						break;
+					case "COPY":
+						totalinstalltime += e.ActionBody.Split('n').Length * 5;
+						break;
+					case "FIND":
+					case "IN-LINE FIND":
+						totalinstalltime += 12;
+						break;
+					case "AFTER, ADD":
+					case "BEFORE, ADD":
+					case "REPLACE WITH":
+					case "INCREMENT":
+					case "IN-LINE AFTER, ADD":
+					case "IN-LINE BEFORE, ADD":
+					case "IN-LINE REPLACE WITH":
+					case "IN-LINE INCREMENT":
+						totalinstalltime += 18;
+						break;
+					case "DIY INSTRUCTIONS":
+						totalinstalltime += 60;
+						break;
+				}
+			}
+			Header.ModInstallationTime = totalinstalltime;
+		}
+
+		/// <summary>
+		/// Update Included files for this MOD.
+		/// </summary>
+		public void UpdateIncludedFiles()
+		{
+			for (int i = 0; i < Actions.Count; i++)
+			{
+				if (Actions[i].ActionType == "COPY")
+				{
+					string[] lines = Actions[i].ActionBody.Split('\n');
+					foreach (string line in lines)
+					{
+						if (line.TrimStart(TrimChars).ToLower().StartsWith("copy"))
+						{
+							Header.ModIncludedFiles.Add(Regex.Match(line.Trim(TrimChars), "copy (.+) to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", ""));
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Update Files to Edit for this MOD.
+		/// </summary>
+		public void UpdateFilesToEdit()
+		{
+			Header.ModFilesToEdit.Clear();
+			foreach (ModAction e in Actions)
+			{
+				if (e.ActionType == "OPEN")
+				{
+					Header.ModFilesToEdit.Add(e.ActionBody.Trim(TrimChars));
+				}
+			}
 		}
 
 		/// <summary>
@@ -777,7 +336,7 @@ namespace ModTemplateTools
 						case 2:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD TITLE")) 
 							{
-								Header.ModTitle = new PropertyLang(Regex.Replace(TextModLines[i], "\\#\\# MOD Title\\:", "", RegexOptions.IgnoreCase).Trim(TrimChars));
+								Header.ModTitle = new StringLocalised(Regex.Replace(TextModLines[i], "\\#\\# MOD Title\\:", "", RegexOptions.IgnoreCase).Trim(TrimChars));
 								StartOffset = i + 1;
 								e++;
 								i = TextModLines.Length;
@@ -787,7 +346,7 @@ namespace ModTemplateTools
 							if (TextModLines[i].ToUpper().StartsWith("## MOD AUTHOR")) 
 							{
 								string[] MODTempAuthor = Regex.Replace(TextModLines[i], "^## MOD Author(|, secondary):([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
-								Header.ModAuthor.AddEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]);
+								Header.ModAuthor.Add(new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]));
 							} 
 							else if (TextModLines[i].ToUpper().StartsWith("## MOD DESCRIPTION")) 
 							{
@@ -799,7 +358,7 @@ namespace ModTemplateTools
 						case 4:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD DESCRIPTION")) 
 							{
-								Header.ModDescription = new PropertyLang(Regex.Replace(TextModLines[i], "\\#\\# MOD Description\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
+								Header.ModDescription = new StringLocalised(Regex.Replace(TextModLines[i], "\\#\\# MOD Description\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
 							} 
 							else 
 							{
@@ -820,7 +379,7 @@ namespace ModTemplateTools
 									{
 										tempii = TextModLines[i];
 									}
-									Header.ModDescription.pValue += Newline + tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' ');
+									Header.ModDescription[defaultLanguage] += Newline + tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' ');
 								}
 							}
 							break;
@@ -937,7 +496,7 @@ namespace ModTemplateTools
 						case 11:
 							if (TextModLines[i].ToUpper().StartsWith("## AUTHOR NOTE")) 
 							{
-								Header.ModAuthorNotes = new PropertyLang(Regex.Replace(TextModLines[i], "\\#\\# Author Note(s|)\\:(\\W|)", "", RegexOptions.IgnoreCase));
+								Header.ModAuthorNotes = new StringLocalised(Regex.Replace(TextModLines[i], "\\#\\# Author Note(s|)\\:(\\W|)", "", RegexOptions.IgnoreCase));
 								InMultiLineElement = true;
 							} 
 							else 
@@ -951,7 +510,7 @@ namespace ModTemplateTools
 								} 
 								else 
 								{
-									Header.ModAuthorNotes.pValue += Newline + TextModLines[i].Replace("## ", "").Replace("##", "");
+									Header.ModAuthorNotes[defaultLanguage] += Newline + TextModLines[i].Replace("## ", "").Replace("##", "");
 								}
 							}
 							break;
@@ -959,6 +518,7 @@ namespace ModTemplateTools
 							if (TextModLines[i].ToUpper().StartsWith("## MOD HISTORY")) 
 							{
 								InMultiLineElement = true;
+								if (Header.ModHistory == null) Header.ModHistory = new ModHistory();
 							} 
 							else 
 							{
@@ -976,15 +536,28 @@ namespace ModTemplateTools
 										//ModVersion HVersion = ModVersion.Parse(Regex.Match(TextModLines[i], "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{1}?|)([ \\t]|)$").Value);
 										//Console.WriteLine(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
 										ModVersion HVersion = ModVersion.Parse(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
-										Header.ModHistory.AddEntry(HVersion,System.DateTime.Parse(Regex.Match(TextModLines[i], "([0-9]+)(\\/|\\\\|\\-)([0-9]+)(\\/|\\\\|\\-)([0-9]+)").Value),"");
+
+										Header.ModHistory.Add(new ModHistoryEntry(HVersion,System.DateTime.Parse(Regex.Match(TextModLines[i], "([0-9]+)(\\/|\\\\|\\-)([0-9]+)(\\/|\\\\|\\-)([0-9]+)").Value),""));
+
+										int UB = Header.ModHistory.Count - 1;
+										Header.ModHistory[UB].HistoryChangeLog = new ModHistoryChangeLogLocalised();
+										Header.ModHistory[UB].HistoryChangeLog.Add(new ModHistoryChangeLog(), defaultLanguage);
 									} 
 									else 
 									{
 										if (!((TextModLines[i] == "##" || TextModLines[i] == "## "))) 
 										{
-											int UB = Header.ModHistory.History.GetUpperBound(0);
-											if (Header.ModHistory.History[UB].HistoryChanges.GetValue().Length > 0 ) Header.ModHistory.History[UB].HistoryChanges.pValue += Newline;
-											Header.ModHistory.History[UB].HistoryChanges.pValue += Regex.Replace(TextModLines[i], "##([\\W]){1}", "");
+											int UB = Header.ModHistory.Count - 1;
+											int UB2 = Header.ModHistory[UB].HistoryChangeLog.Count - 1;
+											string nextLine = Regex.Replace(TextModLines[i], @"##([\s]*)", "");
+											if (nextLine.StartsWith("-"))
+											{
+												Header.ModHistory[UB].HistoryChangeLog[defaultLanguage].Add(nextLine.Substring(1));
+											}
+											else
+											{
+												Header.ModHistory[UB].HistoryChangeLog[defaultLanguage][UB2] += Newline + nextLine;
+											}
 										}
 									}
 								}
@@ -993,6 +566,7 @@ namespace ModTemplateTools
 					} // Switch
 				} // For i
 			} // For j
+			Header.ModphpBBVersion = new ModVersion(2, 0, 0);
 			return;
 		}
 
@@ -1035,8 +609,12 @@ namespace ModTemplateTools
 					{
 						NextMODActionComm = NextMODActionComm.TrimStart('\n');
 						ThisMODActionComm = ThisMODActionComm.TrimStart('\n');
-						//ThisMODActionBody = ThisMODActionBody.TrimStart('\n');
-						Actions.AddEntry(new ModAction(ThisMODActionType, ThisMODActionBody, NextMODActionComm, ThisMODActionComm, IntFirstMALine));
+						ModAction ma = new ModAction(ThisMODActionType, ThisMODActionBody, NextMODActionComm, ThisMODActionComm, IntFirstMALine);
+						if (ma.ActionType == "DIY INSTRUCTIONS")
+						{
+							ma.Modifier = defaultLanguage;
+						}
+						Actions.Add(ma);
 						ThisMODActionBody = "";
 						ThisMODActionType = "";
 						ThisMODActionComm = "";
@@ -1073,7 +651,9 @@ namespace ModTemplateTools
 					{
 						InMODAction = true;
 						FirstActionFound = true;
-						ThisMODActionType = Regex.Replace(ModTextLines[i], "^#([\\-]+)\\[(\\W)([A-Za-z, \\/\\-\\\\]+?) \\]([\\-]+)(| )$", "$3", RegexOptions.IgnoreCase);
+						// match to "#---[ ABC ]---   " an arbitrary amoung of end of line space and dashes
+						// no end of line space is preffered as per the specs
+						ThisMODActionType = Regex.Replace(ModTextLines[i], @"^#([\-]+)\[(\W)([A-Za-z, \/\-\\]+?) \]([\-]+)([ ]*)$", "$3", RegexOptions.IgnoreCase);
 						if (IntFirstMALine == 0) 
 						{
 							IntFirstMALine = i;
@@ -1096,91 +676,106 @@ namespace ModTemplateTools
 			ModTemplateTools.mod XmlDataSet = new ModTemplateTools.mod();
 			XmlDataSet.ReadXml(FileName);
 
+			//
 			// MOD Author parsing
+			//
 			for (int i = 0; i < XmlDataSet._author_group.Rows.Count; i++)
 			{
 				for (int j = 0; j < XmlDataSet.author.Rows.Count; j++)
 				{
-					if (XmlDataSet.author.Rows[j]["author-group_Id"] == XmlDataSet._author_group.Rows[i]["author-group_Id"])
+					if ((int)XmlDataSet.author.Rows[j]["author-group_Id"] == (int)XmlDataSet._author_group.Rows[i]["author-group_Id"])
 					{
 						ModAuthorEntry tempAuthor = new ModAuthorEntry(XmlDataSet.author.Rows[j]["username"].ToString(), 
 							XmlDataSet.author.Rows[j]["realname"].ToString(),
 							XmlDataSet.author.Rows[j]["email"].ToString(),
 							XmlDataSet.author.Rows[j]["homepage"].ToString());
 						// TODO: contributions
-						Header.ModAuthor.AddEntry(tempAuthor);
+						Header.ModAuthor.Add(tempAuthor);
 					}
 				}
 			}
 
+			//
 			// Multilingual MOD Title
-			Header.ModTitle = new PropertyLang();
+			//
+			Header.ModTitle = new StringLocalised();
 			for (int i = 0; i < XmlDataSet.title.Rows.Count; i++)
 			{
 				Header.ModTitle[XmlDataSet.title.Rows[i]["lang"].ToString()] = XmlDataSet.title.Rows[i]["title_Text"].ToString();
 			}
 
+			//
 			// MOD Description
-			Header.ModDescription = new PropertyLang();
+			//
+			Header.ModDescription = new StringLocalised();
 			for (int i = 0; i < XmlDataSet.description.Rows.Count; i++)
 			{
 				Header.ModDescription[XmlDataSet.description.Rows[i]["lang"].ToString()] = XmlDataSet.description.Rows[i]["description_Text"].ToString();
 			}
 
+			//
 			// Author Notes
-			Header.ModAuthorNotes = new PropertyLang();
+			//
+			Header.ModAuthorNotes = new StringLocalised();
 			for (int i = 0; i < XmlDataSet._author_notes.Rows.Count; i++)
 			{
 				Header.ModAuthorNotes[XmlDataSet._author_notes.Rows[i]["lang"].ToString()] = XmlDataSet._author_notes.Rows[i]["author-notes_Text"].ToString();
 			}
 
+			//
 			// MOD History entries
+			//
+			Header.ModHistory = new ModHistory();
 			for (int i = 0; i < XmlDataSet.entry.Rows.Count; i++)
 			{
-				ModHistoryEntry tempHistory = new ModHistoryEntry();
+				Header.ModHistory.Add(new ModHistoryEntry());
 				for (int j = 0; j < XmlDataSet._rev_version.Rows.Count; j++)
 				{
-					if (XmlDataSet._rev_version.Rows[j]["entry_Id"] == XmlDataSet.entry.Rows[i]["entry_Id"])
+					if ((int)XmlDataSet._rev_version.Rows[j]["entry_Id"] == (int)XmlDataSet.entry.Rows[i]["entry_Id"])
 					{
 						ModVersion tempVersion;
 						tempVersion = new ModVersion(
-							int.Parse(XmlDataSet._rev_version.Rows[j]["major"].ToString()),
-							int.Parse(XmlDataSet._rev_version.Rows[j]["minor"].ToString()), 
-							int.Parse(XmlDataSet._rev_version.Rows[j]["revision"].ToString()));
+							(UInt16)XmlDataSet._rev_version.Rows[j]["major"],
+							(UInt16)XmlDataSet._rev_version.Rows[j]["minor"], 
+							(UInt16)XmlDataSet._rev_version.Rows[j]["revision"]);
 						if (XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray().Length == 1)
 						{
 							tempVersion.VersionRelease = XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray()[0];
 						}
-						tempHistory.HistoryVersion = tempVersion;
+						Header.ModHistory[i].HistoryVersion = tempVersion;
 					}
 				}
-				tempHistory.HistoryDate = DateTime.Parse(XmlDataSet.entry.Rows[i]["date"].ToString());
-				StringBuilder tempChangeLog = new StringBuilder();
+				Header.ModHistory[i].HistoryDate = DateTime.Parse(XmlDataSet.entry.Rows[i]["date"].ToString());
+				Header.ModHistory[i].HistoryChangeLog = new ModHistoryChangeLogLocalised();
 				for (int j = 0; j < XmlDataSet.changelog.Rows.Count; j++)
 				{
-					if (XmlDataSet.changelog.Rows[j]["entry_Id"] == XmlDataSet.entry.Rows[i]["entry_Id"])
+					if ((int)XmlDataSet.changelog.Rows[j]["entry_Id"] == (int)XmlDataSet.entry.Rows[i]["entry_Id"])
 					{
+						string language = (string)XmlDataSet.changelog.Rows[j]["lang"];
+						Header.ModHistory[i].HistoryChangeLog.Add(new ModHistoryChangeLog(), language);
 						for (int k = 0; k < XmlDataSet.change.Rows.Count; k++)
 						{
-							tempHistory.HistoryChanges = new PropertyLang();
-							if (XmlDataSet.change.Rows[k]["changelog_Id"] == XmlDataSet.changelog.Rows[j]["changelog_Id"])
+							if ((int)XmlDataSet.change.Rows[k]["changelog_Id"] == (int)XmlDataSet.changelog.Rows[j]["changelog_Id"])
 							{
-								tempHistory.HistoryChanges[XmlDataSet.changelog.Rows[k]["lang"].ToString()] = XmlDataSet.change.Rows[k]["change_Text"].ToString();
+								Header.ModHistory[i].HistoryChangeLog[language].Add((string)XmlDataSet.change.Rows[k]["change_Text"]);
 							}
 						}
 					}
 				}
-				Header.ModHistory.AddEntry(tempHistory);
 			}
 
+			//
 			// meta
+			//
 			Header.Meta = new Hashtable();
 			for (int i = 0; i < XmlDataSet.meta.Rows.Count; i++)
 			{
 				Header.Meta.Add(XmlDataSet.meta.Rows[i]["name"],XmlDataSet.meta.Rows[i]["content"]);
 			}
 
+			//
 			// MOD Version
+			//
 			try
 			{
 				ModVersion tempVersion = new ModVersion();
@@ -1198,11 +793,15 @@ namespace ModTemplateTools
 				Header.ModVersion = new ModVersion(0,0,0);
 			}
 
+			//
 			// license
-			try { Header.License = XmlDataSet.header.Rows[0]["license"].ToString(); }
+			//
+			try { Header.License = (string)XmlDataSet.header.Rows[0]["license"]; }
 			catch {}
 
+			//
 			// installation
+			//
 			try 
 			{ 
 				Header.ModInstallationLevel = ModInstallationLevelParse(XmlDataSet.installation.Rows[0]["level"].ToString());
@@ -1220,7 +819,7 @@ namespace ModTemplateTools
 			// sql
 			for (int i = 0; i < XmlDataSet.sql.Rows.Count; i++)
 			{
-				Actions.AddEntry(new ModAction("SQL", XmlDataSet.sql.Rows[i]["sql_Text"].ToString(), ""));
+				Actions.Add(new ModAction("SQL", XmlDataSet.sql.Rows[i]["sql_Text"].ToString(), ""));
 			}
 
 			// copy
@@ -1235,7 +834,7 @@ namespace ModTemplateTools
 			}
 			if (tempCopy.Length > 0)
 			{
-				Actions.AddEntry(new ModAction("COPY", tempCopy.ToString(), ""));
+				Actions.Add(new ModAction("COPY", tempCopy.ToString(), ""));
 			}
 
 			// open
@@ -1243,21 +842,21 @@ namespace ModTemplateTools
 			// followed by IN-LINE actions, and lastly comments
 			for (int i = 0; i < XmlDataSet.open.Rows.Count; i++)
 			{
-				Actions.AddEntry(new ModAction("OPEN", XmlDataSet.open.Rows[i]["src"].ToString(), ""));
+				Actions.Add(new ModAction("OPEN", XmlDataSet.open.Rows[i]["src"].ToString(), ""));
 				for (int j = 0; j < XmlDataSet.edit.Rows.Count; j++)
 				{
-					if (XmlDataSet.edit.Rows[j]["open_Id"] == XmlDataSet.open.Rows[i]["open_Id"])
+					if ((int)XmlDataSet.edit.Rows[j]["open_Id"] == (int)XmlDataSet.open.Rows[i]["open_Id"])
 					{
 						for (int k = 0; k < XmlDataSet.find.Rows.Count; k++)
 						{
-							if (XmlDataSet.find.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							if ((int)XmlDataSet.find.Rows[k]["edit_Id"] == (int)XmlDataSet.edit.Rows[j]["edit_Id"])
 							{
-								Actions.AddEntry(new ModAction("FIND", XmlDataSet.find.Rows[k]["find_Text"].ToString(), "", XmlDataSet.find.Rows[k]["type"].ToString()));
+								Actions.Add(new ModAction("FIND", XmlDataSet.find.Rows[k]["find_Text"].ToString(), "", XmlDataSet.find.Rows[k]["type"].ToString()));
 							}
 						}
 						for (int k = 0; k < XmlDataSet.action.Rows.Count; k++)
 						{
-							if (XmlDataSet.action.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							if ((int)XmlDataSet.action.Rows[k]["edit_Id"] == (int)XmlDataSet.edit.Rows[j]["edit_Id"])
 							{
 								string actionTitle = "";
 								switch (XmlDataSet.action.Rows[k]["type"].ToString())
@@ -1275,23 +874,23 @@ namespace ModTemplateTools
 										actionTitle = "INCREMENT";
 										break;
 								}
-								Actions.AddEntry(new ModAction(actionTitle, XmlDataSet.action.Rows[k]["action_Text"].ToString(), ""));
+								Actions.Add(new ModAction(actionTitle, XmlDataSet.action.Rows[k]["action_Text"].ToString(), ""));
 							}
 						}
 						for (int k = 0; k < XmlDataSet._inline_edit.Rows.Count; k++)
 						{
-							if (XmlDataSet._inline_edit.Rows[k]["edit_Id"] == XmlDataSet.edit.Rows[j]["edit_Id"])
+							if ((int)XmlDataSet._inline_edit.Rows[k]["edit_Id"] == (int)XmlDataSet.edit.Rows[j]["edit_Id"])
 							{
 								for (int l = 0; l < XmlDataSet._inline_find.Rows.Count; l++)
 								{
-									if (XmlDataSet._inline_find.Rows[l]["_inline_edit_Id"] == XmlDataSet._inline_edit.Rows[k]["_inline_edit_Id"])
+									if ((int)XmlDataSet._inline_find.Rows[l]["inline-edit_Id"] == (int)XmlDataSet._inline_edit.Rows[k]["inline-edit_Id"])
 									{
-										Actions.AddEntry(new ModAction("IN-LINE FIND", XmlDataSet._inline_find.Rows[l]["inline-find_Text"].ToString(), "", XmlDataSet._inline_find.Rows[l]["type"].ToString()));
+										Actions.Add(new ModAction("IN-LINE FIND", XmlDataSet._inline_find.Rows[l]["inline-find_Text"].ToString(), "", XmlDataSet._inline_find.Rows[l]["type"].ToString()));
 									}
 								}
 								for (int l = 0; l < XmlDataSet._inline_action.Rows.Count; l++)
 								{
-									if (XmlDataSet._inline_action.Rows[l]["_inline_edit_Id"] == XmlDataSet._inline_edit.Rows[k]["_inline_edit_Id"])
+									if ((int)XmlDataSet._inline_action.Rows[l]["inline-edit_Id"] == (int)XmlDataSet._inline_edit.Rows[k]["inline-edit_Id"])
 									{
 										string actionTitle = "";
 										switch (XmlDataSet._inline_action.Rows[l]["type"].ToString())
@@ -1309,7 +908,7 @@ namespace ModTemplateTools
 												actionTitle = "INCREMENT";
 												break;
 										}
-										Actions.AddEntry(new ModAction(actionTitle, XmlDataSet._inline_action.Rows[l]["inline-action_Text"].ToString(), ""));
+										Actions.Add(new ModAction(actionTitle, XmlDataSet._inline_action.Rows[l]["inline-action_Text"].ToString(), ""));
 									}
 								}
 							}
@@ -1321,10 +920,10 @@ namespace ModTemplateTools
 			// diy instructions
 			for (int i = 0; i < XmlDataSet._diy_instructions.Rows.Count; i++)
 			{
-				Actions.AddEntry(new ModAction("DIY INSTRUCTIONS", XmlDataSet._diy_instructions.Rows[i]["diy-instructions_Text"].ToString(),"", XmlDataSet._diy_instructions.Rows[i]["lang"].ToString()));
+				Actions.Add(new ModAction("DIY INSTRUCTIONS", XmlDataSet._diy_instructions.Rows[i]["diy-instructions_Text"].ToString(),"", XmlDataSet._diy_instructions.Rows[i]["lang"].ToString()));
 			}
 
-			Actions.AddEntry(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM"));
+			Actions.Add(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM"));
 			//XmlDataSet.Dispose();
 		}
 
@@ -1410,19 +1009,24 @@ namespace ModTemplateTools
 			// TODO: Not elegant, fixed up a little, still needs some work.
 			//
 
+			// lets force these events to sync the MOD,
+			UpdateFilesToEdit();
+			UpdateIncludedFiles();
+			UpdateInstallationTime();
+
 			string BlankTemplate = TextTemplate;
 			System.Text.StringBuilder NewModBody = new System.Text.StringBuilder();
 			BlankTemplate = BlankTemplate.Replace("<mod.title/>", Header.ModTitle.GetValue());
 			string MyMODAuthorS = null;
-			for (int i = 0; i <= Header.ModAuthor.Authors.GetUpperBound(0); i++) 
+			for (int i = 0; i < Header.ModAuthor.Authors.Count; i++)
 			{
 				if (i == 0) 
 				{
-					MyMODAuthorS = Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
+					MyMODAuthorS = Header.ModAuthor[i].ToString();
 				} 
 				else 
 				{
-					MyMODAuthorS += Newline + "## MOD Author: " + Header.ModAuthor.Authors[i].UserName + " < " + Header.ModAuthor.Authors[i].Email + " > (" + Header.ModAuthor.Authors[i].RealName + ") " + Header.ModAuthor.Authors[i].Homepage;
+					MyMODAuthorS += Newline + "## MOD Author: " + Header.ModAuthor[i].ToString();
 				}
 			}
 
@@ -1471,55 +1075,45 @@ namespace ModTemplateTools
 			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
 			string MyMODHistory;
 			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
-			try
+			if (Header.ModHistory.Count > 0)
 			{
-				for (int i = 0; i < Header.ModHistory.History.Length; i++) 
+				NewMyMODHistory.Append("##############################################################" + Newline);
+				NewMyMODHistory.Append("## MOD History:"  + Newline);
+				foreach (ModHistoryEntry mhe in Header.ModHistory)
 				{
-					if (i == 0 && !((Header.ModHistory.History[i].HistoryChanges.GetValue() == null))) 
+					NewMyMODHistory.Append("## " + Newline);
+					NewMyMODHistory.Append("## " + mhe.HistoryDate.ToString("yyyy-MM-dd") + " - Version " + mhe.HistoryVersion.ToString() + Newline);
+					foreach (DictionaryEntry de in mhe.HistoryChangeLog)
 					{
-						NewMyMODHistory.Append("##############################################################");
-						NewMyMODHistory.Append(Newline + "## MOD History:");
-						NewMyMODHistory.Append(Newline + "## ");
-						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
-						if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
+						string Language = (string)de.Key;
+						ModHistoryChangeLog mhcl = (ModHistoryChangeLog)de.Value;
+						if ((string)Language == defaultLanguage)
 						{
-							NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
-						} 
-						else 
-						{
-							NewMyMODHistory.Append(Newline + "## - ");
-						}
-					} 
-					else 
-					{
-						NewMyMODHistory.Append(Newline + "## ");
-						NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryDate.ToString("yyyy-MM-dd") + " - Version " + Header.ModHistory.History[i].HistoryVersion.ToString());
-						if (!(Header.ModHistory.History[i].HistoryChanges.GetValue() == null)) 
-						{
-							NewMyMODHistory.Append(Newline + "## " + Header.ModHistory.History[i].HistoryChanges.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
-						} 
-						else 
-						{
-							NewMyMODHistory.Append(Newline + "## - ");
+							foreach (string le in mhcl)
+							{
+								NewMyMODHistory.Append("## -" + le.Replace(Newline.ToString(), "## " + Newline) + Newline);
+							}
 						}
 					}
+					if (mhe.HistoryChangeLog.Count == 0)
+					{
+						NewMyMODHistory.Append("## - " + Newline);
+					}
 				}
-			}
-			catch
-			{
 			}
 			MyMODHistory = NewMyMODHistory.ToString();
 			if (!(MyMODHistory.Length == 0)) 
 			{
 				MyMODHistory = Newline + MyMODHistory;
-				MyMODHistory += Newline + "## ";
+				MyMODHistory += "## ";
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.history/>", MyMODHistory);
-			BlankTemplate = Regex.Replace(BlankTemplate, "^#(.*?)([\\s\\S]*?)\\n###END OF HEADER###\\n", "", RegexOptions.Compiled);
-			if (Header.ModEasymodCompatibility.VersionMinor > 0 || Header.ModEasymodCompatibility.VersionRevision > 0) 
+			BlankTemplate = Regex.Replace(BlankTemplate, @"^#(.*?)([\s\S]*?)\n###END OF HEADER###\n", "", RegexOptions.Compiled);
+			// TODO: re-add EMC
+			/*if (Header.ModEasymodCompatibility.VersionMinor > 0 || Header.ModEasymodCompatibility.VersionRevision > 0) 
 			{
 				BlankTemplate = "## EasyMod " + Header.ModEasymodCompatibility.ToString() + " compliant" + Newline + BlankTemplate;
-			}
+			}*/
 			NewModBody.Append(BlankTemplate);
 			try 
 			{
@@ -1565,12 +1159,340 @@ namespace ModTemplateTools
 		public string WriteXml()
 		{
 			ModTemplateTools.mod XmlDataSet = new ModTemplateTools.mod();
+
+			//
+			// Title
+			//
 			foreach (string Language in Header.ModTitle)
 			{
-				DataRow newRow = XmlDataSet.title.NewRow();
+				mod.titleRow newRow = XmlDataSet.title.NewtitleRow();
+				newRow.title_Text = Header.ModTitle[Language];
+				newRow.lang = Language;
 				XmlDataSet.title.Rows.Add(newRow);
 			}
-			return "";
+
+			//
+			// Description
+			//
+			foreach (string Language in Header.ModDescription)
+			{
+				mod.descriptionRow newRow = XmlDataSet.description.NewdescriptionRow();
+				newRow.description_Text = Header.ModTitle[Language];
+				newRow.lang = Language;
+				XmlDataSet.description.Rows.Add(newRow);
+			}
+
+			//
+			// Author Notes
+			//
+			foreach (string Language in Header.ModAuthorNotes)
+			{
+				mod._author_notesRow newRow = XmlDataSet._author_notes.New_author_notesRow();
+				newRow._author_notes_Text = Header.ModAuthorNotes[Language];
+				newRow.lang = Language;
+				XmlDataSet._author_notes.Rows.Add(newRow);
+			}
+
+			//
+			// Authors
+			//
+			mod._author_groupRow authorGroupRow = XmlDataSet._author_group.New_author_groupRow();
+			XmlDataSet._author_group.Rows.Add(authorGroupRow);
+			foreach (ModAuthorEntry entry in Header.ModAuthor)
+			{
+				mod.authorRow newRow = XmlDataSet.author.NewauthorRow();
+				newRow.email = entry.Email;
+				newRow.homepage = entry.Homepage;
+				newRow.realname = entry.RealName;
+				newRow.username = entry.UserName;
+				newRow.SetParentRow(authorGroupRow);
+				XmlDataSet.author.Rows.Add(newRow);
+				mod.contributionsRow newContributionsRow = XmlDataSet.contributions.NewcontributionsRow();
+				if (entry.AuthorFrom > 0)
+				{
+					newContributionsRow.from = new DateTime(entry.AuthorFrom, 1, 1);
+				}
+				if (entry.AuthorTo > 0)
+				{
+					newContributionsRow.to = new DateTime(entry.AuthorTo, 1 , 1);
+				}
+				if (entry.Status != ModAuthorStatus.NoneSelected)
+				{
+					newContributionsRow.status = entry.Status.ToString();
+				}
+				newContributionsRow.SetParentRow(newRow);
+				XmlDataSet.contributions.Rows.Add(newContributionsRow);
+			}
+
+			//
+			// Version
+			//
+			mod._mod_versionRow versionRow = XmlDataSet._mod_version.New_mod_versionRow();
+			versionRow.major = (ushort)Header.ModVersion.VersionMajor;
+			versionRow.minor = (ushort)Header.ModVersion.VersionMinor;
+			versionRow.revision = (ushort)Header.ModVersion.VersionRevision;
+			if (Header.ModVersion.VersionRelease != ModVersion.nullChar)
+			{
+					versionRow.release = Header.ModVersion.VersionRelease.ToString();
+			}
+			XmlDataSet._mod_version.Rows.Add(versionRow);
+
+			//
+			// Installation
+			//
+			mod.installationRow installationRow = XmlDataSet.installation.NewinstallationRow();
+			installationRow.level = Header.ModInstallationLevel.ToString();
+			installationRow.time = (ulong)Header.ModInstallationTime;
+			// TODO: target version, right now target version isn't supported by ModTemplateTools
+			// full support to come, release is currently omitted, need full support!!!
+			if (Header.ModphpBBVersion != null)
+			{
+				mod._target_versionRow targetVersionRow = XmlDataSet._target_version.New_target_versionRow();
+				// major
+				mod._target_majorRow targetMajorRow = XmlDataSet._target_major.New_target_majorRow();
+				targetMajorRow.allow = "exact";
+				targetMajorRow._target_major_Text = (ushort)Header.ModphpBBVersion.VersionMajor;
+				targetMajorRow.SetParentRow(targetVersionRow);
+				XmlDataSet._target_major.Rows.Add(targetMajorRow);
+				// minor
+				mod._target_minorRow targetMinorRow = XmlDataSet._target_minor.New_target_minorRow();
+				targetMinorRow.allow = "exact";
+				targetMinorRow._target_minor_Text = (ushort)Header.ModphpBBVersion.VersionMinor;
+				targetMinorRow.SetParentRow(targetVersionRow);
+				XmlDataSet._target_minor.Rows.Add(targetMinorRow);
+				// release : TODO omitted
+				targetVersionRow.SetParentRow(installationRow);
+				XmlDataSet._target_version.Rows.Add(targetVersionRow);
+			}
+			XmlDataSet.installation.Rows.Add(installationRow);
+
+			//
+			// History
+			//
+			mod.historyRow historyRow = XmlDataSet.history.NewhistoryRow();
+			if (Header.ModHistory.Count > 0)
+			{
+				XmlDataSet.history.Rows.Add(historyRow);
+			}
+			foreach (ModHistoryEntry mhe in Header.ModHistory)
+			{
+				mod.entryRow entryRow = XmlDataSet.entry.NewentryRow();
+				entryRow.date = mhe.HistoryDate;
+				// Version
+				mod._rev_versionRow rev_versionRow = XmlDataSet._rev_version.New_rev_versionRow();
+				rev_versionRow.major = (ushort)mhe.HistoryVersion.VersionMajor;
+				rev_versionRow.minor = (ushort)mhe.HistoryVersion.VersionMinor;
+				rev_versionRow.revision = (ushort)mhe.HistoryVersion.VersionRevision;
+				if (mhe.HistoryVersion.VersionRelease != ModVersion.nullChar)
+				{
+					rev_versionRow.release = Header.ModVersion.VersionRelease.ToString();
+				}
+				rev_versionRow.SetParentRow(entryRow);
+				XmlDataSet._rev_version.Rows.Add(rev_versionRow);
+				// Changelogs
+				foreach (DictionaryEntry de in mhe.HistoryChangeLog)
+				{
+					string Language = (string)de.Key;
+					ModHistoryChangeLog mhcl = (ModHistoryChangeLog)de.Value;
+					mod.changelogRow changelogRow = XmlDataSet.changelog.NewchangelogRow();
+					changelogRow.lang = Language;
+					// change
+					foreach (string value in mhcl)
+					{
+						mod.changeRow changeRow = XmlDataSet.change.NewchangeRow();
+						changeRow.change_Text = value;
+						changeRow.SetParentRow(changelogRow);
+						XmlDataSet.change.Rows.Add(changeRow);
+					}
+					changelogRow.SetParentRow(entryRow);
+					XmlDataSet.changelog.Rows.Add(changelogRow);
+				}
+				entryRow.SetParentRow(historyRow);
+				XmlDataSet.entry.Rows.Add(entryRow);
+			}
+
+			//
+			// meta
+			//
+			foreach (DictionaryEntry de in Header.Meta)
+			{
+				string key = (string)de.Key;
+				string value = (string)de.Value;
+				mod.metaRow newRow = XmlDataSet.meta.NewmetaRow();
+				newRow.name = key;
+				newRow.content = value;
+				XmlDataSet.meta.Rows.Add(newRow);
+			}
+
+			//
+			// actions
+			//
+			mod._action_groupRow actiongroupRow = XmlDataSet._action_group.New_action_groupRow();
+			mod.copyRow copyRow = XmlDataSet.copy.NewcopyRow();
+			mod.openRow currentOpenRow = XmlDataSet.open.NewopenRow();
+			mod.editRow currentEditRow = XmlDataSet.edit.NeweditRow();
+			mod._inline_editRow currentInLineEditRow = XmlDataSet._inline_edit.New_inline_editRow();
+			string type = "";
+			string lastActionType = "EDIT";
+			string lastInLineActionType = "EDIT";
+			foreach (ModAction ma in Actions)
+			{
+				switch (ma.ActionType.ToUpper())
+				{
+					case "SQL":
+						mod.sqlRow sqlRow = XmlDataSet.sql.NewsqlRow();
+						sqlRow.sql_Text = ma.ActionBody;
+						sqlRow.SetParentRow(actiongroupRow);
+						XmlDataSet.sql.Rows.Add(sqlRow);
+						break;
+					case "COPY":
+						if (XmlDataSet.copy.Rows.Count == 0)
+						{
+							copyRow = XmlDataSet.copy.NewcopyRow();
+							copyRow.SetParentRow(actiongroupRow);
+							XmlDataSet.copy.Rows.Add(copyRow);
+						}
+						string[] lines = ma.ActionBody.Split('\n');
+						foreach (string line in lines)
+						{
+							string from = "";
+							string to = "";
+							if (line.TrimStart(TrimChars).ToLower().StartsWith("copy"))
+							{
+								try
+								{
+									from = Regex.Match(line.Trim(TrimChars), "copy (.+) to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", "");
+									to = Regex.Match(line.Trim(TrimChars), " to (.+)", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to ", "");
+
+									mod.fileRow fileRow = XmlDataSet.file.NewfileRow();
+									fileRow.from = from;
+									fileRow.to = to;
+									fileRow.SetParentRow(copyRow);
+									XmlDataSet.file.Rows.Add(fileRow);
+								}
+								catch
+								{
+								}
+							}
+						}
+						break;
+					case "OPEN":
+						currentOpenRow = XmlDataSet.open.NewopenRow();
+						currentOpenRow.src = ma.ActionBody.Trim(TrimChars);
+						currentOpenRow.SetParentRow(actiongroupRow);
+						XmlDataSet.open.Rows.Add(currentOpenRow);
+						break;
+					case "FIND":
+						if (lastActionType == "EDIT")
+						{
+							currentEditRow = XmlDataSet.edit.NeweditRow();
+							currentEditRow.SetParentRow(currentOpenRow);
+							XmlDataSet.edit.Rows.Add(currentEditRow);
+						}
+						mod.findRow findRow = XmlDataSet.find.NewfindRow();
+						findRow.find_Text = ma.ActionBody;
+						if (ma.Modifier != "")
+						{
+							findRow.type = ma.Modifier;
+						}
+						// TODO: needs work (merging)
+						if (ma.AfterComment != "")
+						{
+							mod.commentRow commentRow = XmlDataSet.comment.NewcommentRow();
+							commentRow.lang = defaultLanguage;
+							commentRow.comment_Text = ma.AfterComment;
+							commentRow.SetParentRow(currentEditRow);
+							XmlDataSet.comment.Rows.Add(commentRow);
+						}
+						findRow.SetParentRow(currentEditRow);
+						XmlDataSet.find.Rows.Add(findRow);
+						lastActionType = "FIND";
+						lastInLineActionType = "EDIT";
+						break;
+					case "AFTER, ADD":
+					case "BEFORE, ADD":
+					case "REPLACE WITH":
+					case "INCREMENT":
+						type = "";
+						switch (ma.ActionType.ToUpper())
+						{
+							case "AFTER, ADD":
+								type = "after-add";
+								break;
+							case "BEFORE, ADD":
+								type = "before-add";
+								break;
+							case "REPLACE WITH":
+								type = "replace";
+								break;
+							case "INCREMENT":
+								type = "operation";
+								break;
+						}
+						mod.actionRow actionRow = XmlDataSet.action.NewactionRow();
+						actionRow.action_Text = ma.ActionBody;
+						actionRow.type = type;
+						// TODO: comment
+						actionRow.SetParentRow(currentEditRow);
+						XmlDataSet.action.Rows.Add(actionRow);
+						lastActionType = "EDIT";
+						break;
+					case "IN-LINE FIND":
+						if (lastInLineActionType == "EDIT")
+						{
+							currentInLineEditRow = XmlDataSet._inline_edit.New_inline_editRow();
+							currentInLineEditRow.SetParentRow(currentEditRow);
+							XmlDataSet._inline_edit.Rows.Add(currentInLineEditRow);
+						}
+						mod._inline_findRow inLineFindRow = XmlDataSet._inline_find.New_inline_findRow();
+						inLineFindRow._inline_find_Text = ma.ActionBody;
+						if (ma.Modifier != "")
+						{
+							inLineFindRow.type = ma.Modifier;
+						}
+						inLineFindRow.SetParentRow(currentInLineEditRow);
+						XmlDataSet._inline_find.Rows.Add(inLineFindRow);
+						lastInLineActionType = "FIND";
+						break;
+					case "IN-LINE AFTER, ADD":
+					case "IN-LINE BEFORE, ADD":
+					case "IN-LINE REPLACE WITH":
+					case "IN-LINE INCREMENT":
+						type = "";
+						switch (ma.ActionType.ToUpper())
+						{
+							case "IN-LINE AFTER, ADD":
+								type = "after-add";
+								break;
+							case "IN-LINE BEFORE, ADD":
+								type = "before-add";
+								break;
+							case "IN-LINE REPLACE WITH":
+								type = "replace";
+								break;
+							case "IN-LINE INCREMENT":
+								type = "operation";
+								break;
+						}
+						mod._inline_actionRow inLineActionRow = XmlDataSet._inline_action.New_inline_actionRow();
+						inLineActionRow._inline_action_Text = ma.ActionBody;
+						inLineActionRow.type = type;
+						// TODO: comment
+						inLineActionRow.SetParentRow(currentInLineEditRow);
+						XmlDataSet._inline_action.Rows.Add(inLineActionRow);
+						lastInLineActionType = "EDIT";
+						break;
+					case "DIY INSTRUCTIONS":
+						mod._diy_instructionsRow diyRow = XmlDataSet._diy_instructions.New_diy_instructionsRow();
+						diyRow._diy_instructions_Text = ma.ActionBody;
+						diyRow.lang = ma.Modifier;
+						diyRow.SetParentRow(actiongroupRow);
+						XmlDataSet._diy_instructions.Rows.Add(diyRow);
+						break;
+				}
+			}
+
+			return XmlDataSet.GetXml();
 		}
 
 		/// <summary>
