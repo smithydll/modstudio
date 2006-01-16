@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.9 2005-12-09 00:50:05 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.10 2006-01-16 06:12:33 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -46,7 +46,6 @@ namespace ModFormControls
 			InitializeComponent();
 
 			// TODO: Add any initialization after the InitializeComponent call
-
 		}
 
 		/// <summary> 
@@ -112,8 +111,9 @@ namespace ModFormControls
 		private ModActions Actions;
 		private System.Windows.Forms.Panel ModDisplayPanel;
 		private System.Windows.Forms.VScrollBar ModBoxScrollBar;
-		private ModActionItem[] ActionItems;
+		private ModActionItemCollection ActionItems;
 		private int selectedIndex = 0;
+		const int scrollBarWidth = 17;
 
 		/// <summary>
 		/// 
@@ -124,36 +124,37 @@ namespace ModFormControls
 			{
 				Actions = value;
 
+				// Lets dispose of any existing action objects
 				if (ActionItems != null)
 				{
-					for (int i = 0; i < ActionItems.Length; i++)
+					foreach (ModActionItem mai in ActionItems)
 					{
-						ActionItems[i].Dispose();
+						mai.Dispose();
 					}
 					ActionItems = null;
 				}
+				// if we assigned a non-null object
 				if (Actions != null)
 				{
-					ActionItems = new ModActionItem[Actions.Count];
+					// create a new array of the right length
+					ActionItems = new ModActionItemCollection();
 
 					this.ModDisplayPanel.SuspendLayout();
 					this.SuspendLayout();
-					ModDisplayPanel.Height = ActionItems.Length * 100;
-					for (int i = 0; i < ActionItems.Length; i++)
+					ModDisplayPanel.Height = ActionItems.Count * 100;
+					for (int i = 0; i < Actions.Count; i++)
 					{
-					
-						ActionItems[i] = new ModActionItem();
-						ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
-						ActionItems[i].Visible = true;
-						ActionItems[i].Size = new Size(this.Width - 20 - ModBoxScrollBar.Width, 90);
-						ActionItems[i].Visible = false;
-						ActionItems[i].TabIndex = i + 2;
-						ActionItems[i].Index = i;
-						ActionItems[i].ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
-						ActionItems[i].ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
-
-						this.ModDisplayPanel.Controls.Add(this.ActionItems[i]);
+						ModActionItem tempActionItem = new ModActionItem();
+						tempActionItem.TabIndex = i + 2;
+						tempActionItem.Index = i;
+						tempActionItem.ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
+						tempActionItem.ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
+						
+						ActionItems.Add(tempActionItem);
+						this.ModDisplayPanel.Controls.Add(tempActionItem);
 					}
+					//this.ModDisplayPanel.Height = Actions.Count * 100;
+					UpdateLayout();
 					this.ModDisplayPanel.ResumeLayout(false);
 					this.ResumeLayout(false);
 				}
@@ -181,58 +182,14 @@ namespace ModFormControls
 			this.SuspendLayout();
 			if (Actions != null)
 			{
-				for (int i = 0; i < ActionItems.Length; i++)
+				for (int i = 0; i < ActionItems.Count; i++)
 				{
-					ActionItems[i].SuspendLayout();
-					switch (((ModAction)Actions[i]).ActionType)
-					{
-						case "SQL":
-							ActionItems[i].BackColor = Color.LightCyan;
-							break;
-						case "COPY":
-						case "SAVE/CLOSE ALL FILES":
-						case "DIY INSTRUCTIONS":
-							ActionItems[i].BackColor = Color.LightCyan;
-							break;
-						case "OPEN":
-							ActionItems[i].BackColor = Color.LightYellow;
-							if (((ModAction)Actions[i + 1]).ActionType != "FIND") 
-							{
-								ActionItems[i].BackColor = Color.LightPink;
-								// TODO: reinvestigate this line
-								//Actions.Actions[i].toolTip1.SetToolTip(ModActionItem[i].pictureBox1, "This OPEN action is empty, please add one or more FIND child actions.");
-							}
-							break;
-						case "FIND":
-							ActionItems[i].BackColor = Color.LightGreen;
+					ModActionItem mai = ActionItems[i];
+					mai.SuspendLayout();
 
-							if (((ModAction)Actions[i + 1]).ActionType != "AFTER, ADD" && ((ModAction)Actions[i + 1]).ActionType != "BEFORE, ADD" && ((ModAction)Actions[i + 1]).ActionType != "REPLACE WITH" && ((ModAction)Actions[i + 1]).ActionType != "IN-LINE FIND") 
-							{
-								ActionItems[i].BackColor = Color.LightPink;
-							}
-							break;
-						case "IN-LINE FIND":
-							ActionItems[i].BackColor = Color.PaleGreen;
-							break;
-						case "REPLACE WITH":
-						case "AFTER, ADD":
-						case "BEFORE, ADD":
-						case "INCREMENT":
-							ActionItems[i].BackColor = Color.LightGoldenrodYellow;
-							break;
-						case "IN-LINE REPLACE WITH":
-						case "IN-LINE AFTER, ADD":
-						case "IN-LINE BEFORE, ADD":
-						case "IN-LINE INCREMENT":
-							ActionItems[i].BackColor = Color.LemonChiffon;
-							break;
+					mai.BackColor = GetColour(i);
 
-					}
-
-					if (selectedIndex == i)
-					{
-						ActionItems[i].BackColor = Color.GhostWhite;
-					}
+					mai.ResumeLayout();
 					ActionItems[i].Refresh();
 				}
 			}
@@ -246,7 +203,7 @@ namespace ModFormControls
 			this.SuspendLayout();
 			if (Actions != null)
 			{
-				for (int i = 0; i < ActionItems.Length; i++)
+				for (int i = 0; i < ActionItems.Count; i++)
 				{
 					ActionItems[i].SuspendLayout();
 					ActionItems[i].Height = 90;
@@ -293,105 +250,62 @@ namespace ModFormControls
 			{
 				ModBoxScrollBar.Maximum = Actions.Count * 100;
 
-				ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
-				for (int i = 0; i < ActionItems.Length; i++)
+				//ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
+				for (int i = 0; i < ActionItems.Count; i++)
 				{
 					ActionItems[i].SuspendLayout();
-					ActionItems[i].ActionTitle = ((ModAction)Actions[i]).ActionType;
-					ActionItems[i].ActionBody = ((ModAction)Actions[i]).ActionBody;
+					ActionItems[i].ActionTitle = Actions[i].ActionType;
+					ActionItems[i].ActionBody = GetFirstLines(Actions[i].ActionBody);
 					ActionItems[i].ResumeLayout();
 				}
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void UpdateLayout()
 		{
 			this.ModDisplayPanel.SuspendLayout();
 			this.SuspendLayout();
+			int offset = 0;
+			Point scrollPosn = new Point(0,0);
 			if (Actions != null)
 			{
 				ModBoxScrollBar.Maximum = Actions.Count * 100;
 
-				ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
-				for (int i = 0; i < ActionItems.Length; i++)
+				if (ActionItems.Count > 0)
 				{
-					ActionItems[i].SuspendLayout();
-					ActionItems[i].Height = 90;
-					ActionItems[i].Visible = true;
-					//ActionItems[i].Location = new Point(0,0);
+					scrollPosn = ModDisplayPanel.AutoScrollPosition;
+					ModDisplayPanel.AutoScrollPosition = new Point(0,0);
+				}
+				for (int i = 0; i < ActionItems.Count; i++)
+				{
+					ModActionItem mai = ActionItems[i];
+					mai.SuspendLayout();
 
-					switch (((ModAction)Actions[i]).ActionType)
+					mai.Height = 90;
+					mai.Visible = true;
+					int indent = GetIndent(i);
+					mai.Width = this.Width - 20 - indent - scrollBarWidth;
+					mai.Location = new Point(10 + indent, i * 100 + 10 + offset);
+					mai.BackColor = GetColour(i);
+
+					ActionItems[i].ActionTitle = Actions[i].ActionType;
+					ActionItems[i].ActionBody = GetFirstLines(Actions[i].ActionBody);
+
+					/*if (selectedIndex == i)
 					{
-						case "SQL":
-							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LightCyan;
-
-							break;
-						case "COPY":
-						case "SAVE/CLOSE ALL FILES":
-						case "DIY INSTRUCTIONS":
-							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LightCyan;
-
-							break;
-						case "OPEN":
-							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(10, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LightYellow;
-							if (((ModAction)Actions[i + 1]).ActionType != "FIND") 
-							{
-								ActionItems[i].BackColor = Color.LightPink;
-								// TODO: reinvestigate this line
-								//Actions.Actions[i].toolTip1.SetToolTip(ModActionItem[i].pictureBox1, "This OPEN action is empty, please add one or more FIND child actions.");
-							}
-							break;
-						case "FIND":
-							ActionItems[i].Width = this.Width - 40 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(30, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LightGreen;
-
-							if (((ModAction)Actions[i + 1]).ActionType != "AFTER, ADD" && ((ModAction)Actions[i + 1]).ActionType != "BEFORE, ADD" && ((ModAction)Actions[i + 1]).ActionType != "REPLACE WITH" && ((ModAction)Actions[i + 1]).ActionType != "IN-LINE FIND") 
-							{
-								ActionItems[i].BackColor = Color.LightPink;
-							}
-							break;
-						case "IN-LINE FIND":
-
-							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(50, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.PaleGreen;
-							break;
-						case "REPLACE WITH":
-						case "AFTER, ADD":
-						case "BEFORE, ADD":
-						case "INCREMENT":
-							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(50, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LightGoldenrodYellow;
-							break;
-						case "IN-LINE REPLACE WITH":
-						case "IN-LINE AFTER, ADD":
-						case "IN-LINE BEFORE, ADD":
-						case "IN-LINE INCREMENT":
-							ActionItems[i].Width = this.Width - 80 - ModBoxScrollBar.Width;
-							ActionItems[i].Location = new Point(70, i * 100 + 10 - ModBoxScrollBar.Value);
-							ActionItems[i].BackColor = Color.LemonChiffon;
-							break;
-
-					}
-					// TODO: come back to these
-					ActionItems[i].ActionTitle = ((ModAction)Actions[i]).ActionType;
-					ActionItems[i].ActionBody = ((ModAction)Actions[i]).ActionBody;
-
-					if (selectedIndex == i)
-					{
-						ActionItems[i].BackColor = Color.GhostWhite;
 						ModDisplayPanel.ScrollControlIntoView(ActionItems[i]);
-					}
+					}*/
+
+					mai.ResumeLayout();
+
 					ActionItems[i].Refresh();
 				}
+
+				ModDisplayPanel.AutoScrollPosition = scrollPosn;
+				ModDisplayPanel.ScrollControlIntoView(ActionItems[selectedIndex]);
 			}
 			this.ModDisplayPanel.ResumeLayout();
 			this.ResumeLayout();
@@ -408,7 +322,7 @@ namespace ModFormControls
 			{
 				if (ActionItems != null)
 				{
-					if (value < ActionItems.Length)
+					if (value < ActionItems.Count)
 					{
 						UpdateColours();
 						selectedIndex = value;
@@ -427,5 +341,289 @@ namespace ModFormControls
 			}
 		}
 
+		/// <summary>
+		/// Return the indent
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		private int GetIndent(int index)
+		{
+			string type;
+			try
+			{
+				type = Actions[index].ActionType;
+			}
+			catch
+			{
+				return 0;
+			}
+			switch (type)
+			{
+				case "SQL":
+				case "COPY":
+				case "SAVE/CLOSE ALL FILES":
+				case "DIY INSTRUCTIONS":
+				case "OPEN":
+					return 0;
+				case "FIND":
+					return 20;
+				case "IN-LINE FIND":
+				case "REPLACE WITH":
+				case "AFTER, ADD":
+				case "BEFORE, ADD":
+				case "INCREMENT":
+					return 40;
+				case "IN-LINE REPLACE WITH":
+				case "IN-LINE AFTER, ADD":
+				case "IN-LINE BEFORE, ADD":
+				case "IN-LINE INCREMENT":
+					return 60;
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		private Color GetColour(int index)
+		{
+			Color error = Color.LightPink;
+
+			if (selectedIndex == index)
+			{
+				return Color.GhostWhite;
+			}
+
+			string type = "";
+			string next = "";
+
+			try
+			{
+				type = Actions[index].ActionType;
+				if (index + 1 < ActionItems.Count)
+				{
+					next = Actions[index + 1].ActionType;
+				}
+			}
+			catch
+			{
+				return error;
+			}
+
+			switch (type)
+			{
+				case "SQL":
+				case "COPY":
+				case "SAVE/CLOSE ALL FILES":
+				case "DIY INSTRUCTIONS":
+					return Color.LightCyan;
+				case "OPEN":
+					if (next != "FIND") return error;
+					return Color.LightYellow;
+				case "FIND":
+					if (next != "AFTER, ADD" && next != "BEFORE, ADD" && next != "REPLACE WITH" && next != "IN-LINE FIND") return error;
+					return Color.LightGreen;
+				case "IN-LINE FIND":
+					return Color.PaleGreen;
+				case "REPLACE WITH":
+				case "AFTER, ADD":
+				case "BEFORE, ADD":
+				case "INCREMENT":
+					return Color.LightGoldenrodYellow;
+				case "IN-LINE REPLACE WITH":
+				case "IN-LINE AFTER, ADD":
+				case "IN-LINE BEFORE, ADD":
+				case "IN-LINE INCREMENT":
+					return Color.LemonChiffon;
+			}
+			return error;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="value"></param>
+		public void Insert(int index, ModAction value)
+		{
+			Actions.Insert(index, value);
+			// TODO: insert new ModActionItems
+			ModActionItem tempActionItem = new ModActionItem();
+
+			tempActionItem.ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
+			tempActionItem.ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
+
+			ActionItems.Insert(index, tempActionItem);
+			this.ModDisplayPanel.Controls.Add(tempActionItem);
+
+			for (int i = index; i < ActionItems.Count; i++)
+			{
+				ActionItems[i].TabIndex = i + 2;
+				ActionItems[i].Index = i;
+			}
+
+			UpdateLayout();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			Actions.RemoveAt(index);
+			this.ModDisplayPanel.Controls.Remove(ActionItems[index]);
+			ActionItems[index].Dispose();
+			ActionItems.RemoveAt(index);
+
+			for (int i = index; i < ActionItems.Count; i++)
+			{
+				ActionItems[i].TabIndex = i + 2;
+				ActionItems[i].Index = i;
+			}
+
+			UpdateLayout();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static string GetFirstLines(string value)
+		{
+			if (value.Split('\n').Length <= 3)
+			{
+				return value;
+			}
+			string retValue = "";
+			string[] splitValue = value.Split('\n');
+			for (int i = 0; i < 2; i++)
+			{
+				retValue += splitValue[i] + "\r\n";
+			}
+			return retValue;
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class ModActionItemCollection : System.Collections.IEnumerable, System.Collections.ICollection
+	{
+		private ArrayList ModActionItems;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModActionItemCollection()
+		{
+			ModActionItems = new ArrayList();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModActionItem this[int index]
+		{
+			get
+			{
+				return (ModActionItem)ModActionItems[index];
+			}
+			set
+			{
+				ModActionItems[index] = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		public void Add(ModActionItem value)
+		{
+			ModActionItems.Add(value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="value"></param>
+		public void Insert(int index, ModActionItem value)
+		{
+			ModActionItems.Insert(index, value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			ModActionItems.RemoveAt(index);
+		}
+
+		#region IEnumerable Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return ModActionItems.GetEnumerator();
+		}
+
+		#endregion
+
+		#region ICollection Members
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool IsSynchronized
+		{
+			get
+			{
+				return ModActionItems.IsSynchronized;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int Count
+		{
+			get
+			{
+				return ModActionItems.Count;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="index"></param>
+		public void CopyTo(Array array, int index)
+		{
+			ModActionItems.CopyTo(array, index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public object SyncRoot
+		{
+			get
+			{
+				return ModActionItems.SyncRoot;
+			}
+		}
+
+		#endregion
 	}
 }
