@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.10 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: Studio.cs,v 1.11 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
