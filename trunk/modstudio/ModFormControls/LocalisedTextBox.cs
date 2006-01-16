@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LocalisedTextBox.cs,v 1.2 2005-12-09 00:50:05 smithydll Exp $
+ *   $Id: LocalisedTextBox.cs,v 1.3 2006-01-16 06:12:33 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -154,8 +154,8 @@ namespace ModFormControls
 
 		public void menuItems_Click(object sender, System.EventArgs e)
 		{
-			textLang[label1.Text] = textBox1.Text;
-			textBox1.Text = textLang[((MenuItem)sender).Text]; //textLang.GetValue(((MenuItem)sender).Text);
+			textLang[label1.Text] = textBox1.Text.Replace("\r","");
+			textBox1.Text = textLang[((MenuItem)sender).Text].Replace("\r","").Replace("\n","\r\n"); //textLang.GetValue(((MenuItem)sender).Text);
 			label1.Text = ((MenuItem)sender).Text;
 		}
 
@@ -169,11 +169,11 @@ namespace ModFormControls
 		{
 			get
 			{
-					return textBox1.Text;
+					return textBox1.Text.Replace("\r","");
 			}
 			set
 			{
-				textBox1.Text = value;
+				textBox1.Text = value.Replace("\r","").Replace("\n","\r\n");
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace ModFormControls
 		{
 			get
 			{
-				textLang[label1.Text] = textBox1.Text;
+				textLang[label1.Text] = textBox1.Text.Replace("\r","");
 				return textLang;
 			}
 			set
@@ -213,7 +213,7 @@ namespace ModFormControls
 				}
 				if (textLang.Count > 0)
 				{
-					textBox1.Text = textLang[menuItems[0].Text];
+					textBox1.Text = textLang[menuItems[0].Text].Replace("\r","").Replace("\n","\r\n");
 					label1.Text = menuItems[0].Text;
 				}
 			}
