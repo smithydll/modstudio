@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.13 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.14 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -111,6 +111,8 @@ namespace ModStudio
 		private System.Windows.Forms.PictureBox pictureBoxTextMod;
 		private System.Windows.Forms.PictureBox pictureBoxXmlMod;
 		private System.Windows.Forms.ImageList imageListModEditor;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label labelLicense;
 		private System.ComponentModel.IContainer components;
 
 		/// <summary>
@@ -244,6 +246,8 @@ namespace ModStudio
 			this.authorEditorDialog1 = new ModStudio.AuthorEditorDialog();
 			this.historyEditorDialog1 = new ModStudio.HistoryEditorDialog();
 			this.noteEditorDialog1 = new ModStudio.NoteEditorDialog();
+			this.label8 = new System.Windows.Forms.Label();
+			this.labelLicense = new System.Windows.Forms.Label();
 			this.tabControlEditor.SuspendLayout();
 			this.tabPageOverview.SuspendLayout();
 			this.tabPageHeader.SuspendLayout();
@@ -281,6 +285,8 @@ namespace ModStudio
 			this.tabPageOverview.Controls.Add(this.label4);
 			this.tabPageOverview.Controls.Add(this.labelIncludedFiles);
 			this.tabPageOverview.Controls.Add(this.label10);
+			this.tabPageOverview.Controls.Add(this.label8);
+			this.tabPageOverview.Controls.Add(this.labelLicense);
 			this.tabPageOverview.Location = new System.Drawing.Point(4, 22);
 			this.tabPageOverview.Name = "tabPageOverview";
 			this.tabPageOverview.Size = new System.Drawing.Size(784, 540);
@@ -299,7 +305,7 @@ namespace ModStudio
 			// button9
 			// 
 			this.button9.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button9.Location = new System.Drawing.Point(56, 176);
+			this.button9.Location = new System.Drawing.Point(56, 208);
 			this.button9.Name = "button9";
 			this.button9.TabIndex = 6;
 			this.button9.Text = "Add File";
@@ -307,7 +313,7 @@ namespace ModStudio
 			// 
 			// listBoxFileEdits
 			// 
-			this.listBoxFileEdits.Location = new System.Drawing.Point(136, 144);
+			this.listBoxFileEdits.Location = new System.Drawing.Point(136, 176);
 			this.listBoxFileEdits.Name = "listBoxFileEdits";
 			this.listBoxFileEdits.Size = new System.Drawing.Size(456, 147);
 			this.listBoxFileEdits.TabIndex = 5;
@@ -382,7 +388,7 @@ namespace ModStudio
 			// label10
 			// 
 			this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label10.Location = new System.Drawing.Point(8, 144);
+			this.label10.Location = new System.Drawing.Point(8, 176);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(120, 23);
 			this.label10.TabIndex = 2;
@@ -927,6 +933,24 @@ namespace ModStudio
 			// 
 			this.noteEditorDialog1.Save += new ModStudio.NoteEditorDialogBox.NoteEditorDialogBoxSaveHandler(this.noteEditorDialog1_Save);
 			// 
+			// label8
+			// 
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label8.Location = new System.Drawing.Point(8, 144);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(120, 23);
+			this.label8.TabIndex = 2;
+			this.label8.Text = "License";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// labelLicense
+			// 
+			this.labelLicense.Location = new System.Drawing.Point(136, 144);
+			this.labelLicense.Name = "labelLicense";
+			this.labelLicense.Size = new System.Drawing.Size(416, 23);
+			this.labelLicense.TabIndex = 3;
+			this.labelLicense.Text = "GPL";
+			// 
 			// ModEditor
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -992,133 +1016,155 @@ namespace ModStudio
 			switch (tabControlEditor.SelectedIndex)
 			{
 				case 0: // Overview
-					labelOverviewTitle.Text = ThisMod.Header.ModTitle.GetValue();
-					labelModInstallationTime.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
-					listBoxFileEdits.Items.Clear();
-					if (ThisMod.Actions != null)
-					{
-						foreach (ModAction a in ThisMod.Actions)
-						{
-							char[] TrimChars = {' ', '\t', '\n', '\r'};
-							if (a.ActionType == "OPEN")
-							{
-								listBoxFileEdits.Items.Add(a.ActionBody.Trim(TrimChars));
-							}
-						}
-					}
-					if (ThisMod.Header.ModIncludedFiles != null)
-					{
-						labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Count));
-						if (ThisMod.Header.ModIncludedFiles.Count > 0)
-						{
-							if (ThisMod.Header.ModIncludedFiles[0] == "" || ThisMod.Header.ModIncludedFiles[0].ToLower() == "n/a")
-							{
-								labelIncludedFiles.Text = "0 files";
-							}
-						}
-						if (labelIncludedFiles.Text == "1 files")
-						{
-							labelIncludedFiles.Text = "1 file";
-						}
-					}
-					else
-					{
-						labelIncludedFiles.Text = "0 files";
-					}
-					if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
-					{
-						pictureBoxXmlMod.Visible = false;
-						pictureBoxTextMod.Visible = true;
-					}
-					else
-					{
-						pictureBoxXmlMod.Visible = true;
-						pictureBoxTextMod.Visible = false;
-					}
+					UpdateOverviewDisplay();
 					break;
 				case 1: // Header
-					MODTitleTextBox.Text = ThisMod.Header.ModTitle.GetValue();
-					MODTitleTextBox.TextLang = ThisMod.Header.ModTitle;
-					MODAuthorListBox.Items.Clear();
-					foreach (ModAuthorEntry a in ThisMod.Header.ModAuthor)
-					{
-						MODAuthorListBox.Items.Add(a.UserName);
-					}
-					MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
-					MODDescriptionLabel.Text = ThisMod.Header.ModDescription.GetValue();
-					MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.GetValue();
-					MODHistoryListView.Items.Clear();
-					// TODO: properly handle the exception given by this when no MOD History is included
-					try
-					{
-						foreach (ModHistoryEntry h in ThisMod.Header.ModHistory)
-						{
-							// TODO: 
-							string sample = "";
-							foreach (DictionaryEntry de in h.HistoryChangeLog)
-							{
-								if ((string)de.Key == PhpbbMod.DefaultLanguage)
-								{
-									if (((ModHistoryChangeLog)de.Value).Count > 0)
-									{
-										sample = ((ModHistoryChangeLog)de.Value)[0];
-									}
-								}
-							}
-							string[] tempItem = {h.HistoryVersion.ToString(), h.HistoryDate.ToShortDateString(), sample};
-							MODHistoryListView.Items.Add(new ListViewItem(tempItem));
-						}
-					}
-					catch
-					{
-					}
-					MODVersionMajorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMajor;
-					MODVersionMinorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMinor;
-					MODVersionRevisionNumericUpDown.Value = ThisMod.Header.ModVersion.VersionRevision;
-					MODVersionReleaseDomainUpDown.Text = ThisMod.Header.ModVersion.VersionRelease.ToString();
-					MODInstallationTimeLabel.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
-
-					if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
-					{
-						MODTitleTextBox.LanguageSelectorVisible = false;
-					}
-					else
-					{
-						MODTitleTextBox.LanguageSelectorVisible = true;
-					}
+					UpdateHeaderDisplay();
 					break;
 				case 2: // Actions
-					modDisplayBox2.ModActions = ThisMod.Actions;
-					modDisplayBox2.UpdateLayout();
-					modDisplayBox2.Select();
+					UpdateActionsDisplay();
 					break;
 			}
 
 			LastSelectedIndex = tabControlEditor.SelectedIndex;
 		}
 
+		private void UpdateOverviewDisplay()
+		{
+			labelOverviewTitle.Text = ThisMod.Header.ModTitle.GetValue();
+			labelModInstallationTime.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
+			listBoxFileEdits.Items.Clear();
+			if (ThisMod.Actions != null)
+			{
+				foreach (ModAction a in ThisMod.Actions)
+				{
+					char[] TrimChars = {' ', '\t', '\n', '\r'};
+					if (a.ActionType == "OPEN")
+					{
+						listBoxFileEdits.Items.Add(a.ActionBody.Trim(TrimChars));
+					}
+				}
+			}
+			if (ThisMod.Header.ModIncludedFiles != null)
+			{
+				labelIncludedFiles.Text = string.Format("{0} files", (ThisMod.Header.ModIncludedFiles.Count));
+				if (ThisMod.Header.ModIncludedFiles.Count > 0)
+				{
+					if (ThisMod.Header.ModIncludedFiles[0] == "" || ThisMod.Header.ModIncludedFiles[0].ToLower() == "n/a")
+					{
+						labelIncludedFiles.Text = "0 files";
+					}
+				}
+				if (labelIncludedFiles.Text == "1 files")
+				{
+					labelIncludedFiles.Text = "1 file";
+				}
+			}
+			else
+			{
+				labelIncludedFiles.Text = "0 files";
+			}
+			if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
+			{
+				pictureBoxXmlMod.Visible = false;
+				pictureBoxTextMod.Visible = true;
+			}
+			else
+			{
+				pictureBoxXmlMod.Visible = true;
+				pictureBoxTextMod.Visible = false;
+			}
+			labelLicense.Text = ThisMod.Header.License;
+		}
+
+		private void UpdateHeaderDisplay()
+		{
+			MODTitleTextBox.Text = ThisMod.Header.ModTitle.GetValue();
+			MODTitleTextBox.TextLang = ThisMod.Header.ModTitle;
+			MODAuthorListBox.Items.Clear();
+			foreach (ModAuthorEntry a in ThisMod.Header.ModAuthor)
+			{
+				MODAuthorListBox.Items.Add(a.UserName);
+			}
+			MODInstallationLevelComboBox.Text = ThisMod.Header.ModInstallationLevel.ToString();
+			MODDescriptionLabel.Text = ThisMod.Header.ModDescription.GetValue();
+			MODAuthorNotesLabel.Text = ThisMod.Header.ModAuthorNotes.GetValue();
+			MODHistoryListView.Items.Clear();
+			// TODO: properly handle the exception given by this when no MOD History is included
+			try
+			{
+				foreach (ModHistoryEntry h in ThisMod.Header.ModHistory)
+				{
+					// TODO: 
+					string sample = "";
+					foreach (DictionaryEntry de in h.HistoryChangeLog)
+					{
+						if ((string)de.Key == PhpbbMod.DefaultLanguage)
+						{
+							if (((ModHistoryChangeLog)de.Value).Count > 0)
+							{
+								sample = ((ModHistoryChangeLog)de.Value)[0];
+							}
+						}
+					}
+					string[] tempItem = {h.HistoryVersion.ToString(), h.HistoryDate.ToShortDateString(), sample};
+					MODHistoryListView.Items.Add(new ListViewItem(tempItem));
+				}
+			}
+			catch
+			{
+			}
+			MODVersionMajorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMajor;
+			MODVersionMinorNumericUpDown.Value = ThisMod.Header.ModVersion.VersionMinor;
+			MODVersionRevisionNumericUpDown.Value = ThisMod.Header.ModVersion.VersionRevision;
+			MODVersionReleaseDomainUpDown.Text = ThisMod.Header.ModVersion.VersionRelease.ToString();
+			MODInstallationTimeLabel.Text = string.Format("{0} minutes", (ThisMod.Header.ModInstallationTime / 60));
+
+			if (ThisMod.lastReadFormat == PhpbbMod.ModFormats.TextMOD)
+			{
+				MODTitleTextBox.LanguageSelectorVisible = false;
+			}
+			else
+			{
+				MODTitleTextBox.LanguageSelectorVisible = true;
+			}
+		}
+
+		private void UpdateActionsDisplay()
+		{
+			modDisplayBox2.ModActions = ThisMod.Actions;
+			modDisplayBox2.UpdateLayout();
+			modDisplayBox2.Select();
+		}
+
 		private void ModEditor_Load(object sender, System.EventArgs e)
 		{
 			tabControlEditor.SelectedIndex = 0;
-			tabControlEditor_SelectedIndexChanged(null,null);
+			//tabControlEditor_SelectedIndexChanged(null,null);
+			UpdateOverviewDisplay();
+			UpdateHeaderDisplay();
 			modDisplayBox2_SelectedIndexChanged(null, null);
+			SetUnmodified();
 		}
 
 		private void listBoxFileEdits_DoubleClick(object sender, System.EventArgs e)
 		{
-			tabControlEditor.SelectedIndex = 2;
-			for (int i = 0; i < ThisMod.Actions.Count; i++)
+			char[] TrimChars = {' ', '\t', '\n', '\r'};
+			if (listBoxFileEdits.SelectedIndices.Count > 0)
 			{
-				char[] TrimChars = {' ', '\t', '\n', '\r'};
-				if (((ModAction)ThisMod.Actions[i]).ActionType == "OPEN")
+				tabControlEditor.SelectedIndex = 2;
+				for (int i = 0; i < ThisMod.Actions.Count; i++)
 				{
-					if (((ModAction)ThisMod.Actions[i]).ActionBody.Trim(TrimChars) == listBoxFileEdits.Items[listBoxFileEdits.SelectedIndex].ToString())
+					if (ThisMod.Actions[i].ActionType == "OPEN")
 					{
-						modDisplayBox2.SelectedIndex = i;
+						if (ThisMod.Actions[i].ActionBody.Trim(TrimChars) == listBoxFileEdits.Items[listBoxFileEdits.SelectedIndex].ToString())
+						{
+							modDisplayBox2.SelectedIndex = i;
+						}
 					}
 				}
+				modDisplayBox2.UpdateColours();
 			}
-			modDisplayBox2.UpdateColours();
 		}
 
 		private void ModEditor_Resize(object sender, System.EventArgs e)
@@ -1208,6 +1254,7 @@ namespace ModStudio
 
 		private void saveFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
 		{
+			PhpbbMod.ModFormats lastReadFormat = ThisMod.lastReadFormat;
 			// Force it to save in the format of the extension given.
 			string fileNameLower = saveFileDialog1.FileName.ToLower();
 			if (fileNameLower.EndsWith(".xml") || fileNameLower.EndsWith(".modx"))
@@ -1221,6 +1268,11 @@ namespace ModStudio
 			ThisMod.WriteFile(saveFileDialog1.FileName);
 			this.Text = saveFileDialog1.FileName;
 			SetUnmodified();
+			if (ThisMod.lastReadFormat != lastReadFormat)
+			{
+				UpdateOverviewDisplay();
+				UpdateHeaderDisplay();
+			}
 		}
 
 		/// <summary>
@@ -1287,9 +1339,9 @@ namespace ModStudio
 				case 2: // delete action
 					if (((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType != "SAVE/CLOSE ALL FILES")
 					{
-						ThisMod.Actions.RemoveAt(modDisplayBox2.SelectedIndex);
-						modDisplayBox2.ModActions = ThisMod.Actions;
-						modDisplayBox2.UpdateLayout();
+						modDisplayBox2.RemoveAt(modDisplayBox2.SelectedIndex);
+						//modDisplayBox2.ModActions = ThisMod.Actions;
+						//modDisplayBox2.UpdateLayout();
 						modDisplayBox2.Select();
 						SetModified();
 					}
@@ -1459,9 +1511,9 @@ namespace ModStudio
 			{
 				addBefore++;
 			}
-			ThisMod.Actions.Insert(addBefore, new ModAction(actionType, actionBody, ""));
-			modDisplayBox2.ModActions = ThisMod.Actions;
-			modDisplayBox2.UpdateLayout();
+			modDisplayBox2.Insert(addBefore, new ModAction(actionType, actionBody, ""));
+			//modDisplayBox2.ModActions = ThisMod.Actions;
+			//modDisplayBox2.UpdateLayout();
 			modDisplayBox2.Select();
 			modDisplayBox2.SelectedIndex = addBefore;
 			SetModified();
@@ -1519,6 +1571,7 @@ namespace ModStudio
 		private void button5_Click(object sender, System.EventArgs e)
 		{
 			historyEditorDialog1.Reset();
+			historyEditorDialog1.Localised = (ThisMod.lastReadFormat == PhpbbMod.ModFormats.XMLMOD);
 			historyEditorDialog1.ShowDialog(this);
 		}
 
@@ -1558,6 +1611,7 @@ namespace ModStudio
 			{
 				historyEditorDialog1.Index = MODHistoryListView.SelectedItems[0].Index;
 				historyEditorDialog1.Entry = ThisMod.Header.ModHistory[historyEditorDialog1.Index];
+				historyEditorDialog1.Localised = (ThisMod.lastReadFormat == PhpbbMod.ModFormats.XMLMOD);
 				historyEditorDialog1.ShowDialog(this);
 			}
 		}

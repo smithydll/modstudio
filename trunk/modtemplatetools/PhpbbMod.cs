@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.11 2005-12-09 00:51:10 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.12 2006-01-16 06:07:05 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -62,6 +62,11 @@ namespace ModTemplateTools
 
 		private const char Newline = '\n';
 		private const string WinNewLine = "\r\n";
+		public CodeIndents DescriptionIndent = CodeIndents.Space;
+		public CodeIndents AuthorNotesIndent = CodeIndents.Space;
+		public StartLine AuthorNotesStartLine = StartLine.Same;
+		public CodeIndents ModFilesToEditIndent = CodeIndents.RightAligned;
+		public CodeIndents ModIncludedFilesIndent = CodeIndents.RightAligned;
 
 		private char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 
@@ -325,7 +330,7 @@ namespace ModTemplateTools
 								StartOffset = i + 1;
 								e++;
 								i = TextModLines.Length;
-								}
+							}
 							if (TextModLines[i].StartsWith("##")) 
 							{
 								StartOffset = i + 1;
@@ -567,6 +572,16 @@ namespace ModTemplateTools
 				} // For i
 			} // For j
 			Header.ModphpBBVersion = new ModVersion(2, 0, 0);
+			if (Header.ModAuthorNotes[defaultLanguage].StartsWith("\r\n") || Header.ModAuthorNotes[defaultLanguage].StartsWith("\n"))
+			{
+				char[] trimChars = {'\r','\n'};
+				Header.ModAuthorNotes[defaultLanguage].TrimStart(trimChars);
+				AuthorNotesStartLine = StartLine.Next;
+			}
+			else
+			{
+				AuthorNotesStartLine = StartLine.Same;
+			}
 			return;
 		}
 
@@ -1030,13 +1045,40 @@ namespace ModTemplateTools
 				}
 			}
 
+			string DescriptionStartOfLine = "## ";
+			switch (DescriptionIndent)
+			{
+				case CodeIndents.Space:
+					// already assigned as "## ";
+					break;
+				case CodeIndents.Tab:
+					DescriptionStartOfLine = "##\t";
+					break;
+				case CodeIndents.RightAligned:
+					DescriptionStartOfLine = "##                  ";
+					break;
+			}
+
 			BlankTemplate = BlankTemplate.Replace("<mod.author/>", MyMODAuthorS);
-			BlankTemplate = BlankTemplate.Replace("<mod.description/>", Header.ModDescription.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+			BlankTemplate = BlankTemplate.Replace("<mod.description/>", Header.ModDescription.GetValue().Replace(Newline.ToString(), Newline.ToString() + DescriptionStartOfLine));
 			BlankTemplate = BlankTemplate.Replace("<mod.version/>", Header.ModVersion.ToString());
 			BlankTemplate = BlankTemplate.Replace("<mod.install_level/>", Header.ModInstallationLevel.ToString());
 			BlankTemplate = BlankTemplate.Replace("<mod.install_time/>", Math.Ceiling(Header.ModInstallationTime / 60) + " minutes");
 
 			string MyMODFTE = null;
+			string ModFilesToEditStartOfLine = "## ";
+			switch (ModFilesToEditIndent)
+			{
+				case CodeIndents.Space:
+					// already assigned as "## ";
+					break;
+				case CodeIndents.Tab:
+					ModFilesToEditStartOfLine = "##\t";
+					break;
+				case CodeIndents.RightAligned:
+					ModFilesToEditStartOfLine = "##                ";
+					break;
+			}
 			for (int i = 0; i < Header.ModFilesToEdit.Count; i++) 
 			{
 				if (i == 0) 
@@ -1045,12 +1087,25 @@ namespace ModTemplateTools
 				} 
 				else 
 				{
-					MyMODFTE += Newline + "##                " + Header.ModFilesToEdit[i];
+					MyMODFTE += Newline + ModFilesToEditStartOfLine + Header.ModFilesToEdit[i];
 				}
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.files_to_edit/>", MyMODFTE);
 
 			string MyMODIC = null;
+			string ModIncludedFilesStartOfLine = "## ";
+			switch (ModIncludedFilesIndent)
+			{
+				case CodeIndents.Space:
+					// already assigned as "## ";
+					break;
+				case CodeIndents.Tab:
+					ModIncludedFilesStartOfLine = "##\t";
+					break;
+				case CodeIndents.RightAligned:
+					ModIncludedFilesStartOfLine = "##                 ";
+					break;
+			}
 			for (int i = 0; i < Header.ModIncludedFiles.Count; i++) 
 			{
 				if (i == 0) 
@@ -1059,7 +1114,7 @@ namespace ModTemplateTools
 				} 
 				else 
 				{
-					MyMODIC += Newline + "##                 " + Header.ModIncludedFiles[i];
+					MyMODIC += Newline + ModIncludedFilesStartOfLine + Header.ModIncludedFiles[i];
 				}
 			}
 			BlankTemplate = BlankTemplate.Replace("<mod.inc_files/>", MyMODIC);
@@ -1072,7 +1127,23 @@ namespace ModTemplateTools
 			{
 				BlankTemplate = BlankTemplate.Replace("<mod.license/>", "");
 			}
-			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + "## "));
+
+			string AuthorNotesStartOfLine = "## ";
+			switch (AuthorNotesIndent)
+			{
+				case CodeIndents.Space:
+					// already assigned as "## ";
+					break;
+				case CodeIndents.Tab:
+					AuthorNotesStartOfLine = "##\t";
+					break;
+				case CodeIndents.RightAligned:
+					AuthorNotesStartOfLine = "##               ";
+					break;
+			}
+			string AuthorStartLine = "";
+			if (AuthorNotesStartLine == StartLine.Next) AuthorStartLine = Newline.ToString();
+			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", AuthorStartLine + Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + AuthorNotesStartOfLine));
 			string MyMODHistory;
 			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
 			if (Header.ModHistory.Count > 0)

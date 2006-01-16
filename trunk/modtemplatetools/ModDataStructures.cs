@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDataStructures.cs,v 1.2 2005-12-09 00:51:10 smithydll Exp $
+ *   $Id: ModDataStructures.cs,v 1.3 2006-01-16 06:07:05 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -97,6 +97,15 @@ namespace ModTemplateTools.DataStructures
 		public void Add(string value, string language)
 		{
 			keyList.Add(language, value);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="language"></param>
+		public void Remove(string language)
+		{
+			keyList.Remove(language);
 		}
 
 		/// <summary>
@@ -1229,6 +1238,15 @@ namespace ModTemplateTools.DataStructures
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="language"></param>
+		public void Remove(string language)
+		{
+			changeLogs.Remove(language);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <returns></returns>
 		public int Count
 		{
@@ -1460,4 +1478,37 @@ namespace ModTemplateTools.DataStructures
 		#endregion
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum CodeIndents
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		Space,
+		/// <summary>
+		/// 
+		/// </summary>
+		Tab,
+		/// <summary>
+		/// 
+		/// </summary>
+		RightAligned
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum StartLine
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		Same,
+		/// <summary>
+		/// 
+		/// </summary>
+		Next
+	}
 }

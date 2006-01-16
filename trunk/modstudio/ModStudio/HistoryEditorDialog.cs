@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialog.cs,v 1.6 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: HistoryEditorDialog.cs,v 1.7 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -37,6 +37,24 @@ namespace ModStudio
 	public class HistoryEditorDialog : System.Windows.Forms.CommonDialog
 	{
 		private ModHistoryEntry entry = new ModHistoryEntry();
+		private bool localised = false;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[DefaultValue(false)]
+		public bool Localised 
+		{
+			get 
+			{
+				return localised;
+			}
+			set
+			{
+				localised = value;
+			}
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -98,6 +116,7 @@ namespace ModStudio
 				dialogInstance = new HistoryEditorDialogBox();
 				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
 				dialogInstance.HistoryEntry = this.entry;
+				dialogInstance.LanguageSelectorVisible = localised;
 				if (dialogInstance.ShowDialog() == DialogResult.OK)
 				{
 					okTriggered = true;

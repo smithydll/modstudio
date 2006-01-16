@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.5 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.6 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -34,6 +34,8 @@ namespace ModStudio
 	/// </summary>
 	public class HistoryEditorDialogBox : System.Windows.Forms.Form
 	{
+		const int NewChange = -1;
+
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOk;
@@ -50,6 +52,11 @@ namespace ModStudio
 		private System.Windows.Forms.ComboBox comboBoxLanguages;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
+		private ModStudio.NoteEditorDialog noteEditorDialog1;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button button5;
+		private ModFormControls.LanguageSelectionDialog languageSelectionDialog1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -80,6 +87,10 @@ namespace ModStudio
 		/// <param name="entry"></param>
 		public void SetEntry(ModHistoryEntry entry)
 		{
+			if (entry.HistoryChangeLog.Count == 0)
+			{
+				entry.HistoryChangeLog.Add(new ModTemplateTools.DataStructures.ModHistoryChangeLog(), "en-GB");
+			}
 			//TODO: 
 			//textBoxEntry.Text = entry.HistoryChanges.GetValue().Replace("\r","").Replace("\n", "\r\n");
 			MODVersionMajor.Value = entry.HistoryVersion.VersionMajor;
@@ -138,12 +149,17 @@ namespace ModStudio
 			this.MODVersionRevision = new System.Windows.Forms.NumericUpDown();
 			this.MODHistorydtp = new System.Windows.Forms.DateTimePicker();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBoxLanguages = new System.Windows.Forms.ComboBox();
 			this.listViewModChanges = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
+			this.noteEditorDialog1 = new ModStudio.NoteEditorDialog();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
+			languageSelectionDialog1 = new ModFormControls.LanguageSelectionDialog();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MODVersionMajor)).BeginInit();
@@ -156,6 +172,9 @@ namespace ModStudio
 			// 
 			this.panel1.Controls.Add(this.buttonCancel);
 			this.panel1.Controls.Add(this.buttonOk);
+			this.panel1.Controls.Add(this.button2);
+			this.panel1.Controls.Add(this.button4);
+			this.panel1.Controls.Add(this.button5);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(0, 184);
 			this.panel1.Name = "panel1";
@@ -248,15 +267,34 @@ namespace ModStudio
 			// 
 			// panel3
 			// 
-			this.panel3.Controls.Add(this.button2);
 			this.panel3.Controls.Add(this.button1);
 			this.panel3.Controls.Add(this.label1);
 			this.panel3.Controls.Add(this.comboBoxLanguages);
+			this.panel3.Controls.Add(this.button3);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel3.Location = new System.Drawing.Point(0, 32);
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(504, 24);
 			this.panel3.TabIndex = 4;
+			// 
+			// button2
+			// 
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button2.Location = new System.Drawing.Point(8, 8);
+			this.button2.Name = "button2";
+			this.button2.TabIndex = 3;
+			this.button2.Text = "Add Change";
+			this.button2.Click += new System.EventHandler(this.button2_Click);
+			// 
+			// button1
+			// 
+			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button1.Location = new System.Drawing.Point(216, 0);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(88, 23);
+			this.button1.TabIndex = 2;
+			this.button1.Text = "Add Language";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// label1
 			// 
@@ -290,28 +328,49 @@ namespace ModStudio
 			this.listViewModChanges.Size = new System.Drawing.Size(504, 128);
 			this.listViewModChanges.TabIndex = 5;
 			this.listViewModChanges.View = System.Windows.Forms.View.List;
+			this.listViewModChanges.DoubleClick += new System.EventHandler(this.listViewModChanges_DoubleClick);
 			// 
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Changes";
 			// 
-			// button1
+			// noteEditorDialog1
 			// 
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(216, 0);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(88, 23);
-			this.button1.TabIndex = 2;
-			this.button1.Text = "Add Language";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.noteEditorDialog1.Save += new ModStudio.NoteEditorDialogBox.NoteEditorDialogBoxSaveHandler(this.noteEditorDialog1_Save);
 			// 
-			// button2
+			// button3
 			// 
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button2.Location = new System.Drawing.Point(312, 0);
-			this.button2.Name = "button2";
-			this.button2.TabIndex = 3;
-			this.button2.Text = "Add Change";
+			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button3.Location = new System.Drawing.Point(312, 0);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(104, 23);
+			this.button3.TabIndex = 2;
+			this.button3.Text = "Remove Language";
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
+			// button4
+			// 
+			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button4.Location = new System.Drawing.Point(88, 8);
+			this.button4.Name = "button4";
+			this.button4.TabIndex = 3;
+			this.button4.Text = "Edit Change";
+			this.button4.Click += new System.EventHandler(this.button4_Click);
+			// 
+			// button5
+			// 
+			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button5.Location = new System.Drawing.Point(168, 8);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(96, 23);
+			this.button5.TabIndex = 3;
+			this.button5.Text = "Remove Change";
+			this.button5.Click += new System.EventHandler(this.button5_Click);
+			//
+			// languageSelectionDialog1
+			//
+			this.languageSelectionDialog1.Language = "en-GB";
+			this.languageSelectionDialog1.Save +=new ModFormControls.LanguageSelectionDialogBox.LanguageSelectionDialogBoxSaveHandler(languageSelectionDialog1_Save);
 			// 
 			// HistoryEditorDialogBox
 			// 
@@ -407,9 +466,7 @@ namespace ModStudio
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
-			entry.HistoryChangeLog.Add(new ModHistoryChangeLog(), "en-NZ");
-			comboBoxLanguages.Items.Add("en-NZ");
-			comboBoxLanguages.SelectedIndex = comboBoxLanguages.Items.Count - 1;
+			languageSelectionDialog1.ShowDialog(this);
 		}
 
 		/// <summary>
@@ -421,7 +478,149 @@ namespace ModStudio
 		/// </summary>
 		//public event HistoryEditorDialogBoxSaveHandler Save;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void noteEditorDialog1_Save(object sender, NoteEditorDialogBoxSaveEventArgs e)
+		{
+			int index = int.Parse(e.Type);
+			if (index == NewChange)
+			{
+				entry.HistoryChangeLog[comboBoxLanguages.Text].Add(e.Note.GetValue());
+			}
+			else
+			{
+				entry.HistoryChangeLog[comboBoxLanguages.Text][index] = e.Note.GetValue();
+			}
+			comboBoxLanguages_SelectedIndexChanged(null, null);
+		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void button2_Click(object sender, System.EventArgs e)
+		{
+			noteEditorDialog1.Note = new StringLocalised("");
+			noteEditorDialog1.Localised = false;
+			noteEditorDialog1.Type = NewChange.ToString();
+			noteEditorDialog1.ShowDialog(this);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void listViewModChanges_DoubleClick(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if (entry.HistoryChangeLog[comboBoxLanguages.Text].Count > 0)
+				{
+					if (listViewModChanges.SelectedIndices.Count > 0)
+					{
+						noteEditorDialog1.Note = new StringLocalised(entry.HistoryChangeLog[comboBoxLanguages.Text][listViewModChanges.SelectedIndices[0]]);
+						noteEditorDialog1.Localised = false;
+						noteEditorDialog1.Type = listViewModChanges.SelectedIndices[0].ToString();
+						noteEditorDialog1.ShowDialog(this);
+					}
+				}
+			}
+			catch
+			{
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void button3_Click(object sender, System.EventArgs e)
+		{
+			if (entry.HistoryChangeLog.Count == 1)
+			{
+				MessageBox.Show(this, "There must always be at least one language", "Can't remove language", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+			}
+			else
+			{
+				entry.HistoryChangeLog.Remove(comboBoxLanguages.Text);
+				comboBoxLanguages.Items.Remove(comboBoxLanguages.SelectedItem);
+				comboBoxLanguages.SelectedIndex = 0;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void button4_Click(object sender, System.EventArgs e)
+		{
+			listViewModChanges_DoubleClick(null, null);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void button5_Click(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if (entry.HistoryChangeLog[comboBoxLanguages.Text].Count > 0)
+				{
+					if (listViewModChanges.SelectedIndices.Count > 0)
+					{
+						entry.HistoryChangeLog[comboBoxLanguages.Text].RemoveAt(listViewModChanges.SelectedIndices[0]);
+					}
+				}
+			}
+			catch
+			{
+			}
+			comboBoxLanguages_SelectedIndexChanged(null, null);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void languageSelectionDialog1_Save(object sender, ModFormControls.LanguageSelectionDialogBoxSaveEventArgs e)
+		{
+			try
+			{
+				entry.HistoryChangeLog.Add(new ModTemplateTools.DataStructures.ModHistoryChangeLog(), e.Language);
+				comboBoxLanguages.Items.Add(e.Language);
+				comboBoxLanguages.SelectedIndex = comboBoxLanguages.Items.Count - 1;
+			}
+			catch (ArgumentException ex)
+			{
+				MessageBox.Show(this, "You already have an entry for this language", "Can't add language", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+				Console.WriteLine(ex.ToString());
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool LanguageSelectorVisible
+		{
+			get
+			{
+				return panel3.Visible;
+			}
+			set
+			{
+				panel3.Visible = value;
+			}
+		}
 	}
 
 	/// <summary>

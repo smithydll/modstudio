@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.2 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.3 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -48,6 +48,18 @@ namespace ModStudio
 		private AuthorEditorDialog authorEditorDialog1;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.ComboBox comboBox3;
+		private System.Windows.Forms.ComboBox comboBox4;
+		private System.Windows.Forms.ComboBox comboBox5;
+		private System.Windows.Forms.ComboBox comboBox6;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.ComboBox comboBox7;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -103,14 +115,29 @@ namespace ModStudio
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.authorEditorDialog1 = new ModStudio.AuthorEditorDialog();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.label4 = new System.Windows.Forms.Label();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.comboBox3 = new System.Windows.Forms.ComboBox();
+			this.comboBox4 = new System.Windows.Forms.ComboBox();
+			this.comboBox5 = new System.Windows.Forms.ComboBox();
+			this.comboBox6 = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.comboBox7 = new System.Windows.Forms.ComboBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.tabPage2.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
 			// 
 			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -234,6 +261,140 @@ namespace ModStudio
 			// 
 			this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(this.authorEditorDialog1_Save);
 			// 
+			// tabPage2
+			// 
+			this.tabPage2.Controls.Add(this.groupBox1);
+			this.tabPage2.Controls.Add(this.label8);
+			this.tabPage2.Controls.Add(this.comboBox7);
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Size = new System.Drawing.Size(402, 294);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "Formatting";
+			// 
+			// label4
+			// 
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label4.Location = new System.Drawing.Point(8, 24);
+			this.label4.Name = "label4";
+			this.label4.TabIndex = 1;
+			this.label4.Text = "Description:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.comboBox3);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.comboBox4);
+			this.groupBox1.Controls.Add(this.comboBox5);
+			this.groupBox1.Controls.Add(this.comboBox6);
+			this.groupBox1.Location = new System.Drawing.Point(8, 8);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(384, 136);
+			this.groupBox1.TabIndex = 2;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Tabbing";
+			// 
+			// label5
+			// 
+			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label5.Location = new System.Drawing.Point(8, 48);
+			this.label5.Name = "label5";
+			this.label5.TabIndex = 1;
+			this.label5.Text = "Files to edit:";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label6
+			// 
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label6.Location = new System.Drawing.Point(8, 72);
+			this.label6.Name = "label6";
+			this.label6.TabIndex = 1;
+			this.label6.Text = "Included Files:";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label7
+			// 
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label7.Location = new System.Drawing.Point(8, 96);
+			this.label7.Name = "label7";
+			this.label7.TabIndex = 1;
+			this.label7.Text = "Author Notes:";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboBox3
+			// 
+			this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox3.Items.AddRange(new object[] {
+														   "1 Space",
+														   "1 Tab",
+														   "Left Aligned"});
+			this.comboBox3.Location = new System.Drawing.Point(120, 24);
+			this.comboBox3.Name = "comboBox3";
+			this.comboBox3.Size = new System.Drawing.Size(121, 21);
+			this.comboBox3.TabIndex = 2;
+			// 
+			// comboBox4
+			// 
+			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox4.Items.AddRange(new object[] {
+														   "1 Space",
+														   "1 Tab",
+														   "Left Aligned"});
+			this.comboBox4.Location = new System.Drawing.Point(120, 48);
+			this.comboBox4.Name = "comboBox4";
+			this.comboBox4.Size = new System.Drawing.Size(121, 21);
+			this.comboBox4.TabIndex = 2;
+			// 
+			// comboBox5
+			// 
+			this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox5.Items.AddRange(new object[] {
+														   "1 Space",
+														   "1 Tab",
+														   "Left Aligned"});
+			this.comboBox5.Location = new System.Drawing.Point(120, 72);
+			this.comboBox5.Name = "comboBox5";
+			this.comboBox5.Size = new System.Drawing.Size(121, 21);
+			this.comboBox5.TabIndex = 2;
+			// 
+			// comboBox6
+			// 
+			this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox6.Items.AddRange(new object[] {
+														   "1 Space",
+														   "1 Tab",
+														   "Left Aligned"});
+			this.comboBox6.Location = new System.Drawing.Point(120, 96);
+			this.comboBox6.Name = "comboBox6";
+			this.comboBox6.Size = new System.Drawing.Size(121, 21);
+			this.comboBox6.TabIndex = 2;
+			// 
+			// label8
+			// 
+			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label8.Location = new System.Drawing.Point(16, 160);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(104, 23);
+			this.label8.TabIndex = 1;
+			this.label8.Text = "Start Author notes:";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboBox7
+			// 
+			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox7.Items.AddRange(new object[] {
+														   "Detect from MOD",
+														   "On same line",
+														   "On new line"});
+			this.comboBox7.Location = new System.Drawing.Point(128, 160);
+			this.comboBox7.Name = "comboBox7";
+			this.comboBox7.Size = new System.Drawing.Size(121, 21);
+			this.comboBox7.TabIndex = 2;
+			// 
 			// OptionsDialog
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -251,6 +412,8 @@ namespace ModStudio
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
+			this.tabPage2.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

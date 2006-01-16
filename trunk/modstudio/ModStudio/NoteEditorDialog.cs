@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialog.cs,v 1.6 2005-12-09 00:50:06 smithydll Exp $
+ *   $Id: NoteEditorDialog.cs,v 1.7 2006-01-16 06:11:57 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -141,7 +141,6 @@ namespace ModStudio
 		public override void Reset()
 		{
 			this.note = null;
-
 		}
 	}
 } 
