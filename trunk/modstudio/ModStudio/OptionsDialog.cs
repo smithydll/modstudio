@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.3 2006-01-16 06:11:57 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.4 2006-01-21 02:50:52 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -54,12 +54,12 @@ namespace ModStudio
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.ComboBox comboBox3;
-		private System.Windows.Forms.ComboBox comboBox4;
-		private System.Windows.Forms.ComboBox comboBox5;
-		private System.Windows.Forms.ComboBox comboBox6;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.ComboBox comboBox7;
+		private System.Windows.Forms.ComboBox comboBoxDescriptionTabbing;
+		private System.Windows.Forms.ComboBox comboBoxFilesToEditTabbing;
+		private System.Windows.Forms.ComboBox comboBoxIncludedFilesTabbing;
+		private System.Windows.Forms.ComboBox comboBoxAuthorNotesTabbing;
+		private System.Windows.Forms.ComboBox comboBoxAuthorNotesStartLine;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -111,27 +111,26 @@ namespace ModStudio
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
-			this.authorEditorDialog1 = new ModStudio.AuthorEditorDialog();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboBoxDescriptionTabbing = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
-			this.comboBox3 = new System.Windows.Forms.ComboBox();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
-			this.comboBox5 = new System.Windows.Forms.ComboBox();
-			this.comboBox6 = new System.Windows.Forms.ComboBox();
+			this.comboBoxFilesToEditTabbing = new System.Windows.Forms.ComboBox();
+			this.comboBoxIncludedFilesTabbing = new System.Windows.Forms.ComboBox();
+			this.comboBoxAuthorNotesTabbing = new System.Windows.Forms.ComboBox();
 			this.label8 = new System.Windows.Forms.Label();
-			this.comboBox7 = new System.Windows.Forms.ComboBox();
+			this.comboBoxAuthorNotesStartLine = new System.Windows.Forms.ComboBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
-			this.panel1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -229,48 +228,45 @@ namespace ModStudio
 			this.label3.Text = "Line Break:";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.button2);
-			this.panel1.Controls.Add(this.button1);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 320);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(410, 48);
-			this.panel1.TabIndex = 1;
-			// 
-			// button2
-			// 
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button2.Location = new System.Drawing.Point(248, 8);
-			this.button2.Name = "button2";
-			this.button2.TabIndex = 1;
-			this.button2.Text = "Ok";
-			this.button2.Click += new System.EventHandler(this.button2_Click);
-			// 
-			// button1
-			// 
-			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.button1.Location = new System.Drawing.Point(328, 8);
-			this.button1.Name = "button1";
-			this.button1.TabIndex = 0;
-			this.button1.Text = "Cancel";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// authorEditorDialog1
-			// 
-			this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(this.authorEditorDialog1_Save);
-			// 
 			// tabPage2
 			// 
 			this.tabPage2.Controls.Add(this.groupBox1);
 			this.tabPage2.Controls.Add(this.label8);
-			this.tabPage2.Controls.Add(this.comboBox7);
+			this.tabPage2.Controls.Add(this.comboBoxAuthorNotesStartLine);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Size = new System.Drawing.Size(402, 294);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Formatting";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.comboBoxDescriptionTabbing);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.label5);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.comboBoxFilesToEditTabbing);
+			this.groupBox1.Controls.Add(this.comboBoxIncludedFilesTabbing);
+			this.groupBox1.Controls.Add(this.comboBoxAuthorNotesTabbing);
+			this.groupBox1.Location = new System.Drawing.Point(8, 8);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(384, 136);
+			this.groupBox1.TabIndex = 2;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Tabbing";
+			// 
+			// comboBoxDescriptionTabbing
+			// 
+			this.comboBoxDescriptionTabbing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxDescriptionTabbing.Items.AddRange(new object[] {
+																			"1 Space",
+																			"1 Tab",
+																			"Left Aligned"});
+			this.comboBoxDescriptionTabbing.Location = new System.Drawing.Point(120, 24);
+			this.comboBoxDescriptionTabbing.Name = "comboBoxDescriptionTabbing";
+			this.comboBoxDescriptionTabbing.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxDescriptionTabbing.TabIndex = 2;
 			// 
 			// label4
 			// 
@@ -280,23 +276,6 @@ namespace ModStudio
 			this.label4.TabIndex = 1;
 			this.label4.Text = "Description:";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.comboBox3);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.label7);
-			this.groupBox1.Controls.Add(this.comboBox4);
-			this.groupBox1.Controls.Add(this.comboBox5);
-			this.groupBox1.Controls.Add(this.comboBox6);
-			this.groupBox1.Location = new System.Drawing.Point(8, 8);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(384, 136);
-			this.groupBox1.TabIndex = 2;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Tabbing";
 			// 
 			// label5
 			// 
@@ -325,53 +304,41 @@ namespace ModStudio
 			this.label7.Text = "Author Notes:";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboBox3
+			// comboBoxFilesToEditTabbing
 			// 
-			this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox3.Items.AddRange(new object[] {
-														   "1 Space",
-														   "1 Tab",
-														   "Left Aligned"});
-			this.comboBox3.Location = new System.Drawing.Point(120, 24);
-			this.comboBox3.Name = "comboBox3";
-			this.comboBox3.Size = new System.Drawing.Size(121, 21);
-			this.comboBox3.TabIndex = 2;
+			this.comboBoxFilesToEditTabbing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxFilesToEditTabbing.Items.AddRange(new object[] {
+																			"1 Space",
+																			"1 Tab",
+																			"Left Aligned"});
+			this.comboBoxFilesToEditTabbing.Location = new System.Drawing.Point(120, 48);
+			this.comboBoxFilesToEditTabbing.Name = "comboBoxFilesToEditTabbing";
+			this.comboBoxFilesToEditTabbing.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxFilesToEditTabbing.TabIndex = 2;
 			// 
-			// comboBox4
+			// comboBoxIncludedFilesTabbing
 			// 
-			this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox4.Items.AddRange(new object[] {
-														   "1 Space",
-														   "1 Tab",
-														   "Left Aligned"});
-			this.comboBox4.Location = new System.Drawing.Point(120, 48);
-			this.comboBox4.Name = "comboBox4";
-			this.comboBox4.Size = new System.Drawing.Size(121, 21);
-			this.comboBox4.TabIndex = 2;
+			this.comboBoxIncludedFilesTabbing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxIncludedFilesTabbing.Items.AddRange(new object[] {
+																			  "1 Space",
+																			  "1 Tab",
+																			  "Left Aligned"});
+			this.comboBoxIncludedFilesTabbing.Location = new System.Drawing.Point(120, 72);
+			this.comboBoxIncludedFilesTabbing.Name = "comboBoxIncludedFilesTabbing";
+			this.comboBoxIncludedFilesTabbing.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxIncludedFilesTabbing.TabIndex = 2;
 			// 
-			// comboBox5
+			// comboBoxAuthorNotesTabbing
 			// 
-			this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox5.Items.AddRange(new object[] {
-														   "1 Space",
-														   "1 Tab",
-														   "Left Aligned"});
-			this.comboBox5.Location = new System.Drawing.Point(120, 72);
-			this.comboBox5.Name = "comboBox5";
-			this.comboBox5.Size = new System.Drawing.Size(121, 21);
-			this.comboBox5.TabIndex = 2;
-			// 
-			// comboBox6
-			// 
-			this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox6.Items.AddRange(new object[] {
-														   "1 Space",
-														   "1 Tab",
-														   "Left Aligned"});
-			this.comboBox6.Location = new System.Drawing.Point(120, 96);
-			this.comboBox6.Name = "comboBox6";
-			this.comboBox6.Size = new System.Drawing.Size(121, 21);
-			this.comboBox6.TabIndex = 2;
+			this.comboBoxAuthorNotesTabbing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAuthorNotesTabbing.Items.AddRange(new object[] {
+																			"1 Space",
+																			"1 Tab",
+																			"Left Aligned"});
+			this.comboBoxAuthorNotesTabbing.Location = new System.Drawing.Point(120, 96);
+			this.comboBoxAuthorNotesTabbing.Name = "comboBoxAuthorNotesTabbing";
+			this.comboBoxAuthorNotesTabbing.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxAuthorNotesTabbing.TabIndex = 2;
 			// 
 			// label8
 			// 
@@ -383,17 +350,44 @@ namespace ModStudio
 			this.label8.Text = "Start Author notes:";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboBox7
+			// comboBoxAuthorNotesStartLine
 			// 
-			this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox7.Items.AddRange(new object[] {
-														   "Detect from MOD",
-														   "On same line",
-														   "On new line"});
-			this.comboBox7.Location = new System.Drawing.Point(128, 160);
-			this.comboBox7.Name = "comboBox7";
-			this.comboBox7.Size = new System.Drawing.Size(121, 21);
-			this.comboBox7.TabIndex = 2;
+			this.comboBoxAuthorNotesStartLine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAuthorNotesStartLine.Items.AddRange(new object[] {
+																			  "On same line",
+																			  "On new line"});
+			this.comboBoxAuthorNotesStartLine.Location = new System.Drawing.Point(128, 160);
+			this.comboBoxAuthorNotesStartLine.Name = "comboBoxAuthorNotesStartLine";
+			this.comboBoxAuthorNotesStartLine.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxAuthorNotesStartLine.TabIndex = 2;
+			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.button2);
+			this.panel1.Controls.Add(this.button1);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel1.Location = new System.Drawing.Point(0, 320);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(410, 48);
+			this.panel1.TabIndex = 1;
+			// 
+			// button2
+			// 
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button2.Location = new System.Drawing.Point(248, 8);
+			this.button2.Name = "button2";
+			this.button2.TabIndex = 1;
+			this.button2.Text = "Ok";
+			this.button2.Click += new System.EventHandler(this.button2_Click);
+			// 
+			// button1
+			// 
+			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.button1.Location = new System.Drawing.Point(328, 8);
+			this.button1.Name = "button1";
+			this.button1.TabIndex = 0;
+			this.button1.Text = "Cancel";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// OptionsDialog
 			// 
@@ -411,9 +405,9 @@ namespace ModStudio
 			this.Load += new System.EventHandler(this.OptionsDialog_Load);
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -422,10 +416,37 @@ namespace ModStudio
 		private void OptionsDialog_Load(object sender, System.EventArgs e)
 		{
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
-			labelModAuthor.Text = "Username: " + reg.GetValue("author_username", "UserName").ToString();
-			labelModAuthor.Text += "\r\nReal Name: " + reg.GetValue("author_realname", "RealName").ToString();
-			labelModAuthor.Text += "\r\nE-mail: " + reg.GetValue("author_email", "invalid@invalid.invalid").ToString();
-			labelModAuthor.Text += "\r\nWebsite: " + reg.GetValue("author_homepage", "http://invalid.invalid/").ToString();
+			labelModAuthor.Text = "Username: " + (String)reg.GetValue("author_username", "UserName");
+			labelModAuthor.Text += "\r\nReal Name: " + (String)reg.GetValue("author_realname", "RealName");
+			labelModAuthor.Text += "\r\nE-mail: " + (String)reg.GetValue("author_email", "invalid@invalid.invalid");
+			labelModAuthor.Text += "\r\nWebsite: " + (String)reg.GetValue("author_homepage", "http://invalid.invalid/");
+			CodeIndents DescriptionIndent;
+			CodeIndents FilesToEditIndent;
+			CodeIndents IncludedFilesIndent;
+			CodeIndents AuthorNotesIndent;
+			StartLine AuthorNotesStartLine;
+			if (((Form)this.Owner).MdiChildren.GetLength(0) > 0)
+			{
+				DescriptionIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent;
+				FilesToEditIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent;
+				IncludedFilesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent;
+				AuthorNotesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent;
+				AuthorNotesStartLine = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine;
+			}
+			else
+			{
+				DescriptionIndent = (CodeIndents)((int)reg.GetValue("description_indent", CodeIndents.Space));
+				FilesToEditIndent = (CodeIndents)((int)reg.GetValue("files-to-edit_indent", CodeIndents.RightAligned));
+				IncludedFilesIndent = (CodeIndents)((int)reg.GetValue("included-files_indent", CodeIndents.RightAligned));
+				AuthorNotesIndent = (CodeIndents)((int)reg.GetValue("authornotes_indent", CodeIndents.Space));
+				AuthorNotesStartLine = (StartLine)((int)reg.GetValue("authornotes_startline", StartLine.Same));
+			}
+			comboBoxDescriptionTabbing.SelectedIndex = (int)DescriptionIndent;
+			comboBoxFilesToEditTabbing.SelectedIndex = (int)FilesToEditIndent;
+			comboBoxIncludedFilesTabbing.SelectedIndex = (int)IncludedFilesIndent;
+			comboBoxAuthorNotesTabbing.SelectedIndex = (int)AuthorNotesIndent;
+			comboBoxAuthorNotesStartLine.SelectedIndex = (int)AuthorNotesStartLine;
+			reg.Close();
 		}
 
 		private void button1_Click(object sender, System.EventArgs e)
@@ -436,6 +457,19 @@ namespace ModStudio
 
 		private void button2_Click(object sender, System.EventArgs e)
 		{
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings", true);
+			reg.SetValue("description_indent", comboBoxDescriptionTabbing.SelectedIndex);
+			reg.SetValue("files-to-edit_indent", comboBoxFilesToEditTabbing.SelectedIndex);
+			reg.SetValue("included-files_indent", comboBoxIncludedFilesTabbing.SelectedIndex);
+			reg.SetValue("authornotes_indent", comboBoxAuthorNotesTabbing.SelectedIndex);
+			reg.SetValue("authornotes_startline", comboBoxAuthorNotesStartLine.SelectedIndex);
+			reg.Close();
+
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent = (CodeIndents)comboBoxDescriptionTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent = (CodeIndents)comboBoxFilesToEditTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent = (CodeIndents)comboBoxIncludedFilesTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent = (CodeIndents)comboBoxAuthorNotesTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine = (StartLine)comboBoxAuthorNotesStartLine.SelectedIndex;
 			this.Close();
 			this.Dispose();
 		}
@@ -447,6 +481,7 @@ namespace ModStudio
 			reg.SetValue("author_realname", e.Entry.RealName);
 			reg.SetValue("author_email", e.Entry.Email);
 			reg.SetValue("author_homepage", e.Entry.Homepage);
+			reg.Close();
 			OptionsDialog_Load(this, null);
 		}
 
@@ -458,6 +493,7 @@ namespace ModStudio
 				reg.GetValue("author_realname", "RealName").ToString(),
 				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),
 				reg.GetValue("author_homepage", "http://invalid.invalid/").ToString());
+			reg.Close();
 			authorEditorDialog1.ShowDialog(this);
 		}
 	}
