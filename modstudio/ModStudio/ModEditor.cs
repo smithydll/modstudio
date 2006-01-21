@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.14 2006-01-16 06:11:57 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.15 2006-01-21 02:50:52 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -133,11 +133,17 @@ namespace ModStudio
 				reg.GetValue("author_realname", "RealName").ToString(),
 				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),
 				reg.GetValue("author_homepage", "http://invalid.invalid/").ToString()));
+			ThisMod.DescriptionIndent = (CodeIndents)reg.GetValue("description_indent", ThisMod.DescriptionIndent);
+			ThisMod.ModFilesToEditIndent = (CodeIndents)reg.GetValue("files-to-edit_indent", ThisMod.ModFilesToEditIndent);
+			ThisMod.ModIncludedFilesIndent = (CodeIndents)reg.GetValue("included-files_indent", ThisMod.ModIncludedFilesIndent);
+			ThisMod.AuthorNotesIndent = (CodeIndents)reg.GetValue("authornotes_indent", ThisMod.AuthorNotesIndent);
+			ThisMod.AuthorNotesStartLine = (StartLine)reg.GetValue("authornotes_startline", ThisMod.AuthorNotesStartLine);
 			//ThisMod.Header.ModAuthor.AddEntry(new PhpbbMod.ModAuthorEntry("UserName", "RealName", "invalid@invalid.invalid", "http://invalid.invalid/"));
 			ThisMod.Header.ModVersion = new ModVersion(0,0,0);
 			ThisMod.Actions.Add(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM", ""));
 			ThisMod.lastReadFormat = PhpbbMod.ModFormats.TextMOD;
 			ThisMod.Header.License = "http://opensource.org/licenses/gpl-license.php GNU General Public License v2";
+			reg.Close();
 		}
 
 		/// <summary>
