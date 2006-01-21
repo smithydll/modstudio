@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.12 2006-01-16 06:07:05 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.13 2006-01-21 02:36:27 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -379,6 +379,18 @@ namespace ModTemplateTools
 									if (TextModLines[i].StartsWith("##"))
 									{
 										tempii = TextModLines[i].Substring(2, TextModLines[i].Length - 2);
+										if (tempii.StartsWith("\t"))
+										{
+											DescriptionIndent = CodeIndents.Tab;
+										}
+										else if (tempii.StartsWith("    "))
+										{
+											DescriptionIndent = CodeIndents.RightAligned;
+										}
+										else if (tempii.StartsWith(" "))
+										{
+											DescriptionIndent = CodeIndents.Space;
+										}
 									}
 									else
 									{
@@ -441,6 +453,20 @@ namespace ModTemplateTools
 									{
 										tempii = TextModLines[i];
 									}
+
+									if (tempii.StartsWith("\t"))
+									{
+										ModFilesToEditIndent = CodeIndents.Tab;
+									}
+									else if (tempii.StartsWith("    "))
+									{
+										ModFilesToEditIndent = CodeIndents.RightAligned;
+									}
+									else if (tempii.StartsWith(" "))
+									{
+										ModFilesToEditIndent = CodeIndents.Space;
+									}
+
 									/*string[] tempA = Header.ModFilesToEdit;
 									Header.ModFilesToEdit = new string[tempA.Length + 1];
 									tempA.CopyTo(Header.ModFilesToEdit, 0);*/
@@ -474,6 +500,20 @@ namespace ModTemplateTools
 									{
 										tempii = TextModLines[i];
 									}
+
+									if (tempii.StartsWith("\t"))
+									{
+										ModIncludedFilesIndent = CodeIndents.Tab;
+									}
+									else if (tempii.StartsWith("    "))
+									{
+										ModIncludedFilesIndent = CodeIndents.RightAligned;
+									}
+									else if (tempii.StartsWith(" "))
+									{
+										ModIncludedFilesIndent = CodeIndents.Space;
+									}
+
 									/*string[] tempA = Header.ModIncludedFiles;
 									Header.ModIncludedFiles = new string[tempA.Length + 1];
 									tempA.CopyTo(Header.ModIncludedFiles, 0);*/
@@ -501,7 +541,7 @@ namespace ModTemplateTools
 						case 11:
 							if (TextModLines[i].ToUpper().StartsWith("## AUTHOR NOTE")) 
 							{
-								Header.ModAuthorNotes = new StringLocalised(Regex.Replace(TextModLines[i], "\\#\\# Author Note(s|)\\:(\\W|)", "", RegexOptions.IgnoreCase));
+								Header.ModAuthorNotes = new StringLocalised(Regex.Replace(TextModLines[i], @"\#\# Author Note(s|)\:(\W|)", "", RegexOptions.IgnoreCase));
 								InMultiLineElement = true;
 							} 
 							else 
@@ -515,7 +555,30 @@ namespace ModTemplateTools
 								} 
 								else 
 								{
-									Header.ModAuthorNotes[defaultLanguage] += Newline + TextModLines[i].Replace("## ", "").Replace("##", "");
+									string tempii = null;
+									if (TextModLines[i].StartsWith("##"))
+									{
+										tempii = TextModLines[i].Substring(2, TextModLines[i].Length - 2);
+									}
+									else
+									{
+										tempii = TextModLines[i];
+									}
+
+									if (tempii.StartsWith("\t"))
+									{
+										AuthorNotesIndent = CodeIndents.Tab;
+									}
+									else if (tempii.StartsWith("    "))
+									{
+										AuthorNotesIndent = CodeIndents.RightAligned;
+									}
+									else if (tempii.StartsWith(" "))
+									{
+										AuthorNotesIndent = CodeIndents.Space;
+									}
+
+									Header.ModAuthorNotes[defaultLanguage] += Newline + tempii.TrimStart(' ').TrimStart('\t').TrimEnd(' ');
 								}
 							}
 							break;
@@ -574,8 +637,16 @@ namespace ModTemplateTools
 			Header.ModphpBBVersion = new ModVersion(2, 0, 0);
 			if (Header.ModAuthorNotes[defaultLanguage].StartsWith("\r\n") || Header.ModAuthorNotes[defaultLanguage].StartsWith("\n"))
 			{
-				char[] trimChars = {'\r','\n'};
-				Header.ModAuthorNotes[defaultLanguage].TrimStart(trimChars);
+				if (Header.ModAuthorNotes[defaultLanguage].StartsWith("\r\n"))
+				{
+					Header.ModAuthorNotes[defaultLanguage] = Header.ModAuthorNotes[defaultLanguage].Remove(0,2);
+				}
+				else if (Header.ModAuthorNotes[defaultLanguage].StartsWith("\n"))
+				{
+					Header.ModAuthorNotes[defaultLanguage] = Header.ModAuthorNotes[defaultLanguage].Remove(0,1);
+				}
+				//char[] trimChars = {'\r','\n'};
+				//Header.ModAuthorNotes[defaultLanguage].TrimStart(trimChars);
 				AuthorNotesStartLine = StartLine.Next;
 			}
 			else
@@ -1143,7 +1214,7 @@ namespace ModTemplateTools
 			}
 			string AuthorStartLine = "";
 			if (AuthorNotesStartLine == StartLine.Next) AuthorStartLine = Newline.ToString();
-			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", AuthorStartLine + Header.ModAuthorNotes.GetValue().Replace(Newline.ToString(), Newline.ToString() + AuthorNotesStartOfLine));
+			BlankTemplate = BlankTemplate.Replace("<mod.author_notes/>", ((String)(AuthorStartLine + Header.ModAuthorNotes.GetValue())).Replace(Newline.ToString(), Newline.ToString() + AuthorNotesStartOfLine));
 			string MyMODHistory;
 			System.Text.StringBuilder NewMyMODHistory = new System.Text.StringBuilder();
 			if (Header.ModHistory.Count > 0)
