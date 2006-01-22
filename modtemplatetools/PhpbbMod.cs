@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.13 2006-01-21 02:36:27 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.14 2006-01-22 23:40:33 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -296,6 +296,10 @@ namespace ModTemplateTools
 			LastReadFormat = ModFormats.TextMOD;
 			ReadTextHeader(TextMod);
 			ReadTextActions(TextMod);
+			if (Header.ModInstallationTime == 0)
+			{
+				UpdateInstallationTime();
+			}
 		}
 
 		/// <summary>
@@ -350,7 +354,7 @@ namespace ModTemplateTools
 						case 3:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD AUTHOR")) 
 							{
-								string[] MODTempAuthor = Regex.Replace(TextModLines[i], "^## MOD Author(|, secondary):([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)(([a-z]+?://){1}([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
+								string[] MODTempAuthor = Regex.Replace(TextModLines[i], "^## MOD Author(|, secondary):([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)((([a-z]+?://){1}|)([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
 								Header.ModAuthor.Add(new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]));
 							} 
 							else if (TextModLines[i].ToUpper().StartsWith("## MOD DESCRIPTION")) 
@@ -422,7 +426,14 @@ namespace ModTemplateTools
 						case 7:
 							if (TextModLines[i].ToUpper().StartsWith("## INSTALLATION TIME")) 
 							{
-								Header.ModInstallationTime = StringToSeconds(Regex.Replace(TextModLines[i], "\\#\\# Installation Time\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
+								try
+								{
+									Header.ModInstallationTime = StringToSeconds(Regex.Replace(TextModLines[i], "\\#\\# Installation Time\\:", "", RegexOptions.IgnoreCase).TrimStart(' ').TrimStart('\t').TrimEnd(' '));
+								}
+								catch (System.FormatException)
+								{
+									Header.ModInstallationTime = 0;
+								}
 								StartOffset = i + 1;
 								e++;
 								i = TextModLines.Length;
@@ -953,6 +964,7 @@ namespace ModTemplateTools
 									case "before-add":
 										actionTitle = "BEFORE, ADD";
 										break;
+									case "replace":
 									case "replace-with":
 										actionTitle = "REPLACE WITH";
 										break;
@@ -987,6 +999,7 @@ namespace ModTemplateTools
 											case "before-add":
 												actionTitle = "BEFORE, ADD";
 												break;
+											case "replace":
 											case "replace-with":
 												actionTitle = "REPLACE WITH";
 												break;
@@ -1319,7 +1332,7 @@ namespace ModTemplateTools
 			foreach (string Language in Header.ModDescription)
 			{
 				mod.descriptionRow newRow = XmlDataSet.description.NewdescriptionRow();
-				newRow.description_Text = Header.ModTitle[Language];
+				newRow.description_Text = Header.ModDescription[Language];
 				newRow.lang = Language;
 				XmlDataSet.description.Rows.Add(newRow);
 			}
@@ -1595,6 +1608,7 @@ namespace ModTemplateTools
 						inLineFindRow.SetParentRow(currentInLineEditRow);
 						XmlDataSet._inline_find.Rows.Add(inLineFindRow);
 						lastInLineActionType = "FIND";
+						lastActionType = "EDIT";
 						break;
 					case "IN-LINE AFTER, ADD":
 					case "IN-LINE BEFORE, ADD":
@@ -1634,7 +1648,15 @@ namespace ModTemplateTools
 				}
 			}
 
-			return XmlDataSet.GetXml();
+			//XmlDataSet.Namespace = "http://www.phpbb.com/mods/modx-1.0.xsd";
+
+			StringBuilder sb = new StringBuilder();
+			StringWriter sw = new StringWriter(sb);
+			XmlTextWriter xw = new ModxWriter(sw, "http://www.manipef1.com/phpbb/subsilver.php"); //XmlTextWriter(sw);
+			xw.Formatting = Formatting.Indented;
+			XmlDataSet.WriteXml(xw);
+
+			return sb.ToString(); //XmlDataSet.GetXml();
 		}
 
 		/// <summary>

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionEditor.cs,v 1.8 2006-01-21 02:50:52 smithydll Exp $
+ *   $Id: ModActionEditor.cs,v 1.9 2006-01-22 23:38:12 smithydll Exp $
  *
  *
  ***************************************************************************/
