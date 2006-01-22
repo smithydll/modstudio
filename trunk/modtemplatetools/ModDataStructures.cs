@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDataStructures.cs,v 1.4 2006-01-21 02:36:27 smithydll Exp $
+ *   $Id: ModDataStructures.cs,v 1.5 2006-01-22 23:40:32 smithydll Exp $
  *
  *
  ***************************************************************************/
