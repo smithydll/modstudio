@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.14 2006-01-22 23:40:33 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.15 2006-01-25 02:08:11 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -902,7 +902,7 @@ namespace ModTemplateTools
 			try 
 			{ 
 				Header.ModInstallationLevel = ModInstallationLevelParse(XmlDataSet.installation.Rows[0]["level"].ToString());
-				Header.ModInstallationTime = (int)XmlDataSet.installation.Rows[0]["time"];
+				Header.ModInstallationTime = int.Parse(XmlDataSet.installation.Rows[0]["time"].ToString());
 				// TODO: easymod-compliant
 				//Header.ModEasymodCompatibility = (bool)XmlDataSet.installation.Rows[0]["easymod-compliant"];
 				// TODO: mod-config
@@ -1315,6 +1315,10 @@ namespace ModTemplateTools
 		{
 			ModTemplateTools.mod XmlDataSet = new ModTemplateTools.mod();
 
+			mod.headerRow newHeaderRow = XmlDataSet.header.NewheaderRow();
+			newHeaderRow.license = Header.License;
+			XmlDataSet.header.Rows.Add(newHeaderRow);
+
 			//
 			// Title
 			//
@@ -1323,6 +1327,7 @@ namespace ModTemplateTools
 				mod.titleRow newRow = XmlDataSet.title.NewtitleRow();
 				newRow.title_Text = Header.ModTitle[Language];
 				newRow.lang = Language;
+				newRow.SetParentRow(newHeaderRow);
 				XmlDataSet.title.Rows.Add(newRow);
 			}
 
@@ -1334,6 +1339,7 @@ namespace ModTemplateTools
 				mod.descriptionRow newRow = XmlDataSet.description.NewdescriptionRow();
 				newRow.description_Text = Header.ModDescription[Language];
 				newRow.lang = Language;
+				newRow.SetParentRow(newHeaderRow);
 				XmlDataSet.description.Rows.Add(newRow);
 			}
 
@@ -1345,6 +1351,7 @@ namespace ModTemplateTools
 				mod._author_notesRow newRow = XmlDataSet._author_notes.New_author_notesRow();
 				newRow._author_notes_Text = Header.ModAuthorNotes[Language];
 				newRow.lang = Language;
+				newRow.SetParentRow(newHeaderRow);
 				XmlDataSet._author_notes.Rows.Add(newRow);
 			}
 
@@ -1352,6 +1359,7 @@ namespace ModTemplateTools
 			// Authors
 			//
 			mod._author_groupRow authorGroupRow = XmlDataSet._author_group.New_author_groupRow();
+			authorGroupRow.SetParentRow(newHeaderRow);
 			XmlDataSet._author_group.Rows.Add(authorGroupRow);
 			foreach (ModAuthorEntry entry in Header.ModAuthor)
 			{
@@ -1383,6 +1391,7 @@ namespace ModTemplateTools
 			// Version
 			//
 			mod._mod_versionRow versionRow = XmlDataSet._mod_version.New_mod_versionRow();
+			versionRow.SetParentRow(newHeaderRow);
 			versionRow.major = (ushort)Header.ModVersion.VersionMajor;
 			versionRow.minor = (ushort)Header.ModVersion.VersionMinor;
 			versionRow.revision = (ushort)Header.ModVersion.VersionRevision;
@@ -1396,13 +1405,17 @@ namespace ModTemplateTools
 			// Installation
 			//
 			mod.installationRow installationRow = XmlDataSet.installation.NewinstallationRow();
-			installationRow.level = Header.ModInstallationLevel.ToString();
+			installationRow.SetParentRow(newHeaderRow);
+			installationRow.level = Header.ModInstallationLevel.ToString().ToLower();
 			installationRow.time = (ulong)Header.ModInstallationTime;
 			// TODO: target version, right now target version isn't supported by ModTemplateTools
 			// full support to come, release is currently omitted, need full support!!!
+			// For the moment we will say everything is phpBB2.0 compliant
+			Header.ModphpBBVersion = new ModVersion(2,0,0);
 			if (Header.ModphpBBVersion != null)
 			{
 				mod._target_versionRow targetVersionRow = XmlDataSet._target_version.New_target_versionRow();
+				targetVersionRow._target_primary = Header.ModphpBBVersion.VersionMajor + "." + Header.ModphpBBVersion.VersionMinor;
 				// major
 				mod._target_majorRow targetMajorRow = XmlDataSet._target_major.New_target_majorRow();
 				targetMajorRow.allow = "exact";
@@ -1425,6 +1438,7 @@ namespace ModTemplateTools
 			// History
 			//
 			mod.historyRow historyRow = XmlDataSet.history.NewhistoryRow();
+			historyRow.SetParentRow(newHeaderRow);
 			if (Header.ModHistory.Count > 0)
 			{
 				XmlDataSet.history.Rows.Add(historyRow);
@@ -1476,6 +1490,7 @@ namespace ModTemplateTools
 				mod.metaRow newRow = XmlDataSet.meta.NewmetaRow();
 				newRow.name = key;
 				newRow.content = value;
+				newRow.SetParentRow(newHeaderRow);
 				XmlDataSet.meta.Rows.Add(newRow);
 			}
 
@@ -1578,7 +1593,7 @@ namespace ModTemplateTools
 								type = "before-add";
 								break;
 							case "REPLACE WITH":
-								type = "replace";
+								type = "replace-with";
 								break;
 							case "INCREMENT":
 								type = "operation";
@@ -1624,7 +1639,7 @@ namespace ModTemplateTools
 								type = "before-add";
 								break;
 							case "IN-LINE REPLACE WITH":
-								type = "replace";
+								type = "replace-with";
 								break;
 							case "IN-LINE INCREMENT":
 								type = "operation";
@@ -1645,8 +1660,12 @@ namespace ModTemplateTools
 						diyRow.SetParentRow(actiongroupRow);
 						XmlDataSet._diy_instructions.Rows.Add(diyRow);
 						break;
+					default:
+						Console.WriteLine("Problem with action: " + ma.ActionType);
+						break;
 				}
 			}
+			XmlDataSet._action_group.Rows.Add(actiongroupRow);
 
 			//XmlDataSet.Namespace = "http://www.phpbb.com/mods/modx-1.0.xsd";
 
