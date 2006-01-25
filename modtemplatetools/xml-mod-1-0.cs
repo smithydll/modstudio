@@ -845,7 +845,7 @@ namespace ModTemplateTools {
         private void InitClass() {
             this.DataSetName = "mod";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/mod-template-reloaded-revised.xsd";
+            this.Namespace = "http://www.phpbb.com/mods/xml/modx-1.0.xsd";
             this.Locale = new System.Globalization.CultureInfo("en-AU");
             this.CaseSensitive = false;
             this.EnforceConstraints = false;
