@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.8 2006-01-22 23:38:13 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.9 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: PhpbbMod.cs,v 1.15 2006-01-25 02:08:11 smithydll Exp $
+ *   $Id: PhpbbMod.cs,v 1.16 2006-02-17 04:08:23 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -62,11 +62,31 @@ namespace ModTemplateTools
 
 		private const char Newline = '\n';
 		private const string WinNewLine = "\r\n";
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public CodeIndents DescriptionIndent = CodeIndents.Space;
+		/// <summary>
+		/// 
+		/// </summary>
 		public CodeIndents AuthorNotesIndent = CodeIndents.Space;
+		/// <summary>
+		/// 
+		/// </summary>
 		public StartLine AuthorNotesStartLine = StartLine.Same;
+		/// <summary>
+		/// 
+		/// </summary>
 		public CodeIndents ModFilesToEditIndent = CodeIndents.RightAligned;
+		/// <summary>
+		/// 
+		/// </summary>
 		public CodeIndents ModIncludedFilesIndent = CodeIndents.RightAligned;
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool ParseErrors = false;
 
 		private char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 
@@ -256,6 +276,8 @@ namespace ModTemplateTools
 		/// </summary>
 		public void UpdateIncludedFiles()
 		{
+			Header.ModIncludedFiles = new StringCollection();
+			Header.ModIncludedFiles.Clear();
 			for (int i = 0; i < Actions.Count; i++)
 			{
 				if (Actions[i].ActionType == "COPY")
@@ -277,6 +299,7 @@ namespace ModTemplateTools
 		/// </summary>
 		public void UpdateFilesToEdit()
 		{
+			Header.ModFilesToEdit = new StringCollection();
 			Header.ModFilesToEdit.Clear();
 			foreach (ModAction e in Actions)
 			{
@@ -306,7 +329,7 @@ namespace ModTemplateTools
 		/// Read and parse a text MOD's header information. It assumes everything is in the default language i.e. English (en-GB).
 		/// </summary>
 		/// <param name="TextMod">The MOD to parse.</param>
-		private void ReadTextHeader(string TextMod)
+		public void ReadTextHeader(string TextMod)
 		{
 			double start = Environment.TickCount;
 			TextMod = TextMod.Replace("\r", "");
@@ -329,18 +352,24 @@ namespace ModTemplateTools
 						case 1:
 							if (TextModLines[i].StartsWith("## EasyMod")) 
 							{
-								ModVersion EMVersion = ModVersion.Parse((TextModLines[i].Replace("## EasyMod", "").Replace("compliant", "").Replace("compatible", "")));
-								Header.ModEasymodCompatibility = EMVersion;
+								try
+								{
+									ModVersion EMVersion = ModVersion.Parse((TextModLines[i].Replace("## EasyMod", "").Replace("compliant", "").Replace("compatible", "")));
+									Header.ModEasymodCompatibility = EMVersion;
+								}
+								catch (NotAModVersionException)
+								{
+									ParseErrors = true;
+								}
 								StartOffset = i + 1;
 								e++;
-								i = TextModLines.Length;
 							}
-							if (TextModLines[i].StartsWith("##")) 
+							if (TextModLines[i].StartsWith("###")) 
 							{
 								StartOffset = i + 1;
-								e += 1;
-								i = TextModLines.Length;
+								e++;
 							}
+							i = TextModLines.Length;
 							break;
 						case 2:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD TITLE")) 
@@ -354,7 +383,7 @@ namespace ModTemplateTools
 						case 3:
 							if (TextModLines[i].ToUpper().StartsWith("## MOD AUTHOR")) 
 							{
-								string[] MODTempAuthor = Regex.Replace(TextModLines[i], "^## MOD Author(|, secondary):([\\W]+?)((?!n\\/a)[\\w\\s\\.\\-]+?|)\\W<(\\W|)(n\\/a|[a-z0-9\\(\\) \\.\\-_\\+\\[\\]@]+|)(\\W|)>\\W(\\((([\\w\\s\\.\\'\\-]+?)|n\\/a)\\)|)(\\W|)((([a-z]+?://){1}|)([a-z0-9\\-\\.,\\?!%\\*_\\#:;~\\\\&$@\\/=\\+\\(\\)]+)|n\\/a|)(([\\W]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
+								string[] MODTempAuthor = Regex.Replace(TextModLines[i], @"^## MOD Author(|, secondary):([\s]+?)((?!\s)(?!n\/a)[\w\s\.\-\']+?|)\s<(\s|)(n\/a|[a-z0-9\(\) \.\-_\+\[\]@]+|)(\s|)>\s(\((([\w\s\.\'\-]+?)|n\/a)\)|)(\s|)((([a-z]+?://){1}|)([a-z0-9\-\.,\?!%\*_\#:;~\\&$@\/=\+\(\)]+)|n\/a|)(([\s]+?)|)$", "$3\t$5\t$8\t$11", RegexOptions.IgnoreCase).Split('\t');
 								Header.ModAuthor.Add(new ModAuthorEntry(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]));
 							} 
 							else if (TextModLines[i].ToUpper().StartsWith("## MOD DESCRIPTION")) 
@@ -610,11 +639,20 @@ namespace ModTemplateTools
 								} 
 								else 
 								{
-									if (Regex.IsMatch(TextModLines[i], " - Version", RegexOptions.IgnoreCase)) 
+									if (Regex.IsMatch(TextModLines[i], @"((([0-9\-]+?)){3}) \- Version", RegexOptions.IgnoreCase)) 
 									{
 										//ModVersion HVersion = ModVersion.Parse(Regex.Match(TextModLines[i], "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{1}?|)([ \\t]|)$").Value);
 										//Console.WriteLine(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
-										ModVersion HVersion = ModVersion.Parse(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
+										ModVersion HVersion;
+										try
+										{
+											HVersion = ModVersion.Parse(Regex.Replace(TextModLines[i], "^\\#\\#([0-9\\- \\t]+?)Version ([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$2.$3.$5$6", RegexOptions.IgnoreCase));
+										}
+										catch (NotAModVersionException)
+										{
+											ParseErrors = true;
+											HVersion = new ModVersion();
+										}
 
 										Header.ModHistory.Add(new ModHistoryEntry(HVersion,System.DateTime.Parse(Regex.Match(TextModLines[i], "([0-9]+)(\\/|\\\\|\\-)([0-9]+)(\\/|\\\\|\\-)([0-9]+)").Value),""));
 
@@ -627,15 +665,23 @@ namespace ModTemplateTools
 										if (!((TextModLines[i] == "##" || TextModLines[i] == "## "))) 
 										{
 											int UB = Header.ModHistory.Count - 1;
-											int UB2 = Header.ModHistory[UB].HistoryChangeLog.Count - 1;
-											string nextLine = Regex.Replace(TextModLines[i], @"##([\s]*)", "");
-											if (nextLine.StartsWith("-"))
+											// only match changes if we are in a history entry
+											if (Header.ModHistory.Count > 0)
 											{
-												Header.ModHistory[UB].HistoryChangeLog[defaultLanguage].Add(nextLine.Substring(1));
-											}
-											else
-											{
-												Header.ModHistory[UB].HistoryChangeLog[defaultLanguage][UB2] += Newline + nextLine;
+												int UB2 = Header.ModHistory[UB].HistoryChangeLog.Count - 1;
+												
+												string nextLine = Regex.Replace(TextModLines[i], @"##([\s]*)", "");
+												if (nextLine.StartsWith("-"))
+												{
+													Header.ModHistory[UB].HistoryChangeLog[defaultLanguage].Add(nextLine.Substring(1));
+												}
+												else
+												{
+													if (Header.ModHistory[UB].HistoryChangeLog.Count > 0)
+													{
+														Header.ModHistory[UB].HistoryChangeLog[defaultLanguage][UB2] += Newline + nextLine;
+													}
+												}
 											}
 										}
 									}
@@ -702,7 +748,8 @@ namespace ModTemplateTools
 			{
 				if (!ModTextLines[i].StartsWith("##")) 
 				{
-					if (ModTextLines[i].StartsWith("#") && ModTextLines[i + 1].StartsWith("#-----[") && FirstActionFound) 
+					//if (ModTextLines[i].StartsWith("#") && ModTextLines[i + 1].StartsWith("#-----[") && FirstActionFound) 
+					if (ModTextLines[i].StartsWith("#") && Regex.IsMatch(ModTextLines[i + 1], @"^\#([\-]+)\[") && FirstActionFound) 
 					{
 						NextMODActionComm = NextMODActionComm.TrimStart('\n');
 						ThisMODActionComm = ThisMODActionComm.TrimStart('\n');
@@ -744,7 +791,7 @@ namespace ModTemplateTools
 							ThisMODActionBody += ModTextLines[i];
 						}
 					}
-					if (ModTextLines[i].StartsWith("#-----[")) 
+					if (Regex.IsMatch(ModTextLines[i], @"^\#([\-]+)\[")) //ModTextLines[i].StartsWith("#-----[")) 
 					{
 						InMODAction = true;
 						FirstActionFound = true;
@@ -876,12 +923,18 @@ namespace ModTemplateTools
 			try
 			{
 				ModVersion tempVersion = new ModVersion();
-				tempVersion.VersionMajor = (int)XmlDataSet._mod_version.Rows[0]["major"];
-				tempVersion.VersionMinor = (int)XmlDataSet._mod_version.Rows[0]["minor"];
-				tempVersion.VersionRevision = (int)XmlDataSet._mod_version.Rows[0]["revision"];
-				if (XmlDataSet._mod_version.Rows[0]["revision"].ToString().ToCharArray().Length == 1)
+				tempVersion.VersionMajor = int.Parse(XmlDataSet._mod_version.Rows[0]["major"].ToString());
+				tempVersion.VersionMinor = int.Parse(XmlDataSet._mod_version.Rows[0]["minor"].ToString());
+				tempVersion.VersionRevision = int.Parse(XmlDataSet._mod_version.Rows[0]["revision"].ToString());
+				try
 				{
-					tempVersion.VersionRelease = XmlDataSet._mod_version.Rows[0]["release"].ToString().ToCharArray()[0];
+					if (XmlDataSet._mod_version.Rows[0]["revision"].ToString().ToCharArray().Length == 1)
+					{
+						tempVersion.VersionRelease = XmlDataSet._mod_version.Rows[0]["release"].ToString().ToCharArray()[0];
+					}
+				}
+				catch
+				{
 				}
 				Header.ModVersion = tempVersion;
 			}
@@ -937,6 +990,7 @@ namespace ModTemplateTools
 			// open
 			// this is very specific, the FINDs always go BEFORE the actions
 			// followed by IN-LINE actions, and lastly comments
+			bool firstFindInEdit = true;
 			for (int i = 0; i < XmlDataSet.open.Rows.Count; i++)
 			{
 				Actions.Add(new ModAction("OPEN", XmlDataSet.open.Rows[i]["src"].ToString(), ""));
@@ -944,11 +998,34 @@ namespace ModTemplateTools
 				{
 					if ((int)XmlDataSet.edit.Rows[j]["open_Id"] == (int)XmlDataSet.open.Rows[i]["open_Id"])
 					{
+						firstFindInEdit = true;
 						for (int k = 0; k < XmlDataSet.find.Rows.Count; k++)
 						{
 							if ((int)XmlDataSet.find.Rows[k]["edit_Id"] == (int)XmlDataSet.edit.Rows[j]["edit_Id"])
 							{
-								Actions.Add(new ModAction("FIND", XmlDataSet.find.Rows[k]["find_Text"].ToString(), "", XmlDataSet.find.Rows[k]["type"].ToString()));
+								StringLocalised thisComment = new StringLocalised();
+								if (firstFindInEdit)
+								{
+									for(int l = 0; l < XmlDataSet.comment.Rows.Count; l++)
+									{
+										if ((int)XmlDataSet.comment.Rows[l]["edit_Id"] == (int)XmlDataSet.edit.Rows[j]["edit_Id"])
+										{
+											try
+											{
+												thisComment.Add((String)XmlDataSet.comment.Rows[l]["comment_Text"], (String)XmlDataSet.comment.Rows[l]["lang"]);
+											}
+											catch
+											{
+											}
+										}
+									}
+								}
+								else
+								{
+									thisComment = new StringLocalised("");
+								}
+								Actions.Add(new ModAction("FIND", XmlDataSet.find.Rows[k]["find_Text"].ToString(), thisComment, XmlDataSet.find.Rows[k]["type"].ToString()));
+								firstFindInEdit = false;
 							}
 						}
 						for (int k = 0; k < XmlDataSet.action.Rows.Count; k++)
@@ -1027,6 +1104,85 @@ namespace ModTemplateTools
 		}
 
 		/// <summary>
+		/// Reads the contents of a patch (diff) file into the memory stream of a MOD. This read format cannot be saved into.
+		/// must use the same settings as phpBB uses for it's patch releases
+		/// </summary>
+		/// <param name="PatchFile">The contents of a patch file</param>
+		public void ReadPatch(string PatchFile)
+		{
+			/*LastReadFormat = ModFormats.TextMOD;
+			string[] patchLines = PatchFile.Replace("\r","").Split('\n');
+			Header = new ModHeader();
+			Actions = new ModActions();
+			bool firstLine = true;
+			int paddingChars = 0;
+			bool inSeed = false; // string to find
+			bool inRepl = false; // replacement, addition, or subtraction +,-,!
+			string tempAction;
+			int actionType = 0; // 1 = +, 2 = -, 3 = !
+			for (int i = 0; i < patchLines.Length; i++)
+			{
+				string line = patchLines[i];
+				if (firstLine)
+				{
+					paddingChars = line.IndexOf("diff");
+					firstLine = false;
+				}
+				line = line.Remove(0,paddingChars);
+
+				if (line.Length > 1)
+				{
+					switch (line[0])
+					{
+						case '+':
+							tempAction += line.Remove(0,2);
+							break;
+						case '-':
+							tempAction += line.Remove(0,2);
+							break;
+						case '!':
+							tempAction += line.Remove(0,2);
+							break;
+					}
+				}
+
+				// lets just hope file names don't contain spaces
+				string[] lineParts = line.Split(' ');
+				if (lineParts.Length >= 3)
+				{
+					if (lineParts[0] == "diff" && lineParts[1] == "-cRN")
+					{
+						Actions.Add(new ModAction("OPEN", lineParts[2], ""));
+					}
+					if (lineParts[0] == "***" && lineParts[2] == "***")
+					{
+						inSeed = true;
+						tempAction = "";
+					}
+					if (lineParts[0] == "---" && lineParts[2] == "---")
+					{
+						inRepl = true;
+						inSeed = false;
+						tempAction = "";
+					}
+					if (lineParts[0] == "***" && lineParts[2] != "***")
+					{
+						// Nothing, we already added the action
+					}
+					if (lineParts[0] == "---" && lineParts[2] != "---")
+					{
+						// Nothing, we already added the action
+					}
+				}
+				if (lineParts[0] == "***************")
+				{
+					inRepl = false;
+				}
+			}
+			Actions.Add(new ModAction("SAVE/CLOSE ALL FILES", "", "EoM"));*/
+		}
+
+		/// <summary>
 		/// Read and parse a file containing a MOD.
 		/// </summary>
 		/// <param name="FileName">A string containing the file path to the MOD.</param>
@@ -1048,7 +1204,12 @@ namespace ModTemplateTools
 			}
 			else if (FileName.ToLower().EndsWith(".xml"))
 			{
-				 ReadXml(FileName);
+				ReadXml(FileName);
+			}
+			else if (FileName.ToLower().EndsWith(".patch"))
+			{
+				string patchFile = OpenTextFile(FileName);
+				if (patchFile.StartsWith("diff")) ReadPatch(patchFile);
 			}
 		}
 
@@ -1283,9 +1444,9 @@ namespace ModTemplateTools
 						NewModBody.Append("#-----[ " + MA.ActionType + " ]------------------------------------------");
 						NewModBody.Append(Newline);
 						NewModBody.Append("#");
-						if (!((MA.AfterComment == null || MA.AfterComment == Newline.ToString()))) 
+						if (!((MA.AfterComment == null || MA.AfterComment.GetValue() == Newline.ToString()))) 
 						{
-							string[] ACsplit = MA.AfterComment.Replace("\r", "").Split(Newline);
+							string[] ACsplit = MA.AfterComment.GetValue().Replace("\r", "").Split(Newline);
 							for (int j = 0; j <= ACsplit.GetUpperBound(0); j++) 
 							{
 								if (!((ACsplit[j] == "" && j == 0))) 
@@ -1364,10 +1525,10 @@ namespace ModTemplateTools
 			foreach (ModAuthorEntry entry in Header.ModAuthor)
 			{
 				mod.authorRow newRow = XmlDataSet.author.NewauthorRow();
-				newRow.email = entry.Email;
-				newRow.homepage = entry.Homepage;
-				newRow.realname = entry.RealName;
-				newRow.username = entry.UserName;
+				if (entry.Email.ToLower() != "n/a") newRow.email = entry.Email;
+				if (entry.Homepage.ToLower() != "n/a") newRow.homepage = entry.Homepage;
+				if (entry.RealName.ToLower() != "n/a") newRow.realname = entry.RealName;
+				if (entry.UserName.ToLower() != "n/a") newRow.username = entry.UserName;
 				newRow.SetParentRow(authorGroupRow);
 				XmlDataSet.author.Rows.Add(newRow);
 				mod.contributionsRow newContributionsRow = XmlDataSet.contributions.NewcontributionsRow();
@@ -1531,8 +1692,8 @@ namespace ModTemplateTools
 							{
 								try
 								{
-									from = Regex.Match(line.Trim(TrimChars), "copy (.+) to", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to", "");
-									to = Regex.Match(line.Trim(TrimChars), " to (.+)", RegexOptions.IgnoreCase).Value.Replace("copy ", "").Replace(" to ", "");
+									from = Regex.Replace(Regex.Replace(Regex.Match(line.Trim(TrimChars), "^copy (.+) to", RegexOptions.IgnoreCase).Value, "copy ", "", RegexOptions.IgnoreCase), " to", "", RegexOptions.IgnoreCase);
+									to = Regex.Replace(Regex.Replace(Regex.Match(line.Trim(TrimChars), " to (.+)$", RegexOptions.IgnoreCase).Value, "copy ", "", RegexOptions.IgnoreCase), " to", "", RegexOptions.IgnoreCase);
 
 									mod.fileRow fileRow = XmlDataSet.file.NewfileRow();
 									fileRow.from = from;
@@ -1566,13 +1727,19 @@ namespace ModTemplateTools
 							findRow.type = ma.Modifier;
 						}
 						// TODO: needs work (merging)
-						if (ma.AfterComment != "")
+						if (ma.AfterComment != null)
 						{
-							mod.commentRow commentRow = XmlDataSet.comment.NewcommentRow();
-							commentRow.lang = defaultLanguage;
-							commentRow.comment_Text = ma.AfterComment;
-							commentRow.SetParentRow(currentEditRow);
-							XmlDataSet.comment.Rows.Add(commentRow);
+							foreach (string Language in ma.AfterComment)
+							{
+								if (ma.AfterComment[Language] != "" && ma.AfterComment[Language] != null)
+								{
+									mod.commentRow commentRow = XmlDataSet.comment.NewcommentRow();
+									commentRow.lang = Language;
+									commentRow.comment_Text = ma.AfterComment[Language];
+									commentRow.SetParentRow(currentEditRow);
+									XmlDataSet.comment.Rows.Add(commentRow);
+								}
+							}
 						}
 						findRow.SetParentRow(currentEditRow);
 						XmlDataSet.find.Rows.Add(findRow);
@@ -1671,7 +1838,7 @@ namespace ModTemplateTools
 
 			StringBuilder sb = new StringBuilder();
 			StringWriter sw = new StringWriter(sb);
-			XmlTextWriter xw = new ModxWriter(sw, "http://www.manipef1.com/phpbb/subsilver.php"); //XmlTextWriter(sw);
+			XmlTextWriter xw = new ModxWriter(sw, ""); //XmlTextWriter(sw);
 			xw.Formatting = Formatting.Indented;
 			XmlDataSet.WriteXml(xw);
 

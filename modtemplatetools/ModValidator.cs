@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModValidator.cs,v 1.17 2006-01-25 02:08:10 smithydll Exp $
+ *   $Id: ModValidator.cs,v 1.18 2006-02-17 04:08:23 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -23,6 +23,8 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using ModTemplateTools.DataStructures;
+using System.Collections;
+using System.Collections.Specialized;
 
 namespace ModTemplateTools
 {
@@ -863,6 +865,44 @@ namespace ModTemplateTools
 				}
 			}
 
+			try
+			{
+				Modification.ReadTextHeader(TextMod);
+
+				if (Modification.Header != null)
+				{
+					int installTime = Modification.Header.ModInstallationTime;
+					Modification.UpdateInstallationTime();
+					if (Math.Abs(installTime - Modification.Header.ModInstallationTime) / installTime > 0.5)
+					{
+						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Installation time of {0} minutes is more than 50% out of realistic expectation, expectation was {1} minutes\n",
+							installTime / 60, Math.Round((float)Modification.Header.ModInstallationTime / 60));
+						ValidateWarnFlag = false;
+					}
+
+					System.Collections.Specialized.StringCollection filesToEdit = Modification.Header.ModFilesToEdit;
+					Modification.UpdateFilesToEdit();
+					if (!CompareStringCollection(filesToEdit, Modification.Header.ModFilesToEdit))
+					{
+						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Files To Edit in header does not equal files edited in MOD\n");
+						ValidateWarnFlag = false;
+					}
+
+					System.Collections.Specialized.StringCollection includedFiles = Modification.Header.ModIncludedFiles;
+					Modification.UpdateFilesToEdit();
+					if (!CompareStringCollection(includedFiles, Modification.Header.ModIncludedFiles))
+					{
+						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Included Files in header does not equal filed copied over in MOD\n");
+						ValidateWarnFlag = false;
+					}
+				}
+			}
+			catch
+			{
+				Report.HeaderReport += string.Format("[b][color=red]Error[/color]:[/b] Couldn't parse MOD header.\n");
+				ValidateFlag = false;
+			}
+
 			//string rating_report;
 			if (!ValidateFlag) 
 			{
@@ -948,6 +988,44 @@ namespace ModTemplateTools
 			input = input.Replace("\n", "<br />\n");
 
 			return input;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sc1"></param>
+		/// <param name="sc2"></param>
+		/// <returns></returns>
+		public bool CompareStringCollection(StringCollection sc1, StringCollection sc2)
+		{
+			char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
+			// check to see if every element is in
+			bool flag = true;
+			foreach (string s in sc1)
+			{
+				if (s.Trim(TrimChars) != "")
+				{
+					Console.WriteLine("s: " + s);
+					flag = true;
+					foreach (string t in sc2)
+					{
+						if (s == t)
+						{
+							flag = true;
+							break;
+						}
+						else
+						{
+							flag = false;
+						}
+					}
+					if (!flag)
+					{
+						break;
+					}
+				}
+			}
+			return flag;
 		}
 
 		/// <summary>

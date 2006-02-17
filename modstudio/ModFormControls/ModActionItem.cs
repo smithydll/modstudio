@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionItem.cs,v 1.10 2006-01-22 23:38:12 smithydll Exp $
+ *   $Id: ModActionItem.cs,v 1.11 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -163,6 +163,8 @@ namespace ModFormControls
 		{
 			panel1.Width = this.Width - 8;
 			panel2.Width = this.Width - 8;
+			panel1.Height = this.Height - 6;
+			panel2.Height = this.Height - 6;
 		}
 
 		public int Index

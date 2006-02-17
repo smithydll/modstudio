@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.16 2006-01-22 23:38:13 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.17 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -1015,7 +1015,7 @@ namespace ModStudio
 					UpdateHeader();
 					break;
 				case 2: // Actions
-					modDisplayBox2.ModActions = ThisMod.Actions;
+					//modDisplayBox2.ModActions = ThisMod.Actions;
 					break;
 			}
 
@@ -1151,6 +1151,10 @@ namespace ModStudio
 			UpdateHeaderDisplay();
 			modDisplayBox2_SelectedIndexChanged(null, null);
 			SetUnmodified();
+			if (ThisMod.ParseErrors)
+			{
+				MessageBox.Show(this, "There were some errors while importing this MOD, please make sure to go and fix them.\r\nMost of the time this will only require a small edit to your MOD.", "Error(s) occured while importing MOD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
 		}
 
 		private void listBoxFileEdits_DoubleClick(object sender, System.EventArgs e)
@@ -1192,8 +1196,11 @@ namespace ModStudio
 
 			this.tabPageActions.Controls.Add(abc);*/
 
+			bool isXml = false;
+			if (ThisMod.lastReadFormat == ModTemplateTools.PhpbbMod.ModFormats.XMLMOD) isXml = true;
+
 			modActionEditor1.actionIndex = modDisplayBox2.SelectedIndex;
-			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionBody, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).AfterComment);
+			modActionEditor1.SetModAction(modDisplayBox2.SelectedIndex, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionType, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).ActionBody, ((ModAction)ThisMod.Actions[modDisplayBox2.SelectedIndex]).AfterComment, isXml);
 			this.modActionEditor1.Size = new Size(tabPageActions.Width - 20 - 17, tabPageActions.Height - 20 - toolBar1.Height);
 			this.modActionEditor1.Location = new Point(10,10 + toolBar1.Height);
 			toolBar1.Enabled = false;

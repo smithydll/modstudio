@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModxWriter.cs,v 1.1 2006-01-25 02:08:11 smithydll Exp $
+ *   $Id: ModxWriter.cs,v 1.2 2006-02-17 04:08:23 smithydll Exp $
  *
  *
  ***************************************************************************/

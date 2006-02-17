@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LanguageSelectionDialog.cs,v 1.4 2006-01-22 23:38:12 smithydll Exp $
+ *   $Id: LanguageSelectionDialog.cs,v 1.5 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/

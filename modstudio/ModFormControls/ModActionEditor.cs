@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionEditor.cs,v 1.9 2006-01-22 23:38:12 smithydll Exp $
+ *   $Id: ModActionEditor.cs,v 1.10 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
+using ModTemplateTools;
+using ModTemplateTools.DataStructures;
 
 namespace ModFormControls
 {
@@ -40,7 +42,6 @@ namespace ModFormControls
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panel4;
 		private ICSharpCode.TextEditor.TextEditorControl textEditorControlActionBody;
-		private ICSharpCode.TextEditor.TextEditorControl textEditorControlComment;
 		private System.Windows.Forms.Panel panel5;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
@@ -49,6 +50,7 @@ namespace ModFormControls
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.ComboBox comboBoxActionType;
+		private ModFormControls.LocalisedTextBox textEditorControlComment;
 
 		public int actionIndex = 0;
 
@@ -91,7 +93,7 @@ namespace ModFormControls
 			this.textEditorControlActionBody = new ICSharpCode.TextEditor.TextEditorControl();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.panel3 = new System.Windows.Forms.Panel();
-			this.textEditorControlComment = new ICSharpCode.TextEditor.TextEditorControl();
+			this.textEditorControlComment = new ModFormControls.LocalisedTextBox();
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
@@ -154,16 +156,12 @@ namespace ModFormControls
 			// textEditorControlComment
 			// 
 			this.textEditorControlComment.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textEditorControlComment.Encoding = ((System.Text.Encoding)(resources.GetObject("textEditorControlComment.Encoding")));
-			this.textEditorControlComment.IsIconBarVisible = false;
+			this.textEditorControlComment.LanguageSelectorVisible = true;
 			this.textEditorControlComment.Location = new System.Drawing.Point(0, 20);
+			this.textEditorControlComment.Multiline = true;
 			this.textEditorControlComment.Name = "textEditorControlComment";
-			this.textEditorControlComment.ShowEOLMarkers = true;
-			this.textEditorControlComment.ShowSpaces = true;
-			this.textEditorControlComment.ShowTabs = true;
-			this.textEditorControlComment.ShowVRuler = true;
 			this.textEditorControlComment.Size = new System.Drawing.Size(382, 80);
-			this.textEditorControlComment.TabIndex = 1;
+			this.textEditorControlComment.TabIndex = 3;
 			// 
 			// panel5
 			// 
@@ -284,16 +282,48 @@ namespace ModFormControls
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
-			this.Return(this, new ModActionEditorReturnEventArgs(actionIndex, string.Copy(comboBoxActionType.Text), string.Copy(textEditorControlActionBody.Text), string.Copy(textEditorControlComment.Text)));
+			this.Return(this, new ModActionEditorReturnEventArgs(actionIndex, string.Copy(comboBoxActionType.Text), string.Copy(textEditorControlActionBody.Text), textEditorControlComment.TextLang));
 			this.Hide();
 		}
 
-		public void SetModAction(int index, string actionType, string actionBody, string actionComment)
+		public void SetModAction(int index, string actionType, string actionBody, StringLocalised actionComment, bool isXml)
 		{
 			actionIndex = index;
 			comboBoxActionType.Text = string.Copy(actionType);
 			textEditorControlActionBody.Text = string.Copy(actionBody);
-			textEditorControlComment.Text = string.Copy(actionComment);
+			StringLocalised tempLang = new StringLocalised();
+			foreach (string Language in actionComment)
+			{
+				tempLang.Add(actionComment[Language], Language);
+			}
+			textEditorControlComment.TextLang = tempLang;
+
+			if (isXml)
+			{
+				switch (actionType)
+				{
+					case "FIND":
+						textEditorControlComment.Enabled = true;
+						break;
+					default:
+						textEditorControlComment.Enabled = false;
+						break;
+				}
+				textEditorControlComment.LanguageSelectorVisible = true;
+			}
+			else
+			{
+				textEditorControlComment.LanguageSelectorVisible = false;
+				switch (actionType)
+				{
+					case "SAVE/CLOSE ALL FILES":
+						textEditorControlComment.Enabled = false;
+						break;
+					default:
+						textEditorControlComment.Enabled = true;
+						break;
+				}
+			}
 		}
 	}
 
@@ -302,8 +332,8 @@ namespace ModFormControls
 		public int Index;
 		public string ActionType;
 		public string ActionBody;
-		public string ActionComment;
-		public ModActionEditorReturnEventArgs(int index, string actionType, string actionBody, string actionComment)
+		public StringLocalised ActionComment;
+		public ModActionEditorReturnEventArgs(int index, string actionType, string actionBody, StringLocalised actionComment)
 		{
 			this.Index = index;
 			this.ActionType = actionType;
