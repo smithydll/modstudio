@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDataStructures.cs,v 1.6 2006-01-25 02:08:10 smithydll Exp $
+ *   $Id: ModDataStructures.cs,v 1.7 2006-02-17 04:08:23 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -135,6 +135,16 @@ namespace ModTemplateTools.DataStructures
 				keyList[language] = value;
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public bool ContainsKey(string key)
+		{
+			return keyList.ContainsKey(key);
+		}
 	}
 
 	/// <summary>
@@ -167,13 +177,13 @@ namespace ModTemplateTools.DataStructures
 		/// </summary>
 		public string ActionBody;
 		/// <summary>
-		/// 
+		/// Deprecated
 		/// </summary>
 		public string BeforeComment;
 		/// <summary>
-		/// 
+		/// This is comment
 		/// </summary>
-		public string AfterComment;
+		public StringLocalised AfterComment;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -198,6 +208,25 @@ namespace ModTemplateTools.DataStructures
 			this.ActionType = actiontype;
 			this.ActionBody = actionbody;
 			this.BeforeComment = beforecomment;
+			this.AfterComment = new StringLocalised(aftercomment);
+			this.StartLine = startline;
+			this.Modifier = modifier;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actiontype">Type</param>
+		/// <param name="actionbody">Body</param>
+		/// <param name="beforecomment">Before Comment</param>
+		/// <param name="aftercomment">After Comment</param>
+		/// <param name="startline">Start line</param>
+		/// <param name="modifier">Modifier</param>
+		public ModAction(string actiontype, string actionbody, string beforecomment, StringLocalised aftercomment, int startline, string modifier)
+		{
+			this.ActionType = actiontype;
+			this.ActionBody = actionbody;
+			this.BeforeComment = beforecomment;
 			this.AfterComment = aftercomment;
 			this.StartLine = startline;
 			this.Modifier = modifier;
@@ -212,6 +241,24 @@ namespace ModTemplateTools.DataStructures
 		/// <param name="aftercomment">After Comment</param>
 		/// <param name="startline">Start line</param>
 		public ModAction(string actiontype, string actionbody, string beforecomment, string aftercomment, int startline)
+		{
+			this.ActionType = actiontype;
+			this.ActionBody = actionbody;
+			this.BeforeComment = beforecomment;
+			this.AfterComment = new StringLocalised(aftercomment);
+			this.StartLine = startline;
+			this.Modifier = null;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actiontype">Type</param>
+		/// <param name="actionbody">Body</param>
+		/// <param name="beforecomment">Before Comment</param>
+		/// <param name="aftercomment">After Comment</param>
+		/// <param name="startline">Start line</param>
+		public ModAction(string actiontype, string actionbody, string beforecomment, StringLocalised aftercomment, int startline)
 		{
 			this.ActionType = actiontype;
 			this.ActionBody = actionbody;
@@ -233,6 +280,23 @@ namespace ModTemplateTools.DataStructures
 			this.ActionType = actiontype;
 			this.ActionBody = actionbody;
 			this.BeforeComment = null;
+			this.AfterComment = new StringLocalised(aftercomment);
+			this.StartLine = 0;
+			this.Modifier = modifier;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actiontype">Type</param>
+		/// <param name="actionbody">Body</param>
+		/// <param name="aftercomment">After Comment</param>
+		/// <param name="modifier">Modifier</param>
+		public ModAction(string actiontype, string actionbody, StringLocalised aftercomment, string modifier)
+		{
+			this.ActionType = actiontype;
+			this.ActionBody = actionbody;
+			this.BeforeComment = null;
 			this.AfterComment = aftercomment;
 			this.StartLine = 0;
 			this.Modifier = modifier;
@@ -245,6 +309,22 @@ namespace ModTemplateTools.DataStructures
 		/// <param name="actionbody">Body</param>
 		/// <param name="aftercomment">After Comment</param>
 		public ModAction(string actiontype, string actionbody, string aftercomment)
+		{
+			this.ActionType = actiontype;
+			this.ActionBody = actionbody;
+			this.BeforeComment = null;
+			this.AfterComment = new StringLocalised(aftercomment);
+			this.StartLine = 0;
+			this.Modifier = null;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actiontype">Type</param>
+		/// <param name="actionbody">Body</param>
+		/// <param name="aftercomment">After Comment</param>
+		public ModAction(string actiontype, string actionbody, StringLocalised aftercomment)
 		{
 			this.ActionType = actiontype;
 			this.ActionBody = actionbody;
@@ -265,9 +345,9 @@ namespace ModTemplateTools.DataStructures
 			MODBuild += "#\n";
 			MODBuild += "#-----[ " + ActionType + " ]------------------------------------------\n";
 			MODBuild += "#\n";
-			if (!(AfterComment == null || AfterComment == "\n")) 
+			if (!(AfterComment == null || AfterComment.GetValue() == "\n")) 
 			{
-				string[] ACsplit = AfterComment.Replace("\r\n", "\n").Split('\n');
+				string[] ACsplit = AfterComment.GetValue().Replace("\r\n", "\n").Split('\n');
 				for (int j = 0; j < ACsplit.Length; j++) 
 				{
 					if (!((ACsplit[j] == "" && j == 0))) 
@@ -1009,45 +1089,52 @@ namespace ModTemplateTools.DataStructures
 			ModVersion MVersion = new ModVersion();
 			input = Regex.Replace(input.Trim(TrimChars), "([\\d]+?)\\.([\\d]+?)(\\.|)([\\d]+?|)([a-zA-Z]{0,1}?)([ \\t]|)$", "$1.$2.$4.$5");
 			string[] MV = input.Split('.');
-			if (MV.Length >= 1) 
+			try
 			{
-				MVersion.VersionMajor = int.Parse(MV[0]);
-			}
-			if (MV.Length >= 2) 
-			{
-				if (!(MV[1] == null)) 
+				if (MV.Length >= 1) 
 				{
-					MVersion.VersionMinor = int.Parse(MV[1]);
+					MVersion.VersionMajor = int.Parse(MV[0]);
 				}
-			}
-			if (MV.Length >= 3) 
-			{
-				if (!(MV[2] == null)) 
+				if (MV.Length >= 2) 
 				{
-					MVersion.VersionRevision = int.Parse(MV[2]);
-				}
-			}
-			if (MV.Length >= 4) 
-			{
-				if (MV[3].Length > 0)
-				{
-					if (Regex.IsMatch(MV[3], "^([a-zA-Z])$") && MV[3] != "\b")
+					if (!(MV[1] == null)) 
 					{
-						MVersion.VersionRelease = MV[3].ToCharArray()[0];
+						MVersion.VersionMinor = int.Parse(MV[1]);
 					}
-					else
+				}
+				if (MV.Length >= 3) 
+				{
+					if (!(MV[2] == null)) 
+					{
+						MVersion.VersionRevision = int.Parse(MV[2]);
+					}
+				}
+				if (MV.Length >= 4) 
+				{
+					if (MV[3].Length > 0)
+					{
+						if (Regex.IsMatch(MV[3], "^([a-zA-Z])$") && MV[3] != "\b")
+						{
+							MVersion.VersionRelease = MV[3].ToCharArray()[0];
+						}
+						else
+						{
+							MVersion.VersionRelease = ModVersion.nullChar;
+						}
+					}
+					if (MVersion.VersionRelease.GetHashCode() == 0)
 					{
 						MVersion.VersionRelease = ModVersion.nullChar;
 					}
-				}
-				if (MVersion.VersionRelease.GetHashCode() == 0)
+				} 
+				else 
 				{
 					MVersion.VersionRelease = ModVersion.nullChar;
 				}
-			} 
-			else 
+			}
+			catch (FormatException)
 			{
-				MVersion.VersionRelease = ModVersion.nullChar;
+				throw new NotAModVersionException(string.Format("Error, not a valid MOD version on input string: {0}", input));
 			}
 			return MVersion;
 		}
@@ -1510,5 +1597,19 @@ namespace ModTemplateTools.DataStructures
 		/// 
 		/// </summary>
 		Next
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class NotAModVersionException : Exception
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="message"></param>
+		public NotAModVersionException(string message) : base(message)
+		{
+		}
 	}
 }

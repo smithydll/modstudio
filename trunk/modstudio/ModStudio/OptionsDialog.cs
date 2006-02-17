@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.5 2006-01-22 23:38:13 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.6 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -126,6 +126,7 @@ namespace ModStudio
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.button2 = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
+			this.authorEditorDialog1 = new AuthorEditorDialog();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -388,6 +389,10 @@ namespace ModStudio
 			this.button1.TabIndex = 0;
 			this.button1.Text = "Cancel";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// authorEditorDialog1
+			// 
+			this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(authorEditorDialog1_Save);
 			// 
 			// OptionsDialog
 			// 

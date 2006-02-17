@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.13 2006-01-22 23:38:13 smithydll Exp $
+ *   $Id: Studio.cs,v 1.14 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -29,6 +29,7 @@ using Microsoft.Win32;
 using ModTemplateTools;
 using ModTemplateTools.DataStructures;
 using System.IO;
+using System.Net;
 
 namespace ModStudio
 {
@@ -671,7 +672,7 @@ namespace ModStudio
 
 		private void Studio_Load(object sender, System.EventArgs e)
 		{
-			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio");
+			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio", true);
 			this.lastSize = new Size(int.Parse(reg.GetValue("window-width",this.Width).ToString()), int.Parse(reg.GetValue("window-height",this.Height).ToString()));
 			this.lastCoOrdinates = new Point(int.Parse(reg.GetValue("window-left",this.Left).ToString()), int.Parse(reg.GetValue("window-top",this.Top).ToString()));
 			if (reg.GetValue("window-state", this.WindowState).ToString() == "Maximized")
@@ -684,6 +685,64 @@ namespace ModStudio
 				this.Location = this.lastCoOrdinates;
 				this.Size = this.lastSize;
 			}
+			
+
+			if (bool.Parse(reg.GetValue("first-run", true).ToString()))
+			{
+				DialogResult result = MessageBox.Show(this, "Do you want to automatically check for new versions of MOD Studio everytime it loads?", "Automatically check for updates?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				if (result == DialogResult.Yes)
+				{
+					reg.SetValue("automatic-check", true);
+				}
+				else if (result == DialogResult.No)
+				{
+					reg.SetValue("automatic-check", false);
+				}
+				reg.SetValue("first-run", false);
+			}
+			else
+			{
+				if (bool.Parse(reg.GetValue("automatic-check", false).ToString()))
+				{
+					if (checkNewVersion())
+					{
+						MessageBox.Show(this, "There are updates currently avaliable, a browser window will now open at the download page");
+						System.Diagnostics.Process.Start(@"http://www.phpbb.com/phpBB/viewtopic.php?t=320507");
+					}
+					reg.SetValue("last-check", DateTime.Now);
+				}
+				else
+				{
+					if (reg.GetValue("last-check", null) != null)
+					{
+						// if been longer than 3 months since last check for update, ask if we want to check
+						if (((TimeSpan)DateTime.Now.Subtract((DateTime.Parse(reg.GetValue("last-check").ToString())))).Days >= 90)
+						{
+							DialogResult result = MessageBox.Show(this, "It has been a while since you last checked for updates to MOD Studio.\nDo you want to check for updates to MOD Studio now?", "Check for updates?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+							if (result == DialogResult.Yes)
+							{
+								if (checkNewVersion())
+								{
+									MessageBox.Show(this, "There are updates currently avaliable, a browser window will now open at the download page");
+									System.Diagnostics.Process.Start(@"http://www.phpbb.com/phpBB/viewtopic.php?t=320507");
+								}
+								else
+								{
+									MessageBox.Show(this, "There are no updates avaliable", "No updates");
+								}
+								reg.SetValue("last-check", DateTime.Now);
+							}
+						}
+					}
+					else
+					{
+						// lets set last-check if it's null
+						reg.SetValue("last-check", DateTime.Now);
+					}
+				}
+			}
+			reg.SetValue("last-run", DateTime.Now);
+			reg.Close();
 		}
 
 		private void Studio_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -694,6 +753,7 @@ namespace ModStudio
 			reg.SetValue("window-height", this.Height);
 			reg.SetValue("window-left", this.Left);
 			reg.SetValue("window-top", this.Top);
+			reg.Close();
 		}
 
 		private void menuItemToolsOptions_Click(object sender, System.EventArgs e)
@@ -736,6 +796,36 @@ namespace ModStudio
 		private void openFileDialog2_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			
+		}
+
+		/// <summary>
+		/// requires access to the internet
+		/// </summary>
+		/// <returns></returns>
+		public bool checkNewVersion()
+		{
+			WebClient webClient = new WebClient();
+			byte[] bytes;
+			bytes = webClient.DownloadData("http://modstudio.sf.net/updatecheck/4-0-x.txt");
+			string version = System.Text.ASCIIEncoding.ASCII.GetString(bytes);
+			ModVersion newVersion = ModVersion.Parse(version);
+			ModVersion thisVersion = ModVersion.Parse(Application.ProductVersion);
+			Console.WriteLine(newVersion.ToString() + " [...] " + thisVersion.ToString());
+			if (newVersion.VersionMajor > thisVersion.VersionMajor)
+			{
+				return true;
+			}
+			else if (newVersion.VersionMajor == thisVersion.VersionMajor
+				&& newVersion.VersionMinor > newVersion.VersionMinor)
+			{
+				return true;
+			}
+			else if (newVersion.VersionRelease == thisVersion.VersionRelease
+				&& newVersion.VersionRelease > newVersion.VersionRelease)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>

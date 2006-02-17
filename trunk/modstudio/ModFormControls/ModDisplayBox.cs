@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.12 2006-01-22 23:38:12 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.13 2006-02-17 04:11:45 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -114,6 +114,8 @@ namespace ModFormControls
 		private ModActionItemCollection ActionItems;
 		private int selectedIndex = 0;
 		const int scrollBarWidth = 17;
+		const int itemHeight = 60;
+		const int itemRealHeight = itemHeight + 5;
 
 		/// <summary>
 		/// 
@@ -141,7 +143,7 @@ namespace ModFormControls
 
 					this.ModDisplayPanel.SuspendLayout();
 					this.SuspendLayout();
-					ModDisplayPanel.Height = ActionItems.Count * 100;
+					ModDisplayPanel.Height = ActionItems.Count * itemRealHeight;
 					for (int i = 0; i < Actions.Count; i++)
 					{
 						ModActionItem tempActionItem = new ModActionItem();
@@ -206,7 +208,7 @@ namespace ModFormControls
 				for (int i = 0; i < ActionItems.Count; i++)
 				{
 					ActionItems[i].SuspendLayout();
-					ActionItems[i].Height = 90;
+					ActionItems[i].Height = itemHeight;
 					ActionItems[i].Visible = true;
 					//ActionItems[i].Location = new Point(0,0);
 
@@ -248,7 +250,7 @@ namespace ModFormControls
 		{
 			if (Actions != null)
 			{
-				ModBoxScrollBar.Maximum = Actions.Count * 100;
+				ModBoxScrollBar.Maximum = Actions.Count * itemRealHeight;
 
 				//ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
 				for (int i = 0; i < ActionItems.Count; i++)
@@ -272,7 +274,7 @@ namespace ModFormControls
 			Point scrollPosn = new Point(0,0);
 			if (Actions != null)
 			{
-				ModBoxScrollBar.Maximum = Actions.Count * 100;
+				ModBoxScrollBar.Maximum = Actions.Count * itemRealHeight;
 
 				if (ActionItems.Count > 0)
 				{
@@ -284,11 +286,11 @@ namespace ModFormControls
 					ModActionItem mai = ActionItems[i];
 					mai.SuspendLayout();
 
-					mai.Height = 90;
+					mai.Height = itemHeight;
 					mai.Visible = true;
 					int indent = GetIndent(i);
 					mai.Width = this.Width - 20 - indent - scrollBarWidth;
-					mai.Location = new Point(10 + indent, i * 100 + 10 + offset);
+					mai.Location = new Point(10 + indent, i * itemRealHeight + 10 + offset);
 					mai.BackColor = GetColour(i);
 
 					ActionItems[i].ActionTitle = Actions[i].ActionType;
@@ -494,7 +496,7 @@ namespace ModFormControls
 		/// <returns></returns>
 		public static string GetFirstLines(string value)
 		{
-			if (value.Split('\n').Length <= 3)
+			if (value.Split('\n').Length <= 2)
 			{
 				return value;
 			}
