@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 1.3
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">1.3</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1">this is my long string</data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        [base64 mime encoded serialized .NET Framework object]
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        [base64 mime encoded string representing a byte array form of the .NET Framework object]
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used forserialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="mainMenu.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="mainMenu.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </data>
+  <data name="mainMenu.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="mainMenu.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Inherit</value>
+  </data>
+  <data name="menuItemFile.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFile.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFile.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFile.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFile.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFile.Text">
+    <value>&amp;File</value>
+  </data>
+  <data name="menuItemFile.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileNew.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileNew.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileNew.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileNew.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFileNew.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileNew.Text">
+    <value>&amp;New</value>
+  </data>
+  <data name="menuItemFileNew.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileOpen.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileOpen.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileOpen.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileOpen.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>CtrlO</value>
+  </data>
+  <data name="menuItemFileOpen.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileOpen.Text">
+    <value>&amp;Open</value>
+  </data>
+  <data name="menuItemFileOpen.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileClose.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileClose.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileClose.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileClose.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>CtrlW</value>
+  </data>
+  <data name="menuItemFileClose.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileClose.Text">
+    <value>&amp;Close</value>
+  </data>
+  <data name="menuItemFileClose.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep1.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep1.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep1.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep1.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemSep1.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep1.Text">
+    <value>-</value>
+  </data>
+  <data name="menuItemSep1.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSave.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSave.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSave.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSave.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>CtrlS</value>
+  </data>
+  <data name="menuItemFileSave.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSave.Text">
+    <value>&amp;Save</value>
+  </data>
+  <data name="menuItemFileSave.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAs.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSaveAs.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSaveAs.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAs.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFileSaveAs.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAs.Text">
+    <value>Save &amp;As</value>
+  </data>
+  <data name="menuItemFileSaveAs.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAll.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSaveAll.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileSaveAll.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAll.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFileSaveAll.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileSaveAll.Text">
+    <value>Save A&amp;ll</value>
+  </data>
+  <data name="menuItemFileSaveAll.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep3.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep3.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep3.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep3.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemSep3.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep3.Text">
+    <value>-</value>
+  </data>
+  <data name="menuItemSep3.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileExport.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileExport.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileExport.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="menuItemFileExport.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFileExport.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileExport.Text">
+    <value>&amp;Export</value>
+  </data>
+  <data name="menuItemFileExport.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileValidate.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileValidate.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileValidate.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileValidate.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemFileValidate.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileValidate.Text">
+    <value>&amp;Validate Text MOD</value>
+  </data>
+  <data name="menuItemFileValidate.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep2.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep2.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep2.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep2.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemSep2.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep2.Text">
+    <value>-</value>
+  </data>
+  <data name="menuItemSep2.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileExit.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileExit.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemFileExit.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileExit.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>AltF4</value>
+  </data>
+  <data name="menuItemFileExit.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemFileExit.Text">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="menuItemFileExit.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemEdit.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemEdit.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemEdit.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="menuItemEdit.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemEdit.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemEdit.Text">
+    <value>&amp;Edit</value>
+  </data>
+  <data name="menuItemEdit.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemView.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemView.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemView.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="menuItemView.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemView.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemView.Text">
+    <value>&amp;View</value>
+  </data>
+  <data name="menuItemView.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemTools.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemTools.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemTools.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemTools.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemTools.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemTools.Text">
+    <value>&amp;Tools</value>
+  </data>
+  <data name="menuItemTools.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemToolsOptions.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemToolsOptions.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemToolsOptions.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemToolsOptions.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemToolsOptions.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemToolsOptions.Text">
+    <value>&amp;Options</value>
+  </data>
+  <data name="menuItemToolsOptions.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemWindow.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemWindow.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemWindow.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemWindow.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemWindow.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemWindow.Text">
+    <value>&amp;Window</value>
+  </data>
+  <data name="menuItemWindow.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelp.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelp.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelp.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelp.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemHelp.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelp.Text">
+    <value>&amp;Help</value>
+  </data>
+  <data name="menuItemHelp.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelpHelp.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelpHelp.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelpHelp.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="menuItemHelpHelp.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemHelpHelp.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelpHelp.Text">
+    <value>&amp;Help</value>
+  </data>
+  <data name="menuItemHelpHelp.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep4.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep4.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemSep4.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep4.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemSep4.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemSep4.Text">
+    <value>-</value>
+  </data>
+  <data name="menuItemSep4.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelpAbout.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelpAbout.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="menuItemHelpAbout.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelpAbout.Shortcut" type="System.Windows.Forms.Shortcut, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>None</value>
+  </data>
+  <data name="menuItemHelpAbout.ShowShortcut" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="menuItemHelpAbout.Text">
+    <value>&amp;About</value>
+  </data>
+  <data name="menuItemHelpAbout.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="openFileDialog1.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="openFileDialog1.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="openFileDialog1.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>120, 17</value>
+  </data>
+  <data name="openFileDialog1.Filter">
+    <value>phpBB MOD Files (*.mod,*.xml,*.txt)|*.mod;*.xml;*.txt|phpBB2 MOD Files (*.mod,*.txt)|*.mod;*.txt|phpBB XML MOD Format (*.xml)|*.xml</value>
+  </data>
+  <data name="openFileDialog1.Title">
+    <value />
+  </data>
+  <data name="toolBar1.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="toolBar1.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBar1.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBar1.AccessibleDescription" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="toolBar1.AccessibleName" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="toolBar1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Top, Left</value>
+  </data>
+  <data name="toolBar1.Appearance" type="System.Windows.Forms.ToolBarAppearance, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Flat</value>
+  </data>
+  <data name="toolBar1.AutoSize" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBar1.BackgroundImage" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="toolBar1.ButtonSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>23, 22</value>
+  </data>
+  <data name="toolBar1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Top</value>
+  </data>
+  <data name="toolBar1.DropDownArrows" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBar1.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBar1.Font" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="toolBar1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>NoControl</value>
+  </data>
+  <data name="toolBar1.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="toolBar1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Inherit</value>
+  </data>
+  <data name="toolBar1.ShowToolTips" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBar1.Size" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>792, 28</value>
+  </data>
+  <data name="toolBar1.TabIndex" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>1</value>
+  </data>
+  <data name="toolBar1.TextAlign" type="System.Windows.Forms.ToolBarTextAlign, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Underneath</value>
+  </data>
+  <data name="toolBar1.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBar1.Wrappable" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;toolBar1.Name">
+    <value>toolBar1</value>
+  </data>
+  <data name="&gt;&gt;toolBar1.Type">
+    <value>System.Windows.Forms.ToolBar, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolBar1.Parent">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;toolBar1.ZOrder">
+    <value>0</value>
+  </data>
+  <data name="toolBarButtonNew.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonNew.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonNew.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonNew.ImageIndex" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>0</value>
+  </data>
+  <data name="toolBarButtonNew.Text">
+    <value />
+  </data>
+  <data name="toolBarButtonNew.ToolTipText">
+    <value />
+  </data>
+  <data name="toolBarButtonNew.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonOpen.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonOpen.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonOpen.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonOpen.ImageIndex" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>1</value>
+  </data>
+  <data name="toolBarButtonOpen.Text">
+    <value />
+  </data>
+  <data name="toolBarButtonOpen.ToolTipText">
+    <value />
+  </data>
+  <data name="toolBarButtonOpen.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonSave.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonSave.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonSave.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonSave.ImageIndex" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>2</value>
+  </data>
+  <data name="toolBarButtonSave.Text">
+    <value />
+  </data>
+  <data name="toolBarButtonSave.ToolTipText">
+    <value />
+  </data>
+  <data name="toolBarButtonSave.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonSaveAll.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonSaveAll.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="toolBarButtonSaveAll.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="toolBarButtonSaveAll.ImageIndex" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>3</value>
+  </data>
+  <data name="toolBarButtonSaveAll.Text">
+    <value />
+  </data>
+  <data name="toolBarButtonSaveAll.ToolTipText">
+    <value />
+  </data>
+  <data name="toolBarButtonSaveAll.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="imageList1.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="imageList1.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="imageList1.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>250, 17</value>
+  </data>
+  <data name="imageList1.ImageSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>16, 16</value>
+  </data>
+  <data name="imageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFpTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj0xLjAuNTAw
+        MC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZT
+        eXN0ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMA
+        AAB+CQAAAk1TRnQBSQFMAgEBBAEAAQUBAAEEAQABEAEAARABAAT/AQkBEAj/AUIBTQE2AQQGAAE2AQQC
+        AAEoAwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB
+        3AHAAQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IB
+        AAM5AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8B
+        MwMAAWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYC
+        AAFmAZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMC
+        AAHMAWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQAB
+        ZgEAATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8B
+        AAEzAWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQAB
+        MwGZAWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQAB
+        MwLMAQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQAB
+        MwEAAWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMB
+        mQEAAWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQAB
+        ZgGZAWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYB
+        zAH/AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMB
+        mQEAAZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgAB
+        mQFmATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwB
+        AAKZAf8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB
+        /wEzAQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQAB
+        mQEAAcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYC
+        AAHMAWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYB
+        AAHMApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8C
+        AAHMAf8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQAB
+        mQEAAcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMB
+        AAHMAmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB
+        /wGZAcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC
+        /wEzAQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC
+        /wFmAQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gB
+        AAHwAfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD//8A/wD/AP8AdgAC
+        AwQAAQcBAAEDKAACAwYAAgcBAAEDAwACAwQAAQcBAAEDCQAJ/wYACQMHAAIDBgACBwEAAQMDAAIDBgAB
+        AwEAAQMHAAn/BQAB+wEACQMGAAIDBgACBwEAAQMDAAkDAQABAwcACf8FAAH/AfsBAAkDBQACAwkAAQMD
+        AAIDBQACAwEAAQMBAAEDBQAJ/wUAAfsB/wH7AQAJAwQADAMDAAEDAQAFBwEAAQMBAAEDAQABAwUACf8F
+        AAH/AfsB/wH7DQACAwgAAgMDAAEDAQAFBwEAAQMBAAEDAQABAwUACf8FAAH7Af8B+wH/AfsB/wH7Af8B
+        +wgAAQMBAAgHAQABAwMAAQMBAAUHAwABAwEAAQMFAAn/BQAB/wH7Af8B+wH/AfsB/wH7Af8IAAEDAQAI
+        BwEAAQMDAAEDAQAFBwEAAQcBAAEDAQABAwUACf8FAAH7Af8B+w4AAQMBAAgHAQABAw8AAQMFAAb/GQAB
+        AwEACAcBAAEDBQABAwEABQcBAAEHAQABAwUABv8BAAH/FwABAwEACAcXAAb/GQABAwEACAcBAAEHBwAB
+        AwEABQcBAAEHggABQgFNAT4HAAE+AwABKAMAAUADAAEgAwABAQEAAQEGAAEBFgAD/4EABv8BgAEfBP8B
+        wAEBAQABHwHAAQcBAAEfAYABAQEAAQcBwAEHAQABDwGAAQEBAAEHAcABBwEAAQcBgAEBAQABAQHAAQcB
+        AAEDAYABAQEAAQEBwAEHAQABAQGAAQEBAAEBAcABBwIAAYABAQEAAQEBwAEHAQABHwGAAQEBAAEBAcAB
+        BwEAAR8BgAEBAQABAQHAAQcBAAEfAYABAQEAAQEBwAEHAY8B8QGAAQEBwAEBAcABDwH/AfkBgAEBAcAB
+        AQHAAR8B/wF1AYABAQHwAQEBwAE/Af8BjwGAAQEB8AEBCP8WAAs=
+</value>
+  </data>
+  <data name="openFileDialog2.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="openFileDialog2.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="openFileDialog2.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>355, 17</value>
+  </data>
+  <data name="openFileDialog2.Filter">
+    <value>phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt</value>
+  </data>
+  <data name="openFileDialog2.Title">
+    <value>Open Text MOD to Validate</value>
+  </data>
+  <data name="$this.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="$this.Name">
+    <value>Studio</value>
+  </data>
+  <data name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>(Default)</value>
+  </data>
+  <data name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="$this.Localizable" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="$this.GridSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>8, 8</value>
+  </data>
+  <data name="$this.DrawGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="$this.TrayHeight" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>80</value>
+  </data>
+  <data name="$this.SnapToGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="$this.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="$this.AccessibleDescription" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="$this.AccessibleName" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="$this.AutoScaleBaseSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>5, 13</value>
+  </data>
+  <data name="$this.AutoScroll" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="$this.AutoScrollMargin" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="$this.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="$this.BackgroundImage" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>792, 545</value>
+  </data>
+  <data name="$this.Enabled" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="$this.Font" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </data>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAMAMDAAAAEAIACoJQAANgAAACAgAAABACAAqBAAAN4lAAAQEAAAAQAgAGgEAACGNgAAKAAAADAA
+        AABgAAAAAQAgAAAAAACAJQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+IABL/iAAoAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gACv+IAF//iACv/44N6/+V
+        HP//mif//5onTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+IAAj/iAB9/4gA7v+R
+        FP//njD//6dD//+oRv//qEb//50vuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAM/+I
+        ANv/iQT//5sp//+nQ///qEb//6hG//+oRv//qEb//6A1+/+NCxcAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD/iABK/4gA9v+JA///nS///6hG//+oRv//qEb//6hG//+oRv//qEb//6dE//+ZJn0AAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+IADb/iAD3/4gA//+aKP//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+f
+        M9YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAA/4gACP+IANz/iAD//48R//+nQ///qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+mQf7/mCQqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAE/4gALv+I
+        AEf/iABH/4gAL/+IAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAcP+IAP//iAD//5sq//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRf//nCuCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gANf+I
+        AKj/iAD0/4gA//+IAP//iAD//4gA//+IAPf/iAC3/4gAVP+IAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gA1P+IAP//iAH//6E3//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//nS/KAAAAAAAAAAAAAAAAAAAAAP+I
+        AAT/iACV/4gA/v+IAP//iAD//4gA//+IAP//iAD//4gA//+IAP//iAD//4gA//+IANH/iAA3AAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAU/4gA/v+I
+        AP//iQT//6ZB//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//oTb6/4gACwAA
+        AAAAAAAA/4gAAv+IALL/iAD//4gA//+IAP//iAD//40L//+UG///mCP//5kl//+WIP//kRX//4kE//+I
+        AP//iAD6/4gAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD/iAAv/4gA//+IAP//iAD//6E3//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//pkL//5gkTQAAAAAAAAAA/4gAff+IAP//iAD//4gA//+NC///nCz//6ZC//+oRv//qEb//6hG//+o
+        Rv//qEX//6E3//+XIv//iQT//4gA8P+IAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAD/iAAk/4gA//+IAP//iAD//5km//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEX//50tjQAAAAD/iAAU/4gA9f+IAP//iAD//5EU//+iOP//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//oDT//48RpQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAD/4gA8P+IAP//iAD//40M//+mQf//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//54wwgAAAAD/iABr/4gA//+IAP//jg7//6VA//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//ojn//5chPQAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAlv+IAP//iAD//4gA//+W
+        IP//p0T//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6A08AAAAAD/iACo/4gA//+I
+        AP//njD//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//njHFAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAGP+I
+        AOz/iAD//4gA//+IAf//myr//6hF//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6VA//+S
+        FyD/iADF/4gA//+ODv//p0P//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+h
+        N/z/nCs1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+IAEH/iAD3/4gA//+IAP//iAL//5sq//+nRP//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6dD//+aJ1T/iADB/4gA//+UGv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6dD//+dLY0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iABA/4gA7f+IAP//iAD//4gB//+XIv//pkL//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hF//+cLIT/iACH/4gA//+WHv//p0T//6I5//+fMvv/nzPo/6E35/+i
+        OPn/ojn//6hF//+oRv//qEX//58yv/+IAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAHv+IAL7/iAD//4gA//+I
+        AP//kRX//6E2//+oRv//qEb//6hG//+oRv//qEb//6hG//+eMa//iAAI/4gAef+PEZD/nS1x/5MYNf+I
+        AAQAAAAAAAAAAP+IAAH/lRw//5wstv+iOf//nzPK/50uCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+IAIb/jg2q/54xyv+eMdj/njDl/6A05f+gNOX/njHf/54w0f+dLrz/myqd/5gjcv+T
+        GTv/iABg/4gA4P+IAP//iAD//4sH//+cK///p0P//6hG//+oRv//pkL//54w8v+aKGUAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+ZJVj/iAJn/4gAqP+IAMv/iADB/4gAef+I
+        AAsAAAAAAAAAAAAAAAAAAAAAAAAAAP+IAP3/iQP//6E3//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6dE//+mQv//oDT2/50tsv+IAGr/iADf/4gA//+IAP//kxn//6E3//+dL///khe1/4gAFwAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAZ/+IAOf/iAD//4gA//+I
+        AP//iAD//4gA//+IANf/iAAYAAAAAAAAAAAAAAAAAAAAAP+IAO3/iAD//5kl//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6dD//+dLpr/iAAD/4gAWP+IAMn/iAD//4oG//+I
+        AYAAAAAAAAAAACR7/wcqf/9mLoH/ry+C/84wgv/EJ33/VQAAAAAAAAAAAAAAAP+IABH/iAC6/4gA//+I
+        AP//iAD//4gA//+IAP//iAD//4gA//+IAP//iADAAAAAAAAAAAAAAAAAAAAAAP+IAMb/iAD//5EV//+n
+        RP//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+mQf//myqWAAAAAAAA
+        AAD/iAA8/4gAkQAAAAAAAAAAKn//VTGD/+czhP//M4T//zOE//8zhP//M4T//yyA/8IfeP8x/4gAFP+I
+        ANP/iAD//4gA//+IAP//iAD//4wJ//+PEf//jAr//4gA//+IAP//iAD//4gASQAAAAAAAAAAAAAAAP+I
+        AIj/iAD//5EU//+nRP//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//p0P//58zu/+gNRMAAAAAAAAAAAAAAAAXc/+AMoT//jOE//8zhP//M4T//zOE//8zhP//M4T//zOE
+        //80gvr924Up6/+IAP//iAD//4wK//+XIf//nzP//6ZC//+nRP//p0P//50t//+LCP//iAD//4gAowAA
+        AAAAAAAAAAAAAP+IACn/iAD8/5EV//+oRf//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+iOOf/mSZPAAAAAAJn/3Mrf///M4T//zOE//8zhP//M4T//zOE
+        //8zhP//M4T//zOE//+YhYD//4gA//+JA///mCP//6I5//+oRv//qEb//6hG//+oRv//qEb//6hG//+f
+        Mv//iQP//4gA0wAAAAAAAAAAAAAAAAAAAAD/iACi/40M//+mQv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//oTf+5pE0xk13wf0zhP//M4T//zOE
+        //8zhP//M4T//zOE//8zhP//M4T//1SE1f/4hwj//4wJ//+eMf//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRf//lRz//4gA3wAAAAAAAAAAAAAAAAAAAAD/iAAw/4gA//+fMv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6dD//+Q
+        Ev+OhY3/M4T//zOE//8zhP//M4T//zOE//8zhP//M4T//5WFhP//jQv//6A1//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//nS///4gA9/+IAAgAAAAAAAAAAAAAAAAAAAAA/4gA7/+S
+        Fv//p0P//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rf//oTb//5Qa//eHCf9VhNT/M4T//zOE//8zhP//M4T//zOE//8zhP//M4T//zeE+v+okoX//KE6//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//oDT//4gA//+IAGkAAAAAAAAAAAAA
+        AAAAAAAA/4gAvP+IAP//mij//6hF//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//pkL//58z//+VHf//iQT/+YcG/3eFqv8zhP//M4T//zOE//8zhP//M4T//zOE//8pfv//GnX//xRy
+        //8Wc///bIGu//ugOv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//nS7//4gA//+I
+        AOj/iAAHAAAAAAAAAAAAAAAA/4gAY/+IAP//iAL//5gk//+iOf//qEb//6hG//+oRv//qEb//6hF//+m
+        Qv//ojj//50u//+WH///jg7//4gA//+IAP/Sgi3/M2zM/zCC//8zhP//M4T//zKE//8lfP//FXL//wVp
+        //8AZv//AGb//wBm//8AZv//AGb//2N6rP/9oTn//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//mif//4gA//+IAP//iABNAAAAAAAAAAAAAAAA/4gABf+IANj/iAD//4gA//+NDP//liD//5sp//+b
+        Kv//mCT//5MZ//+ODf//iAL//4gA//+IAP//iAD//4gA682BMoYDZvz/AGb//wdq//8Tcf//DW3//wJn
+        //8AZv/9AGb/ygBm/4IAZv9fAGb/awBm/2IAZv9fAGb/VQBm/0bYlE6i/6dD//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//myn//4gA//+IAP//iACLAAAAAAAAAAAAAAAAAAAAAP+IADL/iADz/4gA//+I
+        AP//iAD//4gA//+IAP//iAD//4gA//+IAP//iAD//4gA//+IAPH/iACD/4gADgBm/wYAZv/sDmjy/49/
+        f//hhB7+jHhz2ABm/2YAZv8YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAB/58zzP+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//oTf//4kD//+IAP//iACvAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD/iAA4/4gA4/+IAP//iAD//4gA//+IAP//iAD//4gA//+IAP//iADf/4gAeP+IABAAAAAAAAAAAP+I
+        AAHVk0949p488f+lQP//iQP//4gA9/+IAAwAAAAAAAAAAAAAAAAAAAAAAAAAAP+IABT/iABo/4gAYv+I
+        ADEAAAAA/5klNv+iOP3/qEb//6hG//+oRv//qEb//6hG//+oRv//qEX//5EV//+IAP//iAC0AAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAA/4gAC/+IAHD/iAC9/4gA4/+IAOT/iADD/4gAjP+IAEX/njCd/6A05P+d
+        L6f/nS2M/5wrpf+fM+b/p0P//6hG//+mQf//igX//4gA//+IAD4AAAAAAAAAAAAAAAAAAAAA/4gAV/+I
+        AOj/iAD//4gA//+IAP//iADj/4gAgf+YI4L/nS6g/54xtv+fMsT/njHH/6A0uv+dLqT/nCuG/5QaV/+I
+        ACMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/5IWF/+e
+        Mc7/p0T//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+iOP//iAH//4gA//+IAFUAAAAA/4gAIP+I
+        AHT/iADW/48R//+SFv//igX//4gA//+IAP//iAD//4gA//+IAPL/iABz/4gAAQAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD/lyEm/58y4/+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+dL///iAD//4gA//+I
+        AHX/iQTU/44O//+VHP//njD//6dE//+oRv//oTf//5Ud//+IAv//iAD//4gA//+IAP//iAD//4gAtv+I
+        AAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+ZJij/ojnq/6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+X
+        If//iAD//4gA//+IAFf/oDX3/6dD//+oRv//qEb//6hG//+oRv//qEb//6hF//+eMf//jQv//4gA//+I
+        AP//iAD//4gA//+IAKsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAA/5ooGf+hNuT/qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6dD//+PEP//iAD//4gA//+IAD3/njDI/6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//pD7//48R//+IAP//iAD//4gA//+IAP//iABDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAC/6A0y/+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6E2//+IAf//iAD//4gA//+IABr/nS+N/6hF//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6E3//+NDP//iAD//4gA//+IAP//iACbAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/njCI/6dE//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//5ch//+IAP//iAD//4gA5gAAAAD/mihG/6ZC//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+dL///iAD//4gA//+IAP//iADBAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+dLyv/ojj6/6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//pD7//4sH//+IAP//iAD//4gAoAAA
+        AAD/iAAE/6A19f+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+nQ///jg3//4gA//+I
+        AP//iAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+g
+        NLz/qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+nQ///lBr//4gA//+I
+        AP//iAD//4gARAAAAAAAAAAA/50vtv+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rf//khb//4gA//+IAP//iACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA/5EVO/+hN/7/qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6dD//+X
+        If//iAD//4gA//+IAP//iADKAAAAAAAAAAAAAAAA/50tZf+nQ///qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+nRP//kBL//4gA//+IAPz/iAAnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAA/4gAhP+NC///nCz//6ZC//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rf//oTb//5MY//+IAP//iAD//4gA//+IAPn/iAAyAAAAAAAAAAAAAAAA/5sqDP+hN/b/qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+hN///iQT//4gA//+IAJkAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAA/+IAJb/iAD//44O//+XIv//njH//6I4//+l
+        QP//ojj//50v//+VHP//igX//4gA//+IAP//iAD//4gA/f+IAF8AAAAAAAAAAAAAAAAAAAAAAAAAAP+f
+        M6j/qEX//6hG//+oRv//qEb//6hG//+oRv//qEb//6dE//+VHf//iAD//4gAzv+IAAoAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iABW/4gA5f+I
+        AP//iAD//4gB//+JBP//iAH//4gA//+IAP//iAD//4gA//+IAP//iADw/4gAUwAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+ZJTb/ojn+/6hG//+oRv//qEb//6hG//+oRv//qEX//5sq//+IAf//iADH/4gAEwAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA/4gACf+IAGz/iADP/4gA//+IAP//iAD//4gA//+IAP//iAD//4gA7/+IAJL/iAAYAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/nzLF/6hG//+oRv//qEb//6hG//+mQv//mSX//4gC+f+I
+        AIb/iAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAGv+IAE7/iABr/4gAb/+IAGT/iAA5/4gABQAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/nCxL/6ZB//+oRv//pkL//50u//+Q
+        Eur/iACO/4gAHwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/50uhf+f
+        Mon/lBtn/4gAMP+IAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP//z////wAA//wH////AAD/8Af///8AAP/gA////wAA/8AD////AAD/gAP///8AAP8A
+        Af4H/wAA/wAB+AD/AAD/AAHgAH8AAP4AAMAAPwAA/gAAwAAfAAD+AACAAD8AAP4AAIAAPwAA/wAAgAB/
+        AAD/AAAAAH8AAP+AAAAA/wAA/8AAAAD/AAD/4AABgf8AAAAAAH/wHwAAAAAA/+APAAAAAAMDgA8AAAAA
+        ZgAABwAAAAAcAAAHAAAAAAgAAAcAAIAAAAAABwAAgAAAAAADAADAAAAAAAMAAMAAAAAAAQAAwAAAAAAB
+        AADAAAAAAAEAAOAAAD/AAQAA8ADAfCABAAD4AAB4AAMAAP/gAEAB/wAA/8AAAAD/AAD/gAAAAP8AAP8A
+        AAAAfwAA/gAAAAB/AAD+AACAAH8AAPwAAIAAfwAA/AAAwAB/AAD4AAHAAH8AAPgAAcAA/wAA+AAD4AD/
+        AAD+AAfgAf8AAP8AD/AD/wAA/+A/8A//AAD////4P/8AACgAAAAgAAAAQAAAAAEAIAAAAAAAgBAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gABf+I
+        AEX/iwh+/5MZlf+IAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gABv+I
+        AHr/jQvr/5oo//+lQP//pkL//5spUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+I
+        AB7/iADR/5IX//+lQP//qEb//6hG//+oRv//nS+2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD/iAAR/4gA3f+PEP//pkH//6hG//+oRv//qEb//6hG//+hN/n/myoSAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAP+IAJ3/iAD//54w//+oRv//qEb//6hG//+oRv//qEb//6dE//+dLmkAAAAAAAAAAAAA
+        AAAAAAAA/4gAIf+IAHf/iACm/4gArP+IAI3/iABL/4gAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAD/iAAQ/4gA+f+LCP//pkL//6hG//+oRv//qEb//6hG//+oRv//qEb//54wtAAA
+        AAAAAAAA/4gAAf+IAIn/iAD7/4gA//+IAP//iAD//4gA//+IAP//iADd/4gASQAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+IAEL/iAD//4wK//+mQv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//oDXvAAAAAAAAAAD/iACS/4gA//+IAP//kBP//5sp//+gNP//oDT//5sp//+RFf//iAD9/4gAVgAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4gAQf+IAP//iAH//6A1//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+mQf//mSUw/4gALf+IAP3/iAH//5km//+nQ///qEb//6hG//+oRv//qEb//6dE//+d
+        Lf//iwdBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAO/4gA9v+IAP//kxn//6dD//+o
+        Rv//qEb//6hG//+oRv//qEb//6dE//+cLGz/iACF/4gA//+WHv//qEX//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//58z2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iACB/4gA//+I
+        AP//mSb//6dE//+oRv//qEb//6hG//+oRv//qEb//54wn/+IAKv/iAL//6Q8//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+mQf7/nCxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+I
+        AAH/iACk/4gA//+IAf//mCT//6dD//+oRv//qEb//6hG//+oRv//nzLK/4gAnP+MCv//pkL//6ZB//+l
+        P///pkH//6ZC//+oRv//p0T//54wowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iAAD/4gAD/+W
+        HhH/iAANAAAAAAAAAAD/iABx/4gA9f+IAP//kxj//6E3//+oRv//qEb//6hG//+hNu//iAAg/4oFi/+d
+        Ln3/lyFE/5gjHf+dLSf/mypg/6A01/+fMrr/iAAFAAAAAAAAAAAAAAAAAAAAAAAAAAD/iABp/48P7f+h
+        N///pUD//6ZB//+lP///oDT7/58y5P+eML3/mSag/4oFuP+IAPr/jAn//50t//+mQv//nCvp/5gkWgAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/iQNL/4gAvv+IAPj/iAD4/4gAof+IAAoAAAAAAAAAAP+I
+        AHL/iAH//6A1//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRf//oDXX/4wKL/+IAI3/iAHw/44Ny/+I
+        ABMfeP8ILID/bS+C/6wugf+qKH7/MwAAAAD/iAAH/4gAo/+IAP//iAD//4gA//+IAP//iAD//4gApgAA
+        AAAAAAAA/4gARv+IAP//myr//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+oRf//nzPV/50vIP+I
+        AA//iAAdHHb/NTGD/+IzhP//M4T//zOE//8yhP/8LH77pfWGCr//iAD//4oG//+TGP//mSX//5ci//+M
+        Cv//iAD+/4gAJQAAAAD/iAAG/4gA5/+bKv//qEb//6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//ojjv/5spYgBm/ysnff/xM4T//zOE//8zhP//M4T//zOE//+WhYP//4gC//+WIP//ojj//6hF//+o
+        Rv//qEb//6E2//+MCf//iABgAAAAAAAAAAD/iABv/5Ye//+oRv//qEb//6hG//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//ojn/1o9E+F+Ex/8zhP//M4T//zOE//8zhP//R4Tl//iIC///nS7//6hF//+o
+        Rv//qEb//6hG//+oRv//qEb//5gj//+IAHIAAAAAAAAAAP+IACD/iwf//6Q9//+oRv//qEb//6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6dD//+eMP/9jQ7/aIW8/zOE//8zhP//M4T//zOE//80hP3/p5CD//2l
+        Qf//qEb//6hG//+oRv//qEb//6hG//+oRv//nCz//4gAxQAAAAAAAAAAAAAAAP+IAOH/kBP//6I4//+o
+        Rv//qEb//6hG//+nRP//pkL//6E2//+ZJv//kBL/9YYK/G18o/8zhP//M4T//zGD//8je///E3H//wdq
+        //8Gaf//cX2i//6hOf//qEb//6hG//+oRv//qEb//6hG//+ZJv//iAD//4gAQAAAAAAAAAAA/4gAaf+I
+        AP//jAn//5Yf//+ZJv//lyH//5IX//+NC///iAH//4gA/f+IAKUdaeLvA2f//yBz8v8Obv//AWb/5QBm
+        /5wAZv9vAGb/bwBm/28AZv9gzZNZsP+nQ///qEb//6hG//+oRv//qEb//5km//+IAP//iACFAAAAAAAA
+        AAAAAAAA/4gAnf+IAP//iAD//4gA//+IAP//iAD//4gA+/+IAKv/iAAwAAAAADtxzX3DkGDp/YkH/rd+
+        SH0AAAAAAAAAAAAAAAAAAAAA/4gAFf+IAAj/iAAC/6A01v+oRv//qEb//6hG//+oRv//oTb//4gC//+I
+        AKUAAAAAAAAAAAAAAAAAAAAA/4gATv+IAKn/iADA/4gArf+IAHT/mymr/58ysP+dL4z/njGw/6E39v+n
+        Q///jQz//4gApgAAAAAAAAAA/4gAFP+IAJj/iAD+/4gA+/+IAL//jxGP/54wnf+fM6//nzK3/58ypv+e
+        MIr/iwhW/4gAGwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/mCQO/54xw/+nRP//qEb//6hG//+o
+        Rv//qEb//6ZB//+KBv//iAC7/4gAXf+KBa//khb4/5sq//+WHv//iQP//4gA//+IAP//iADF/4gAHAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/5gkDv+fM9H/qEX//6hG//+o
+        Rv//qEb//6hG//+oRv//nzL//4gA//+IALX/nCzY/6I5//+nRP//qEb//6hF//+fM///jw///4gA//+I
+        AP//iADc/4gADgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+IAAL/oDTD/6hG//+o
+        Rv//qEb//6hG//+oRv//qEb//6hG//+XIv//iAD//4gAnf+eMKL/qEb//6hG//+oRv//qEb//6hG//+l
+        QP//kBL//4gA//+IAP//iAB2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/54wiP+n
+        RP//qEb//6hG//+oRv//qEb//6hG//+oRv//pkL//44N//+IAP//iABu/50tX/+nQ///qEb//6hG//+o
+        Rv//qEb//6hG//+hNv//iQT//4gA//+IAKkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+d
+        Lib/ojj5/6hG//+oRv//qEb//6hG//+oRv//qEb//6hG//+aKP//iAD//4gA/v+IACP/lRwS/6E3+/+o
+        Rv//qEb//6hG//+oRv//qEb//6hF//+RFf//iAD//4gAlgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA/5kmq/+nQ///qEb//6hG//+oRv//qEb//6hG//+oRf//nS7//4kE//+IAP//iACxAAAAAAAA
+        AAD/oDTG/6hG//+oRv//qEb//6hG//+oRv//qEX//5EV//+IAP//iABDAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAD/iACZ/5EU//+dLv//ojn//6ZC//+mQv//oDX//5Ye//+IAv//iAD//4gA6f+I
+        AB0AAAAAAAAAAP+eMWz/p0T//6hG//+oRv//qEb//6hG//+hNv//iQT//4gAqwAAAAAAAAAAAAAAAAAA
+        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
+        AACAgQAA4AcAAMAHAACABwAAgQcAAOOPAAA=
+</value>
+  </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>NoControl</value>
+  </data>
+  <data name="$this.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="$this.MaximumSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>0, 0</value>
+  </data>
+  <data name="$this.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Inherit</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>WindowsDefaultLocation</value>
+  </data>
+  <data name="$this.Text">
+    <value>MOD Studio</value>
+  </data>
+  <data name="&gt;&gt;mainMenu.Name">
+    <value>mainMenu</value>
+  </data>
+  <data name="&gt;&gt;mainMenu.Type">
+    <value>System.Windows.Forms.MainMenu, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFile.Name">
+    <value>menuItemFile</value>
+  </data>
+  <data name="&gt;&gt;menuItemFile.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileNew.Name">
+    <value>menuItemFileNew</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileNew.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileOpen.Name">
+    <value>menuItemFileOpen</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileOpen.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileClose.Name">
+    <value>menuItemFileClose</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileClose.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep1.Name">
+    <value>menuItemSep1</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep1.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSave.Name">
+    <value>menuItemFileSave</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSave.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSaveAs.Name">
+    <value>menuItemFileSaveAs</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSaveAs.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSaveAll.Name">
+    <value>menuItemFileSaveAll</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileSaveAll.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep3.Name">
+    <value>menuItemSep3</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep3.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileExport.Name">
+    <value>menuItemFileExport</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileExport.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileValidate.Name">
+    <value>menuItemFileValidate</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileValidate.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep2.Name">
+    <value>menuItemSep2</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep2.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileExit.Name">
+    <value>menuItemFileExit</value>
+  </data>
+  <data name="&gt;&gt;menuItemFileExit.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemEdit.Name">
+    <value>menuItemEdit</value>
+  </data>
+  <data name="&gt;&gt;menuItemEdit.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemView.Name">
+    <value>menuItemView</value>
+  </data>
+  <data name="&gt;&gt;menuItemView.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemTools.Name">
+    <value>menuItemTools</value>
+  </data>
+  <data name="&gt;&gt;menuItemTools.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemToolsOptions.Name">
+    <value>menuItemToolsOptions</value>
+  </data>
+  <data name="&gt;&gt;menuItemToolsOptions.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemWindow.Name">
+    <value>menuItemWindow</value>
+  </data>
+  <data name="&gt;&gt;menuItemWindow.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelp.Name">
+    <value>menuItemHelp</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelp.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelpHelp.Name">
+    <value>menuItemHelpHelp</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelpHelp.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep4.Name">
+    <value>menuItemSep4</value>
+  </data>
+  <data name="&gt;&gt;menuItemSep4.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelpAbout.Name">
+    <value>menuItemHelpAbout</value>
+  </data>
+  <data name="&gt;&gt;menuItemHelpAbout.Type">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog1.Name">
+    <value>openFileDialog1</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog1.Type">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonNew.Name">
+    <value>toolBarButtonNew</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonNew.Type">
+    <value>System.Windows.Forms.ToolBarButton, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonOpen.Name">
+    <value>toolBarButtonOpen</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonOpen.Type">
+    <value>System.Windows.Forms.ToolBarButton, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonSave.Name">
+    <value>toolBarButtonSave</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonSave.Type">
+    <value>System.Windows.Forms.ToolBarButton, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonSaveAll.Name">
+    <value>toolBarButtonSaveAll</value>
+  </data>
+  <data name="&gt;&gt;toolBarButtonSaveAll.Type">
+    <value>System.Windows.Forms.ToolBarButton, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;imageList1.Name">
+    <value>imageList1</value>
+  </data>
+  <data name="&gt;&gt;imageList1.Type">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog2.Name">
+    <value>openFileDialog2</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog2.Type">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name">
+    <value>Studio</value>
+  </data>
+  <data name="&gt;&gt;$this.Type">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>
