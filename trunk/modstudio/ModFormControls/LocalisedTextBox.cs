@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LocalisedTextBox.cs,v 1.6 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: LocalisedTextBox.cs,v 1.7 2006-07-03 12:54:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,8 +25,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModFormControls
 {

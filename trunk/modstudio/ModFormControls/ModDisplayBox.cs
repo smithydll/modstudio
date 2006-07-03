@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.13 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.14 2006-07-03 12:54:28 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,8 +25,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModFormControls
 {
@@ -212,7 +212,7 @@ namespace ModFormControls
 					ActionItems[i].Visible = true;
 					//ActionItems[i].Location = new Point(0,0);
 
-					switch (((ModAction)Actions[i]).ActionType)
+					switch (Actions[i].Type)
 					{
 						case "SQL":
 						case "COPY":
@@ -256,8 +256,8 @@ namespace ModFormControls
 				for (int i = 0; i < ActionItems.Count; i++)
 				{
 					ActionItems[i].SuspendLayout();
-					ActionItems[i].ActionTitle = Actions[i].ActionType;
-					ActionItems[i].ActionBody = GetFirstLines(Actions[i].ActionBody);
+					ActionItems[i].ActionTitle = Actions[i].Type;
+					ActionItems[i].ActionBody = GetFirstLines(Actions[i].Body);
 					ActionItems[i].ResumeLayout();
 				}
 			}
@@ -293,8 +293,8 @@ namespace ModFormControls
 					mai.Location = new Point(10 + indent, i * itemRealHeight + 10 + offset);
 					mai.BackColor = GetColour(i);
 
-					ActionItems[i].ActionTitle = Actions[i].ActionType;
-					ActionItems[i].ActionBody = GetFirstLines(Actions[i].ActionBody);
+					ActionItems[i].ActionTitle = Actions[i].Type;
+					ActionItems[i].ActionBody = GetFirstLines(Actions[i].Body);
 
 					/*if (selectedIndex == i)
 					{
@@ -353,7 +353,7 @@ namespace ModFormControls
 			string type;
 			try
 			{
-				type = Actions[index].ActionType;
+				type = Actions[index].Type;
 			}
 			catch
 			{
@@ -403,10 +403,10 @@ namespace ModFormControls
 
 			try
 			{
-				type = Actions[index].ActionType;
+				type = Actions[index].Type;
 				if (index + 1 < ActionItems.Count)
 				{
-					next = Actions[index + 1].ActionType;
+					next = Actions[index + 1].Type;
 				}
 			}
 			catch
