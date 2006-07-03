@@ -9,14 +9,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModFormControls", "ModFormC
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
+		BuildAll = BuildAll
 		Debug = Debug
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll.ActiveCfg = BuildAll|.NET
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll.Build.0 = BuildAll|.NET
 		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug.ActiveCfg = Debug|.NET
 		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug.Build.0 = Debug|.NET
 		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release.ActiveCfg = Release|.NET
 		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release.Build.0 = Release|.NET
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll.ActiveCfg = BuildAll|.NET
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll.Build.0 = BuildAll|.NET
 		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug.ActiveCfg = Debug|.NET
 		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug.Build.0 = Debug|.NET
 		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Release.ActiveCfg = Release|.NET

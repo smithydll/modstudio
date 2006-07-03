@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialog.cs,v 1.10 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: HistoryEditorDialog.cs,v 1.11 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,8 +22,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 /*
  * Inspired by:

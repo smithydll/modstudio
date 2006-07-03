@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.6 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.7 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,8 +25,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModStudio
 {
@@ -493,7 +493,7 @@ namespace ModStudio
 		private void button3_Click(object sender, System.EventArgs e)
 		{
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
-			authorEditorDialog1.Entry = new ModAuthorEntry(
+			authorEditorDialog1.Entry = new ModAuthor(
 				reg.GetValue("author_username", "UserName").ToString(),
 				reg.GetValue("author_realname", "RealName").ToString(),
 				reg.GetValue("author_email", "invalid@invalid.invalid").ToString(),

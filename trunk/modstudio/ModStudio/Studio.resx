@@ -335,7 +335,7 @@
     <value>True</value>
   </data>
   <data name="menuItemFileValidate.Text">
-    <value>&amp;Validate Text MOD</value>
+    <value>&amp;Validate MOD</value>
   </data>
   <data name="menuItemFileValidate.Visible" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -581,7 +581,7 @@
     <value>120, 17</value>
   </data>
   <data name="openFileDialog1.Filter">
-    <value>phpBB MOD Files (*.mod,*.xml,*.txt)|*.mod;*.xml;*.txt|phpBB2 MOD Files (*.mod,*.txt)|*.mod;*.txt|phpBB XML MOD Format (*.xml)|*.xml</value>
+    <value>phpBB MOD Files (*.mod,*.xml,*.txt)|*.mod;*.xml;*.txt|phpBB2 MOD Files (*.mod,*.txt)|*.mod;*.txt|MODX Format(*.xml)|*.xml</value>
   </data>
   <data name="openFileDialog1.Title">
     <value />
@@ -821,16 +821,13 @@
     <value>355, 17</value>
   </data>
   <data name="openFileDialog2.Filter">
-    <value>phpBB2 Mod Files (*.mod,*.txt)|*.mod;*.txt</value>
+    <value>phpBB MOD Files (*.mod,*.xml,*.txt)|*.mod;*.xml;*.txt|phpBB2 MOD Files (*.mod,*.txt)|*.mod;*.txt|MODX Format(*.xml)|*.xml</value>
   </data>
   <data name="openFileDialog2.Title">
     <value>Open Text MOD to Validate</value>
   </data>
   <data name="$this.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
-  </data>
-  <data name="$this.Name">
-    <value>Studio</value>
   </data>
   <data name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>(Default)</value>
@@ -852,6 +849,9 @@
   </data>
   <data name="$this.SnapToGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </data>
+  <data name="$this.Name">
+    <value>Studio</value>
   </data>
   <data name="$this.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Private</value>

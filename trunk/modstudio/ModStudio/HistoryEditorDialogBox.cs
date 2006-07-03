@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: HistoryEditorDialogBox.cs,v 1.9 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: HistoryEditorDialogBox.cs,v 1.10 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -24,8 +24,8 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModStudio
 {
@@ -76,7 +76,7 @@ namespace ModStudio
 			// TODO: Add any constructor code after InitializeComponent call
 			//
 			entry = new ModHistoryEntry();
-			entry.HistoryChangeLog = new ModHistoryChangeLogLocalised();
+			entry.ChangeLog = new ModHistoryChangeLogLocalised();
 		}
 
 		private ModHistoryEntry entry;
@@ -87,21 +87,21 @@ namespace ModStudio
 		/// <param name="entry"></param>
 		public void SetEntry(ModHistoryEntry entry)
 		{
-			if (entry.HistoryChangeLog.Count == 0)
+			if (entry.ChangeLog.Count == 0)
 			{
-				entry.HistoryChangeLog.Add(new ModTemplateTools.DataStructures.ModHistoryChangeLog(), "en-GB");
+				entry.ChangeLog.Add(new ModHistoryChangeLog(), "en-GB");
 			}
 			//TODO: 
 			//textBoxEntry.Text = entry.HistoryChanges.GetValue().Replace("\r","").Replace("\n", "\r\n");
-			MODVersionMajor.Value = entry.HistoryVersion.VersionMajor;
-			MODVersionMinor.Value = entry.HistoryVersion.VersionMinor;
-			MODVersionRevision.Value = entry.HistoryVersion.VersionRevision;
-			MODVersionRelease.Text = entry.HistoryVersion.VersionRelease.ToString();
-			MODHistorydtp.Value = entry.HistoryDate;
+			MODVersionMajor.Value = entry.Version.Major;
+			MODVersionMinor.Value = entry.Version.Minor;
+			MODVersionRevision.Value = entry.Version.Revision;
+			MODVersionRelease.Text = entry.Version.Release.ToString();
+			MODHistorydtp.Value = entry.Date;
 
 			comboBoxLanguages.Items.Clear();
 			comboBoxLanguages.Text = "";
-			foreach (DictionaryEntry de in entry.HistoryChangeLog)
+			foreach (DictionaryEntry de in entry.ChangeLog)
 			{
 				comboBoxLanguages.Items.Add((string)de.Key);
 				if (comboBoxLanguages.Items.Count == 1)
@@ -412,13 +412,13 @@ namespace ModStudio
 		{
 			get
 			{
-				entry.HistoryVersion.VersionMajor = (int)MODVersionMajor.Value;
-				entry.HistoryVersion.VersionMinor = (int)MODVersionMinor.Value;
-				entry.HistoryVersion.VersionRevision = (int)MODVersionRevision.Value;
-				entry.HistoryDate = MODHistorydtp.Value;
+				entry.Version.Major = (int)MODVersionMajor.Value;
+				entry.Version.Minor = (int)MODVersionMinor.Value;
+				entry.Version.Revision = (int)MODVersionRevision.Value;
+				entry.Date = MODHistorydtp.Value;
 				if (MODVersionRelease.Text.Length > 0)
 				{
-					entry.HistoryVersion.VersionRelease = MODVersionRelease.Text[0];
+					entry.Version.Release = MODVersionRelease.Text[0];
 				}
 				return entry;
 			}
@@ -431,13 +431,13 @@ namespace ModStudio
 
 		private void buttonOk_Click(object sender, System.EventArgs e)
 		{
-			entry.HistoryVersion.VersionMajor = (int)MODVersionMajor.Value;
-			entry.HistoryVersion.VersionMinor = (int)MODVersionMinor.Value;
-			entry.HistoryVersion.VersionRevision = (int)MODVersionRevision.Value;
-			entry.HistoryDate = MODHistorydtp.Value;
+			entry.Version.Major = (int)MODVersionMajor.Value;
+			entry.Version.Minor = (int)MODVersionMinor.Value;
+			entry.Version.Revision = (int)MODVersionRevision.Value;
+			entry.Date = MODHistorydtp.Value;
 			if (MODVersionRelease.Text.Length > 0)
 			{
-				entry.HistoryVersion.VersionRelease = MODVersionRelease.Text[0];
+				entry.Version.Release = MODVersionRelease.Text[0];
 				//this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(new ModTemplateTools.PhpbbMod.ModHistoryEntry(new ModTemplateTools.PhpbbMod.ModVersion((int)MODVersionMajor.Value, (int)MODVersionMinor.Value, (int)MODVersionRevision.Value, MODVersionRelease.Text[0]), MODHistorydtp.Value, new ModTemplateTools.PhpbbMod.PropertyLang(textBoxEntry.Text))));
 			}
 			//this.Save(this, new HistoryEditorDialogBoxSaveEventArgs(entry));
@@ -454,7 +454,7 @@ namespace ModStudio
 			try
 			{
 				listViewModChanges.Items.Clear();
-				foreach (string change in entry.HistoryChangeLog[comboBoxLanguages.Text])
+				foreach (string change in entry.ChangeLog[comboBoxLanguages.Text])
 				{
 					listViewModChanges.Items.Add(change.Split('\n')[0]);
 				}
@@ -488,11 +488,11 @@ namespace ModStudio
 			int index = int.Parse(e.Type);
 			if (index == NewChange)
 			{
-				entry.HistoryChangeLog[comboBoxLanguages.Text].Add(e.Note.GetValue());
+				entry.ChangeLog[comboBoxLanguages.Text].Add(e.Note.GetValue());
 			}
 			else
 			{
-				entry.HistoryChangeLog[comboBoxLanguages.Text][index] = e.Note.GetValue();
+				entry.ChangeLog[comboBoxLanguages.Text][index] = e.Note.GetValue();
 			}
 			comboBoxLanguages_SelectedIndexChanged(null, null);
 		}
@@ -519,11 +519,11 @@ namespace ModStudio
 		{
 			try
 			{
-				if (entry.HistoryChangeLog[comboBoxLanguages.Text].Count > 0)
+				if (entry.ChangeLog[comboBoxLanguages.Text].Count > 0)
 				{
 					if (listViewModChanges.SelectedIndices.Count > 0)
 					{
-						noteEditorDialog1.Note = new StringLocalised(entry.HistoryChangeLog[comboBoxLanguages.Text][listViewModChanges.SelectedIndices[0]]);
+						noteEditorDialog1.Note = new StringLocalised(entry.ChangeLog[comboBoxLanguages.Text][listViewModChanges.SelectedIndices[0]]);
 						noteEditorDialog1.Localised = false;
 						noteEditorDialog1.Type = listViewModChanges.SelectedIndices[0].ToString();
 						noteEditorDialog1.ShowDialog(this);
@@ -542,13 +542,13 @@ namespace ModStudio
 		/// <param name="e"></param>
 		private void button3_Click(object sender, System.EventArgs e)
 		{
-			if (entry.HistoryChangeLog.Count == 1)
+			if (entry.ChangeLog.Count == 1)
 			{
 				MessageBox.Show(this, "There must always be at least one language", "Can't remove language", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
 			}
 			else
 			{
-				entry.HistoryChangeLog.Remove(comboBoxLanguages.Text);
+				entry.ChangeLog.Remove(comboBoxLanguages.Text);
 				comboBoxLanguages.Items.Remove(comboBoxLanguages.SelectedItem);
 				comboBoxLanguages.SelectedIndex = 0;
 			}
@@ -573,11 +573,11 @@ namespace ModStudio
 		{
 			try
 			{
-				if (entry.HistoryChangeLog[comboBoxLanguages.Text].Count > 0)
+				if (entry.ChangeLog[comboBoxLanguages.Text].Count > 0)
 				{
 					if (listViewModChanges.SelectedIndices.Count > 0)
 					{
-						entry.HistoryChangeLog[comboBoxLanguages.Text].RemoveAt(listViewModChanges.SelectedIndices[0]);
+						entry.ChangeLog[comboBoxLanguages.Text].RemoveAt(listViewModChanges.SelectedIndices[0]);
 					}
 				}
 			}
@@ -596,7 +596,7 @@ namespace ModStudio
 		{
 			try
 			{
-				entry.HistoryChangeLog.Add(new ModTemplateTools.DataStructures.ModHistoryChangeLog(), e.Language);
+				entry.ChangeLog.Add(new ModHistoryChangeLog(), e.Language);
 				comboBoxLanguages.Items.Add(e.Language);
 				comboBoxLanguages.SelectedIndex = comboBoxLanguages.Items.Count - 1;
 			}

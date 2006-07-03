@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: NoteEditorDialogBox.cs,v 1.9 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: NoteEditorDialogBox.cs,v 1.10 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -24,7 +24,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModStudio
 {
