@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LanguageSelectionDialog.cs,v 1.5 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: LanguageSelectionDialog.cs,v 1.6 2006-07-03 12:54:27 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,8 +22,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 /*
  * Inspired by:
