@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.14 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: Studio.cs,v 1.15 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -26,8 +26,9 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
 using Microsoft.Win32;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
+using Phpbb.ModTeam.Tools.Validation;
 using System.IO;
 using System.Net;
 
@@ -128,7 +129,7 @@ namespace ModStudio
 				ModEditor newEditor = new ModEditor();
 				newEditor.MdiParent = this;
 				//newEditor.ThisMod.Header.ModTitle = new PropertyLang();
-				newEditor.ThisMod.Header.ModTitle[defaultLanguage] = "Untitled Mod";
+				newEditor.ThisMod.Header.Title[defaultLanguage] = "Untitled Mod";
 				newEditor.Show();
 			}
 		}
@@ -659,7 +660,7 @@ namespace ModStudio
 		{
 			ModEditor newEditor = new ModEditor();
 			newEditor.MdiParent = this;
-			newEditor.ThisMod.Header.ModTitle.Add("Untitled Mod", "en-GB");
+			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en-GB");
 			newEditor.Show();
 		}
 
@@ -784,9 +785,17 @@ namespace ModStudio
 			{
 				if (openFileDialog2.FileName.ToLower().EndsWith(".txt") || openFileDialog2.FileName.ToLower().EndsWith(".mod"))
 				{
-					ModTemplateTools.ModValidator validator = new ModTemplateTools.ModValidator(Application.StartupPath);
-					ModTemplateTools.ModValidator.ModValidationReport validationReport = validator.ValidateTextMod(OpenTextFile(openFileDialog2.FileName));
-					SaveTextFile(validationReport.ToString(ModValidator.ModValidationReport.ModValidationReportFormat.HTML), Application.UserAppDataPath + @"\validationReport.html");
+					TextMod aMod = new TextMod(Application.StartupPath);
+					Report report = aMod.Validate(openFileDialog2.FileName);
+					SaveTextFile(report.ToString(Phpbb.ModTeam.Tools.Validation.Report.ReportFormat.Html), Application.UserAppDataPath + @"\validationReport.html");
+					ValidationResult validationResultWindow = new ValidationResult();
+					validationResultWindow.ShowDialog(this);
+				}
+				else if (openFileDialog2.FileName.ToLower().EndsWith(".xml") || openFileDialog2.FileName.ToLower().EndsWith(".modx"))
+				{
+					ModxMod aMod = new ModxMod();
+					Report report = aMod.Validate(openFileDialog2.FileName);
+					SaveTextFile(report.ToString(Phpbb.ModTeam.Tools.Validation.Report.ReportFormat.Html), Application.UserAppDataPath + @"\validationReport.html");
 					ValidationResult validationResultWindow = new ValidationResult();
 					validationResultWindow.ShowDialog(this);
 				}
@@ -811,17 +820,17 @@ namespace ModStudio
 			ModVersion newVersion = ModVersion.Parse(version);
 			ModVersion thisVersion = ModVersion.Parse(Application.ProductVersion);
 			Console.WriteLine(newVersion.ToString() + " [...] " + thisVersion.ToString());
-			if (newVersion.VersionMajor > thisVersion.VersionMajor)
+			if (newVersion.Major > thisVersion.Major)
 			{
 				return true;
 			}
-			else if (newVersion.VersionMajor == thisVersion.VersionMajor
-				&& newVersion.VersionMinor > newVersion.VersionMinor)
+			else if (newVersion.Major == thisVersion.Major
+				&& newVersion.Minor > newVersion.Minor)
 			{
 				return true;
 			}
-			else if (newVersion.VersionRelease == thisVersion.VersionRelease
-				&& newVersion.VersionRelease > newVersion.VersionRelease)
+			else if (newVersion.Release == thisVersion.Release
+				&& newVersion.Release > newVersion.Release)
 			{
 				return true;
 			}

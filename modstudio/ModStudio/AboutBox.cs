@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: AboutBox.cs,v 1.7 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: AboutBox.cs,v 1.8 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -157,7 +157,7 @@ namespace ModStudio
 		private void AboutBox_Load(object sender, System.EventArgs e)
 		{
 			label2.Text = Application.ProductVersion;
-			label3.Text = "Copyright © 2005 David Smith (smithy_dll). All rights reserved. All logos and graphics are copyright David Smith. Some logos and graphics under license (GPL) from the phpBB group.\n\nTextbox component from http://icsharpcode.net/\n\nLicensed under the GPL.";
+			label3.Text = "Copyright © 2005-2006 David Smith (smithy_dll). All rights reserved. All logos and graphics are copyright David Smith. Some logos and graphics under license (GPL) from the phpBB group.\n\nTextbox component from http://icsharpcode.net/\n\nLicensed under the GPL.";
 		}
 	}
 }

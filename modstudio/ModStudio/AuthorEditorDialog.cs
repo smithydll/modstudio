@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: AuthorEditorDialog.cs,v 1.10 2006-02-17 04:11:45 smithydll Exp $
+ *   $Id: AuthorEditorDialog.cs,v 1.11 2006-07-03 13:05:58 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,8 +22,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using ModTemplateTools;
-using ModTemplateTools.DataStructures;
+using Phpbb.ModTeam.Tools;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 /*
  * Inspired by:
@@ -36,12 +36,12 @@ namespace ModStudio
 	/// </summary>
 	public class AuthorEditorDialog : System.Windows.Forms.CommonDialog
 	{
-		private ModAuthorEntry entry = new ModAuthorEntry();
+		private ModAuthor entry = new ModAuthor();
 		/// <summary>
 		/// 
 		/// </summary>
 		[DefaultValue(null)]
-		public ModAuthorEntry Entry
+		public ModAuthor Entry
 		{
 			get
 			{
@@ -122,7 +122,7 @@ namespace ModStudio
 		public override void Reset()
 		{
 			this.index = -1;
-			this.entry = new ModAuthorEntry();
+			this.entry = new ModAuthor();
 		}
 	}
 } 

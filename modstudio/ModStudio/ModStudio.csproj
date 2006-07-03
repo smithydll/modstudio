@@ -62,6 +62,26 @@
                     TreatWarningsAsErrors = "false"
                     WarningLevel = "4"
                 />
+                <Config
+                    Name = "BuildAll"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = ""
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\BuildAll\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
             </Settings>
             <References>
                 <Reference
@@ -95,11 +115,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "ModTemplateTools"
-                    AssemblyName = "ModTemplateTools"
-                    HintPath = "..\..\phpBBMOD\bin\Debug\ModTemplateTools.dll"
-                />
-                <Reference
                     Name = "ICSharpCode.TextEditor"
                     AssemblyName = "ICSharpCode.TextEditor"
                     HintPath = "..\ModFormControls\bin\debug\ICSharpCode.TextEditor.dll"
@@ -119,6 +134,11 @@
                     VersionMinor = "1"
                     Lcid = "0"
                     WrapperTool = "aximp"
+                />
+                <Reference
+                    Name = "Phpbb.ModTeam.Tools"
+                    AssemblyName = "Phpbb.ModTeam.Tools"
+                    HintPath = "..\..\Phpbb.ModTeam.Tools\bin\Release\Phpbb.ModTeam.Tools.dll"
                 />
             </References>
         </Build>
