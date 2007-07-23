@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModxMod.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: ModxMod.cs,v 1.2 2007-07-23 11:17:30 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -39,8 +39,10 @@ namespace Phpbb.ModTeam.Tools
 	public class ModxMod : Mod, IMod
 	{
 
-		private string defaultXsltFile = "modx.subsilver.en.xsl";
+		public const string Default2XsltFile = "modx.subsilver.en.xsl";
+        public const string Default3XsltFile = "modx.prosilver.en.xsl";
 		private string XmlValidationMessage;
+        private string modxVersion = "1.0.1";
 
 		/// <summary>
 		/// 
@@ -48,6 +50,11 @@ namespace Phpbb.ModTeam.Tools
 		public ModxMod() : base()
 		{
 		}
+
+        public string GetModxVersion()
+        {
+            return modxVersion;
+        }
 
 		/// <summary>
 		/// 
@@ -57,7 +64,13 @@ namespace Phpbb.ModTeam.Tools
 		{
 			lastReadFormat = ModFormats.Modx;
 			mod xmlDataSet = new mod();
-			xmlDataSet.ReadXml(fileName);
+            xmlDataSet.ReadXml(fileName, System.Data.XmlReadMode.IgnoreSchema);
+            if (xmlDataSet.title.Rows.Count == 0)
+            {
+                xmlDataSet.Namespace = "http://www.phpbb.com/mods/xml/modx-1.0.xsd";
+                xmlDataSet.ReadXml(fileName, System.Data.XmlReadMode.IgnoreSchema);
+                modxVersion = "1.0";
+            }
 
 			ReadAuthors(xmlDataSet);
 			ReadTitle(xmlDataSet);
@@ -84,7 +97,13 @@ namespace Phpbb.ModTeam.Tools
 			Stream modxStream = new MemoryStream();
 			StreamWriter sw = new StreamWriter(modxStream);
 			sw.Write(modxMod);
-			xmlDataSet.ReadXml(modxStream);
+			xmlDataSet.ReadXml(modxStream, System.Data.XmlReadMode.IgnoreSchema);
+            if (xmlDataSet.title.Rows.Count == 0)
+            {
+                xmlDataSet.Namespace = "http://www.phpbb.com/mods/xml/modx-1.0.xsd";
+                xmlDataSet.ReadXml(modxStream, System.Data.XmlReadMode.IgnoreSchema);
+                modxVersion = "1.0";
+            }
 
 			ReadAuthors(xmlDataSet);
 			ReadTitle(xmlDataSet);
@@ -179,8 +198,12 @@ namespace Phpbb.ModTeam.Tools
 						ModVersion tempVersion;
 						tempVersion = new ModVersion(
 							(UInt16)XmlDataSet._rev_version.Rows[j]["major"],
-							(UInt16)XmlDataSet._rev_version.Rows[j]["minor"], 
-							(UInt16)XmlDataSet._rev_version.Rows[j]["revision"]);
+							(UInt16)XmlDataSet._rev_version.Rows[j]["minor"],
+                            (UInt16)XmlDataSet._rev_version.Rows[j]["revision"]);
+                        if (!(XmlDataSet._rev_version.Rows[j]["stage"] is DBNull))
+                        {
+                            tempVersion.Stage = Mod.StringToVersionStage((string)XmlDataSet._rev_version.Rows[j]["stage"]);
+                        }
 						if (XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray().Length == 1)
 						{
 							tempVersion.Release = XmlDataSet._rev_version.Rows[j]["release"].ToString().ToCharArray()[0];
@@ -220,6 +243,11 @@ namespace Phpbb.ModTeam.Tools
 				tempVersion.Major = int.Parse(XmlDataSet._mod_version.Rows[0]["major"].ToString());
 				tempVersion.Minor = int.Parse(XmlDataSet._mod_version.Rows[0]["minor"].ToString());
 				tempVersion.Revision = int.Parse(XmlDataSet._mod_version.Rows[0]["revision"].ToString());
+                if (!(XmlDataSet._mod_version.Rows[0]["stage"] is DBNull))
+                {
+                    tempVersion.Stage = Mod.StringToVersionStage((string)XmlDataSet._mod_version.Rows[0]["stage"]);
+                }
+                
 				try
 				{
 					if (XmlDataSet._mod_version.Rows[0]["revision"].ToString().ToCharArray().Length == 1)
@@ -263,6 +291,136 @@ namespace Phpbb.ModTeam.Tools
 				// TODO: mod-config
 			}
 			catch {}
+			Header.PhpbbVersion = new TargetVersionCases();
+			try { Header.PhpbbVersion.Primary = (string)XmlDataSet._target_version.Rows[0]["target-primary"]; }
+			catch {}
+
+			// major
+			for (int i = 0; i < XmlDataSet._target_major.Rows.Count; i++)
+			{
+				TargetVersionComparisson comparisson = TargetVersionComparisson.EqualTo;
+				switch ((string)XmlDataSet._target_major.Rows[i]["allow"])
+				{
+					case "exact":
+						comparisson = TargetVersionComparisson.EqualTo;
+						break;
+					case "after":
+						comparisson = TargetVersionComparisson.GreaterThan;
+						break;
+					case "after-equal":
+						comparisson = TargetVersionComparisson.GreaterThanEqual;
+						break;
+					case "before":
+						comparisson = TargetVersionComparisson.LessThan;
+						break;
+					case "before-equal":
+						comparisson = TargetVersionComparisson.LessThanEqual;
+						break;
+					case "not-equal":
+						comparisson = TargetVersionComparisson.NotEqualTo;
+						break;
+				}
+				Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Major, (ushort)XmlDataSet._target_major.Rows[i]["target-major_Text"]));
+			}
+
+			// minor
+			for (int i = 0; i < XmlDataSet._target_minor.Rows.Count; i++)
+			{
+				TargetVersionComparisson comparisson = TargetVersionComparisson.EqualTo;
+				switch ((string)XmlDataSet._target_minor.Rows[i]["allow"])
+				{
+					case "exact":
+						comparisson = TargetVersionComparisson.EqualTo;
+						break;
+					case "after":
+						comparisson = TargetVersionComparisson.GreaterThan;
+						break;
+					case "after-equal":
+						comparisson = TargetVersionComparisson.GreaterThanEqual;
+						break;
+					case "before":
+						comparisson = TargetVersionComparisson.LessThan;
+						break;
+					case "before-equal":
+						comparisson = TargetVersionComparisson.LessThanEqual;
+						break;
+					case "not-equal":
+						comparisson = TargetVersionComparisson.NotEqualTo;
+						break;
+				}
+				Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Minor, (ushort)XmlDataSet._target_minor.Rows[i]["target-minor_Text"]));
+			}
+
+			// revision
+			for (int i = 0; i < XmlDataSet._target_revision.Rows.Count; i++)
+			{
+				TargetVersionComparisson comparisson = TargetVersionComparisson.EqualTo;
+				switch ((string)XmlDataSet._target_revision.Rows[i]["allow"])
+				{
+					case "exact":
+						comparisson = TargetVersionComparisson.EqualTo;
+						break;
+					case "after":
+						comparisson = TargetVersionComparisson.GreaterThan;
+						break;
+					case "after-equal":
+						comparisson = TargetVersionComparisson.GreaterThanEqual;
+						break;
+					case "before":
+						comparisson = TargetVersionComparisson.LessThan;
+						break;
+					case "before-equal":
+						comparisson = TargetVersionComparisson.LessThanEqual;
+						break;
+					case "not-equal":
+						comparisson = TargetVersionComparisson.NotEqualTo;
+						break;
+				}
+                if (XmlDataSet._target_revision.Rows[i]["stage"] is DBNull)
+                {
+                    Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Revision, (ushort)XmlDataSet._target_revision.Rows[i]["target-revision_Text"]));
+                }
+                else
+                {
+                    Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Revision, Mod.StringToVersionStage((string)XmlDataSet._target_revision.Rows[i]["stage"]), (ushort)XmlDataSet._target_revision.Rows[i]["target-revision_Text"]));
+                }
+			}
+
+			// release
+			for (int i = 0; i < XmlDataSet._target_release.Rows.Count; i++)
+			{
+				TargetVersionComparisson comparisson = TargetVersionComparisson.EqualTo;
+                switch ((string)XmlDataSet._target_release.Rows[i]["allow"])
+				{
+					case "exact":
+						comparisson = TargetVersionComparisson.EqualTo;
+						break;
+					case "after":
+						comparisson = TargetVersionComparisson.GreaterThan;
+						break;
+					case "after-equal":
+						comparisson = TargetVersionComparisson.GreaterThanEqual;
+						break;
+					case "before":
+						comparisson = TargetVersionComparisson.LessThan;
+						break;
+					case "before-equal":
+						comparisson = TargetVersionComparisson.LessThanEqual;
+						break;
+					case "not-equal":
+						comparisson = TargetVersionComparisson.NotEqualTo;
+						break;
+				}
+				string release = (string)XmlDataSet._target_release.Rows[i]["target-release_Text"];
+				if (release.Length > 0)
+				{
+					Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Release, release[0]));
+				}
+				else
+				{
+					Header.PhpbbVersion.Add(new TargetVersionCase(comparisson, TargetVersionPart.Release));
+				}
+			}
 		}
 
 		/// <summary>
@@ -451,7 +609,14 @@ namespace Phpbb.ModTeam.Tools
 		/// <param name="fileName"></param>
 		public override void Write(string fileName)
 		{
-			Write(fileName, defaultXsltFile);
+            if (this.Header.PhpbbVersion.Contains(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Major, 3)))
+            {
+                Write(fileName, Default3XsltFile);
+            }
+            else
+            {
+                Write(fileName, Default2XsltFile);
+            }
 		}
 
 		/// <summary>
@@ -593,7 +758,13 @@ namespace Phpbb.ModTeam.Tools
 			versionRow.SetParentRow(newHeaderRow);
 			versionRow.major = (ushort)Header.Version.Major;
 			versionRow.minor = (ushort)Header.Version.Minor;
+            //--------------------------------------------------------------------
 			versionRow.revision = (ushort)Header.Version.Revision;
+            if (Header.Version.Stage != VersionStage.Stable)
+            {
+                versionRow.stage = Mod.VersionStageToString(Header.Version.Stage);
+            }
+            //--------------------------------------------------------------------
 			if (Header.Version.Release != ModVersion.nullChar)
 			{
 				versionRow.release = Header.Version.Release.ToString();
@@ -615,25 +786,153 @@ namespace Phpbb.ModTeam.Tools
 			// TODO: target version, right now target version isn't supported by Phpbb.ModTeam.Tools
 			// full support to come, release is currently omitted, need full support!!!
 			// For the moment we will say everything is phpBB2.0 compliant
-			if (Header.PhpbbVersion == null) Header.PhpbbVersion = new ModVersion(2,0,0);
+			if (Header.PhpbbVersion == null) Header.PhpbbVersion = new TargetVersionCases(new ModVersion(2, 0, 0));
 			if (Header.PhpbbVersion != null)
 			{
-				if (Header.PhpbbVersion.Major == 0) Header.PhpbbVersion = new ModVersion(2,0,0);
+				// handle for case where Major version is non-sensical
+				//if (Header.PhpbbVersion.Major == 0) Header.PhpbbVersion = new TargetVersionCases(new ModVersion(2, 0, 0));
+
 				mod._target_versionRow targetVersionRow = XmlDataSet._target_version.New_target_versionRow();
-				targetVersionRow._target_primary = Header.PhpbbVersion.Major + "." + Header.PhpbbVersion.Minor;
-				// major
-				mod._target_majorRow targetMajorRow = XmlDataSet._target_major.New_target_majorRow();
-				targetMajorRow.allow = "exact";
-				targetMajorRow._target_major_Text = (ushort)Header.PhpbbVersion.Major;
-				targetMajorRow.SetParentRow(targetVersionRow);
-				XmlDataSet._target_major.Rows.Add(targetMajorRow);
-				// minor
-				mod._target_minorRow targetMinorRow = XmlDataSet._target_minor.New_target_minorRow();
-				targetMinorRow.allow = "exact";
-				targetMinorRow._target_minor_Text = (ushort)Header.PhpbbVersion.Minor;
-				targetMinorRow.SetParentRow(targetVersionRow);
-				XmlDataSet._target_minor.Rows.Add(targetMinorRow);
-				// release : TODO omitted
+				targetVersionRow._target_primary = Header.PhpbbVersion.Primary;
+				foreach (TargetVersionCase versionCase in Header.PhpbbVersion)
+				{
+					switch (versionCase.Part)
+					{
+						case TargetVersionPart.Major:
+							mod._target_majorRow targetMajorRow = XmlDataSet._target_major.New_target_majorRow();
+							switch (versionCase.Comparisson)
+							{
+								case TargetVersionComparisson.EqualTo:
+									targetMajorRow.allow = "exact";
+									break;
+								case TargetVersionComparisson.GreaterThan:
+									targetMajorRow.allow = "after";
+									break;
+								case TargetVersionComparisson.GreaterThanEqual:
+									targetMajorRow.allow = "after-equal";
+									break;
+								case TargetVersionComparisson.LessThan:
+									targetMajorRow.allow = "before";
+									break;
+								case TargetVersionComparisson.LessThanEqual:
+									targetMajorRow.allow = "before-equal";
+									break;
+								case TargetVersionComparisson.NotEqualTo:
+									targetMajorRow.allow = "not-equal";
+									break;
+							}
+							targetMajorRow._target_major_Text = ushort.Parse(versionCase.GetValue);
+							targetMajorRow.SetParentRow(targetVersionRow);
+							XmlDataSet._target_major.Rows.Add(targetMajorRow);
+							break;
+						case TargetVersionPart.Minor:
+							mod._target_minorRow targetMinorRow = XmlDataSet._target_minor.New_target_minorRow();
+							switch (versionCase.Comparisson)
+							{
+								case TargetVersionComparisson.EqualTo:
+									targetMinorRow.allow = "exact";
+									break;
+								case TargetVersionComparisson.GreaterThan:
+									targetMinorRow.allow = "after";
+									break;
+								case TargetVersionComparisson.GreaterThanEqual:
+									targetMinorRow.allow = "after-equal";
+									break;
+								case TargetVersionComparisson.LessThan:
+									targetMinorRow.allow = "before";
+									break;
+								case TargetVersionComparisson.LessThanEqual:
+									targetMinorRow.allow = "before-equal";
+									break;
+								case TargetVersionComparisson.NotEqualTo:
+									targetMinorRow.allow = "not-equal";
+									break;
+							}
+							targetMinorRow._target_minor_Text = ushort.Parse(versionCase.GetValue);
+							targetMinorRow.SetParentRow(targetVersionRow);
+							XmlDataSet._target_minor.Rows.Add(targetMinorRow);
+							break;
+						case TargetVersionPart.Revision:
+							mod._target_revisionRow targetRevisionRow = XmlDataSet._target_revision.New_target_revisionRow();
+							switch (versionCase.Comparisson)
+							{
+								case TargetVersionComparisson.EqualTo:
+									targetRevisionRow.allow = "exact";
+									break;
+								case TargetVersionComparisson.GreaterThan:
+									targetRevisionRow.allow = "after";
+									break;
+								case TargetVersionComparisson.GreaterThanEqual:
+									targetRevisionRow.allow = "after-equal";
+									break;
+								case TargetVersionComparisson.LessThan:
+									targetRevisionRow.allow = "before";
+									break;
+								case TargetVersionComparisson.LessThanEqual:
+									targetRevisionRow.allow = "before-equal";
+									break;
+								case TargetVersionComparisson.NotEqualTo:
+									targetRevisionRow.allow = "not-equal";
+									break;
+							}
+                            switch (versionCase.Stage)
+                            {
+                                case VersionStage.Alpha:
+                                    targetRevisionRow.stage = "alpha";
+                                    break;
+                                case VersionStage.Beta:
+                                    targetRevisionRow.stage = "beta";
+                                    break;
+                                case VersionStage.Delta:
+                                    targetRevisionRow.stage = "delta";
+                                    break;
+                                case VersionStage.Gamma:
+                                    targetRevisionRow.stage = "gamma";
+                                    break;
+                                case VersionStage.ReleaseCandidate:
+                                    targetRevisionRow.stage = "release-candidate";
+                                    break;
+                            }
+							targetRevisionRow._target_revision_Text = ushort.Parse(versionCase.GetValue);
+							targetRevisionRow.SetParentRow(targetVersionRow);
+							XmlDataSet._target_revision.Rows.Add(targetRevisionRow);
+							break;
+						case TargetVersionPart.Release:
+							mod._target_releaseRow targetReleaseRow = XmlDataSet._target_release.New_target_releaseRow();
+							switch (versionCase.Comparisson)
+							{
+								case TargetVersionComparisson.EqualTo:
+									targetReleaseRow.allow = "exact";
+									break;
+								case TargetVersionComparisson.GreaterThan:
+									targetReleaseRow.allow = "after";
+									break;
+								case TargetVersionComparisson.GreaterThanEqual:
+									targetReleaseRow.allow = "after-equal";
+									break;
+								case TargetVersionComparisson.LessThan:
+									targetReleaseRow.allow = "before";
+									break;
+								case TargetVersionComparisson.LessThanEqual:
+									targetReleaseRow.allow = "before-equal";
+									break;
+								case TargetVersionComparisson.NotEqualTo:
+									targetReleaseRow.allow = "not-equal";
+									break;
+							}
+							if (versionCase.GetValue.Length > 0)
+							{
+								targetReleaseRow._target_release_Text = versionCase.GetValue[0].ToString();
+							}
+							else
+							{
+								targetReleaseRow._target_release_Text = "";
+							}
+							targetReleaseRow.SetParentRow(targetVersionRow);
+							XmlDataSet._target_release.Rows.Add(targetReleaseRow);
+							break;
+					}
+				}
 				targetVersionRow.SetParentRow(installationRow);
 				XmlDataSet._target_version.Rows.Add(targetVersionRow);
 			}
@@ -661,7 +960,13 @@ namespace Phpbb.ModTeam.Tools
 				mod._rev_versionRow rev_versionRow = XmlDataSet._rev_version.New_rev_versionRow();
 				rev_versionRow.major = (ushort)mhe.Version.Major;
 				rev_versionRow.minor = (ushort)mhe.Version.Minor;
-				rev_versionRow.revision = (ushort)mhe.Version.Revision;
+                // -----------------------------------------------------------------
+                rev_versionRow.revision = (ushort)mhe.Version.Revision;
+                if (mhe.Version.Stage != VersionStage.Stable)
+                {
+                    rev_versionRow.stage = Mod.VersionStageToString(mhe.Version.Stage);
+                }
+                // -----------------------------------------------------------------
 				if (mhe.Version.Release != ModVersion.nullChar)
 				{
 					rev_versionRow.release = mhe.Version.Release.ToString();
@@ -911,7 +1216,14 @@ namespace Phpbb.ModTeam.Tools
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return ToString(defaultXsltFile);
+            if (this.Header.PhpbbVersion.Contains(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Major, 3)))
+            {
+                return ToString(Default3XsltFile);
+            }
+            else
+            {
+                return ToString(Default2XsltFile);
+            }
 		}
 
 		/// <summary>
@@ -943,147 +1255,240 @@ namespace Phpbb.ModTeam.Tools
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="fileName"></param>
 		/// <returns></returns>
-		public override Validation.Report Validate(string fileName)
+		public override Phpbb.ModTeam.Tools.Validation.Report Validate(string fileName)
+		{
+			return Validate(fileName, "english");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="language"></param>
+		/// <returns></returns>
+		public Validation.Report Validate(string fileName, string language)
+		{
+			return Validate(fileName, language, new ModVersion(2, 0, 0), true);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="language"></param>
+		/// <param name="version">Can alter the checks performed based on the version</param>
+		/// <param name="checks">Can disable addtional checks so they aren't duplicated in m|EAL</param>
+		/// <returns></returns>
+		public Validation.Report Validate(string fileName, string language, ModVersion version, bool checks)
 		{
 			Validation.Report report = new Validation.Report();
 			ModxMod modification = new ModxMod();
 			bool validateFlag = true;
 			bool validateWarnFlag = true;
+            string schema = "1.0.1";
 
 			try
 			{
 				modification.Read(fileName);
+                version = ModVersion.Parse(modification.Header.PhpbbVersion.Primary);
 			}
-			catch
+			catch (Exception ex)
 			{
 				report.HeaderReport += "[color=red][b]Error reading MODX file[/b][/color]\n";
+                report.HeaderReport += "[quote]\n";
+                report.HeaderReport += ex.ToString() + "\n";
+                report.HeaderReport += "[/quote]\n";
 				return report;
 			}
+
+            if (modification != null)
+            {
+                schema = modification.GetModxVersion();
+            }
 
 			// validate XML against schema
 
 			XmlValidationMessage = "";
 			XmlTextReader xtr = new XmlTextReader(fileName);
-			XmlValidatingReader xvr = new XmlValidatingReader(xtr);
+            XmlReaderSettings xrs = new XmlReaderSettings();
+            xrs.ConformanceLevel = ConformanceLevel.Document;
+            xrs.ValidationEventHandler += new ValidationEventHandler(xvr_ValidationEventHandler);
+            xrs.ValidationType = ValidationType.Schema;
 
-			xvr.ValidationType = ValidationType.Schema;
-			xvr.ValidationEventHandler +=new ValidationEventHandler(xvr_ValidationEventHandler);
-			xvr.Schemas.Add("http://www.phpbb.com/mods/xml/modx-1.0.xsd", "http://www.phpbb.com/mods/xml/modx-1.0.xsd");
+            XmlSchema modx1_0Schema = new XmlSchema();
+            modx1_0Schema.SourceUri = "http://www.phpbb.com/mods/xml/modx-1.0.xsd";
 
-			while(xvr.Read())
+            XmlSchema modx1_0_1Schema = new XmlSchema();
+            modx1_0Schema.SourceUri = "http://www.phpbb.com/mods/xml/modx-1.0.xsd";
+
+            if (schema == "1.0")
+            {
+                xrs.Schemas.Add(modx1_0Schema);
+            }
+            else if (schema == "1.0.1")
+            {
+                xrs.Schemas.Add(modx1_0_1Schema);
+            }
+
+            XmlReader xr = XmlReader.Create(fileName, xrs);
+
+            try
+            {
+                while (xr.Read())
+                {
+                }
+            }
+            catch
+            {
+                try
+                {
+                    if (schema == "1.0.1")
+                    {
+                        xrs.Schemas.Add(modx1_0Schema);
+                    }
+                    else if (schema == "1.0")
+                    {
+                        xrs.Schemas.Add(modx1_0_1Schema);
+                    }
+                }
+                catch
+                {
+                    report.HeaderReport += "[color=red][b]Error reading MODX file[/b][/color]\n";
+                }
+            }
+
+			if (XmlValidationMessage == "")
 			{
+				report.HeaderReport += string.Format("{0} XML Validation against the MODX XML Schema found no errors\n",
+					Validator.ok);
+			}
+			else
+			{
+				report.HeaderReport += "[quote=\"Xml Validation Report output\"]";
+				report.HeaderReport += string.Format("{0}/n",
+					Validator.info);
+				report.HeaderReport += XmlValidationMessage;
+				report.HeaderReport += "[/quote]\n";
 			}
 
-			report.HeaderReport += "Xml Validation Report output:[quote]";
-			report.HeaderReport += XmlValidationMessage;
-			report.HeaderReport += "[/quote]\n";
-
 			// validate for phpbb.com requirements
-
-			report.HeaderReport += "[b][color=purple]Please be aware that XML entities have been represented in text format for readability and do not reflect the structure of the MOD in the following report where appropriate.[/color][/b]\n\n";
+			report.HeaderReport += string.Format("{0} Please be aware that XML entities have been represented in text format for readability and do not reflect the structure of the MOD in the following report where appropriate.\n\n",
+				Validator.info);
 
 			foreach (ModAuthor ma in modification.Header.Authors)
 			{
 				if (ma.UserName == "" || ma.UserName == null)
 				{
-					report.HeaderReport += string.Format("[b][color=red]Error[/color]:[/b] phpBB requires MODX files contain at least a valid phpBB.com usernames for authors.[quote]{0}[/quote]\n",
-						ma.ToString());
+					report.HeaderReport += string.Format("{1} phpBB requires MODX files contain at least a valid phpBB.com usernames for authors.[quote]{0}[/quote]\n",
+						ma.ToString(), Validator.error);
 					validateFlag = false;
 				}
 				if (ma.Email.ToUpper() == "N/A")
 				{
-					report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] e-mail should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
-						ma.Email, ma.ToString());
+					report.HeaderReport += string.Format("{2} e-mail should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
+						ma.Email, ma.ToString(), Validator.warning);
 					validateWarnFlag = false;
 				}
 				if (ma.RealName.ToUpper() == "N/A")
 				{
-					report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] real name should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
-						ma.Email, ma.ToString());
+					report.HeaderReport += string.Format("{2} real name should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
+						ma.Email, ma.ToString(), Validator.warning);
 					validateWarnFlag = false;
 				}
 				if (ma.Homepage.ToUpper() == "N/A")
 				{
-					report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] homepage should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
-						ma.Email, ma.ToString());
+					report.HeaderReport += string.Format("{2} homepage should be omitted or empty, not [i]{0}[/i].[quote]{1}[/quote]\n",
+						ma.Email, ma.ToString(), Validator.warning);
 					validateWarnFlag = false;
 				}
 			}
 
 			if (modification.Header.License == "http://opensource.org/licenses/gpl-license.php GNU General Public License v2")
 			{
-				report.HeaderReport += "[i]You are using the GPL License[/i].\n";
+				report.HeaderReport += string.Format("{0} [i]You are using the GPL License[/i].\n",
+					Validator.pass);
 			}
 			else if (modification.Header.License == "" || modification.Header.License == null)
 			{
-				report.HeaderReport += "[i]You have omitted the license field[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.";
+				report.HeaderReport += string.Format("{0} [i]You have omitted the license field[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n",
+					Validator.warning);
 			}
 			else
 			{
-				report.HeaderReport += "[i]You are not using the GPL License[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n";
+				report.HeaderReport += string.Format("[i]You are not using the GPL License[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n",
+					Validator.info);
 			}
 
 			foreach (ModAction ma in modification.Actions)
 			{
 				if (ma.Type == "OPEN")
 				{
-					Validator.LoadPhpbbFileList(); // Load the phpBB file list for comparison in the OPEN check
+					Validator.LoadPhpbbFileList(language, version); // Load the phpBB file list for comparison in the OPEN check
 					if (!Validator.PhpbbFileList.Contains(ma.Body))
 					{
-						report.ActionsReport += string.Format("File to OPEN does not exist in phpBB standard installation package\n[quote]{1}[/quote]\n",
-							0, ma.ToString());
+						report.ActionsReport += string.Format("{2} File to OPEN does not exist in phpBB standard installation package\n[quote]{1}[/quote]\n",
+							0, ma.ToString(), Validator.warning);
 						validateFlag = false;
 					}
+				}
+
+				if(ma.Type == "COPY")
+				{
+					// TODO: fill this in
 				}
 
 				if (Validation.ModActions.GetType(ma.Type) == Validation.ModActions.ModActionType.Edit ||
 					Validation.ModActions.GetType(ma.Type) == Validation.ModActions.ModActionType.InLineEdit)
 				{
-					if (ma.Body.IndexOf("<font") >= 0)
+					if (checks)
 					{
-						if (Regex.IsMatch(ma.Body, "<font(.*?)>")) 
+						if (ma.Body.IndexOf("<font") >= 0)
 						{
-							report.HtmlReport += string.Format("Unauthorised usage of the FONT tag. Please use the span tag, starting line: {0}\n[quote]{1}[/quote]\n",
-								0, Regex.Replace(ma.ToString(), "<font(.*?)>", "[b]<font$1>[/b]"));
+							if (Regex.IsMatch(ma.Body, "<font(.*?)>")) 
+							{
+								report.HtmlReport += string.Format("{2} Unauthorised usage of the FONT tag. Please use the span tag, starting line: {0}\n[quote]{1}[/quote]\n",
+									0, Regex.Replace(ma.ToString(), "<font(.*?)>", "[b]<font$1>[/b]"), Validator.fail);
+								validateFlag = false;
+							}
+						}
+						//if (Regex.IsMatch(Modification.Actions[i].ActionBody, "<br>")) 
+						if (ma.Body.IndexOf("<br>") >= 0)
+						{
+							report.HtmlReport += string.Format("{2} Unauthorised usage of the <br> tag. Please use the <br /> tag.\n[quote]{1}[/quote]\n",
+								0, Regex.Replace(ma.ToString(), "<br>", "[b]<br>[/b]"), Validator.fail);
 							validateFlag = false;
 						}
-					}
-					//if (Regex.IsMatch(Modification.Actions[i].ActionBody, "<br>")) 
-					if (ma.Body.IndexOf("<br>") >= 0)
-					{
-						report.HtmlReport += string.Format("Unauthorised usage of the <br> tag. Please use the <br /> tag.\n[quote]{1}[/quote]\n",
-							0, Regex.Replace(ma.ToString(), "<br>", "[b]<br>[/b]"));
-						validateFlag = false;
-					}
-					if (ma.Body.IndexOf("<img") >= 0 &&
-						ma.Body.IndexOf("/>") < 0)
-					{
-						report.HtmlReport += string.Format("Unauthorised usage of the <img> tag. Please make sure you use XHTML entities e.g. <img />.\n[quote]{1}[/quote]\n",
-							0, Regex.Replace(ma.ToString(), "<img", "[b]<img[/b]"));
-						validateFlag = false;
-					}
-					if (ma.Body.IndexOf("mysql_") >= 0)
-					{
-						if (ma.Body.IndexOf("mysql_connect") >= 0)
+						if (ma.Body.IndexOf("<img") >= 0 &&
+							ma.Body.IndexOf("/>") < 0)
 						{
-							if (Regex.IsMatch(ma.Body, "mysql_connect\\((.*?)\\)")) 
+							report.HtmlReport += string.Format("Unauthorised usage of the <img> tag. Please make sure you use XHTML entities e.g. <img />.\n[quote]{1}[/quote]\n",
+								0, Regex.Replace(ma.ToString(), "<img", "[b]<img[/b]"));
+							validateFlag = false;
+						}
+						if (ma.Body.IndexOf("mysql_") >= 0)
+						{
+							if (ma.Body.IndexOf("mysql_connect") >= 0)
 							{
-								report.DbalReport += string.Format("Unauthorised usage of mysql_connect, please use the DBAL\n[quote]{1}[/quote]\n",
-									0, Regex.Replace(ma.ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
-								validateFlag = false;
+								if (Regex.IsMatch(ma.Body, "mysql_connect\\((.*?)\\)")) 
+								{
+									report.DbalReport += string.Format("Unauthorised usage of mysql_connect, please use the DBAL\n[quote]{1}[/quote]\n",
+										0, Regex.Replace(ma.ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
+									validateFlag = false;
+								}
+							}
+							if (ma.Body.IndexOf("mysql_error") >= 0)
+							{
+								if (Regex.IsMatch(ma.Body, "mysql_error\\((.*?)\\)")) 
+								{
+									report.DbalReport += string.Format("Unauthorised usage of mysql_error, please use the DBAL\n[quote]{1}[/quote]\n",
+										0, Regex.Replace(ma.ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
+									validateFlag = false;
+								}
 							}
 						}
-						if (ma.Body.IndexOf("mysql_error") >= 0)
-						{
-							if (Regex.IsMatch(ma.Body, "mysql_error\\((.*?)\\)")) 
-							{
-								report.DbalReport += string.Format("Unauthorised usage of mysql_error, please use the DBAL\n[quote]{1}[/quote]\n",
-									0, Regex.Replace(ma.ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
-								validateFlag = false;
-							}
-						}
-					}
+					} // end check blocking
 				}
 			}
 
@@ -1102,15 +1507,15 @@ namespace Phpbb.ModTeam.Tools
 				report.Rating += "\nThere were some [b][color=orange]warnings[/color][/b] which should be looked at but aren't causes for denial. These warnings may cause your MOD to act in undetermined ways in tools other than EasyMod, and should be fixed for maximum compatibility.";
 				report.Passed = false;
 			}
-			if (validateFlag && validateWarnFlag) 
+			if (validateFlag && validateWarnFlag && checks)
 			{
 				report.ActionsReport += "\n[color=green]No problems[/color] were detected in this MODs Template in accordance with the phpBB MOD Team guidelines.";
 			}
-			if (report.HtmlReport == null) 
+			if (report.HtmlReport == null && checks)
 			{
 				report.HtmlReport = "[color=green]No problems[/color] were detected in this MODs use HTML elements in accordance with the phpBB2 coding standards.";
 			}
-			if (report.DbalReport == null) 
+			if (report.DbalReport == null && checks)
 			{
 				report.DbalReport = "[color=green]No problems[/color] were detected in this MODs use of databases [size=9](if used)[/size] in accordance with the phpBB2 coding standards.";
 			}

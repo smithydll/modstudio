@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: DataStructures.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: DataStructures.cs,v 1.2 2007-07-23 11:17:24 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -578,7 +578,7 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			string tempTabSeparatedAuthor = "";
 			try
 			{
-				tempTabSeparatedAuthor = Regex.Replace(input, @"^(## MOD Author(|, secondary):|)([\s]*?)((?!\s)(?!n\/a)[\w\s\=\$\.\-\|@\' ]+?|)\s<(\s|)(n\/a|[a-z0-9\(\) \.\-_\+\[\]@]+|)(\s|)>\s(\(\s{0,1}(([\w\s\.\'\-]+?)|n\/a)\s{0,1}\)|)(\s|)((([a-z]+?://){1}|)([a-z0-9\-\.,\?!%\*_\#:;~\\&$@\/=\+\(\)]+)|n\/a|)(([\s]+?)|)$", "$4\t$6\t$9\t$12", RegexOptions.IgnoreCase);
+				tempTabSeparatedAuthor = Regex.Replace(input, @"^(## MOD Author(|, secondary):|)([\s]*?)((?!\s)(?!n\/a)[\w\s\=\$\.\-\|@\'\:\[\]\|\*\(\)<> ]+?|)\s<(\s|)(n\/a|[a-z0-9\(\) \.\-_\+\[\]@]+|)(\s|)>\s(\(\s{0,1}(([\w\s\.\'\-]+?)|n\/a)\s{0,1}\)|)(\s|)((([a-z]+?://){1}|)([a-z0-9\-\.,\?!%\*_\#:;~\\&$@\/=\+\(\)]+)|n\/a|)(([\s]+?)|)$", "$4\t$6\t$9\t$12", RegexOptions.IgnoreCase);
 				string[] MODTempAuthor = tempTabSeparatedAuthor.Split('\t');
 				//Console.Error.WriteLine(tempTabSeparatedAuthor);
 				ModAuthor returnValue = new ModAuthor(MODTempAuthor[0].TrimStart(' ').TrimStart('\t'), MODTempAuthor[2], MODTempAuthor[1].TrimEnd(' '), MODTempAuthor[3]);
@@ -668,6 +668,485 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 	/// <summary>
 	/// 
 	/// </summary>
+	public class TargetVersion
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public string String;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class TargetVersionCases : System.Collections.IEnumerable, System.Collections.ICollection
+	{
+		private ArrayList cases;
+		private string primary;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public TargetVersionCases()
+		{
+			cases = new ArrayList();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fromVersion"></param>
+		public TargetVersionCases(ModVersion fromVersion)
+		{
+			cases = new ArrayList();
+			primary = fromVersion.ToString();
+			cases.Add(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Major, fromVersion.Major));
+			cases.Add(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Minor, fromVersion.Minor));
+			cases.Add(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Revision, fromVersion.Revision));
+            if (fromVersion.Release != ModVersion.nullChar)
+            {
+                cases.Add(new TargetVersionCase(TargetVersionComparisson.EqualTo, TargetVersionPart.Release, fromVersion.Release));
+            }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string Primary
+		{
+			get
+			{
+				return primary;
+			}
+			set
+			{
+				primary = value;
+			}
+		}
+
+		#region IEnumerable Members
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+		public IEnumerator GetEnumerator()
+		{
+			return cases.GetEnumerator();
+		}
+
+		#endregion
+
+		#region ICollection Members
+
+        /// <summary>
+        /// 
+        /// </summary>
+		public bool IsSynchronized
+		{
+			get
+			{
+				return cases.IsSynchronized;
+			}
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+		public int Count
+		{
+			get
+			{
+				return cases.Count;
+			}
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
+		public void CopyTo(Array array, int index)
+		{
+			cases.CopyTo(array, index);
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+		public object SyncRoot
+		{
+			get
+			{
+				return cases.SyncRoot;
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void Clear()
+		{
+			cases.Clear();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="o"></param>
+		/// <returns></returns>
+		public bool Contains(Object o)
+		{
+			return cases.Contains(o);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="versionCase"></param>
+		/// <returns></returns>
+		public bool Contains(TargetVersionCase versionCase)
+		{
+			return cases.Contains(versionCase);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public TargetVersionCase this[int index]
+		{
+			get
+			{
+				return (TargetVersionCase)cases[index];
+			}
+			set
+			{
+				cases[index] = (TargetVersionCase)value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newCase"></param>
+		/// <returns></returns>
+		public int Add(TargetVersionCase newCase)
+		{
+			return cases.Add(newCase);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="BeforeCase"></param>
+		/// <param name="newCase"></param>
+		public void Insert(int BeforeCase, TargetVersionCase newCase)
+		{
+			cases.Insert(BeforeCase, newCase);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		public void RemoveAt(int index)
+		{
+			cases.RemoveAt(index);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="o"></param>
+		public void Remove(TargetVersionCase o)
+		{
+			cases.Remove(o);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="versionCase"></param>
+		/// <returns></returns>
+		public int IndexOf(TargetVersionCase versionCase)
+		{
+			return cases.IndexOf(versionCase);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return primary;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			if (obj.GetType() != typeof(TargetVersionCases)) return false;
+			TargetVersionCases tvc = (TargetVersionCases)obj;
+			if (!primary.Equals(tvc.primary)) return false;
+			if (cases.Count != tvc.cases.Count) return false;
+			for (int i = 0; i < cases.Count; i++)
+			{
+				if (!cases[i].Equals(tvc.cases[i])) return false;
+			}
+			return true;
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class TargetVersionCase
+	{
+		/// <summary>
+		/// The comparisson to be made
+		/// </summary>
+		public TargetVersionComparisson Comparisson;
+		/// <summary>
+		/// The part of the version to be compared with
+		/// </summary>
+		public TargetVersionPart Part;
+        /// <summary>
+        /// The stage of development (for release part)
+        /// </summary>
+        public VersionStage Stage;
+		/// <summary>
+		/// The value to be compared with
+		/// </summary>
+		private string caseValue;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public TargetVersionCase()
+		{
+			Comparisson = TargetVersionComparisson.EqualTo;
+			Part = TargetVersionPart.Major;
+			caseValue = "2";
+            Stage = VersionStage.Stable;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="comparisson"></param>
+		/// <param name="part"></param>
+		/// <param name="value"></param>
+		public TargetVersionCase(TargetVersionComparisson comparisson, TargetVersionPart part, int value)
+		{
+			Comparisson = comparisson;
+			Part = part;
+			caseValue = value.ToString();
+            Stage = VersionStage.Stable;
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comparisson"></param>
+        /// <param name="part"></param>
+        /// <param name="stage"></param>
+        /// <param name="value"></param>
+        public TargetVersionCase(TargetVersionComparisson comparisson, TargetVersionPart part, VersionStage stage, int value)
+        {
+            Comparisson = comparisson;
+            Part = part;
+            Stage = stage;
+            caseValue = value.ToString();
+        }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="comparisson"></param>
+		/// <param name="part"></param>
+		/// <param name="value"></param>
+		public TargetVersionCase(TargetVersionComparisson comparisson, TargetVersionPart part, char value)
+		{
+			Comparisson = comparisson;
+			Part = part;
+			caseValue = value.ToString();
+            Stage = VersionStage.Stable;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="comparisson"></param>
+		/// <param name="part"></param>
+		public TargetVersionCase(TargetVersionComparisson comparisson, TargetVersionPart part)
+		{
+			Comparisson = comparisson;
+			Part = part;
+			caseValue = "";
+            Stage = VersionStage.Stable;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public char SetValueChar
+		{
+			set
+			{
+				caseValue = value.ToString();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int SetValueInt
+		{
+			set
+			{
+				caseValue = value.ToString();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string GetValue
+		{
+			get
+			{
+				return caseValue;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			if (obj.GetType() != typeof(TargetVersionCase)) return false;
+			TargetVersionCase tvc = (TargetVersionCase)obj;
+			if (!Comparisson.Equals(tvc.Comparisson)) return false;
+			if (!Part.Equals(tvc.Part)) return false;
+			if (!caseValue.Equals(tvc.caseValue)) return false;
+			return true;
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum TargetVersionComparisson
+	{
+		/// <summary>
+		/// exact
+		/// </summary>
+		EqualTo,
+		/// <summary>
+		/// not-equal
+		/// </summary>
+		NotEqualTo,
+		/// <summary>
+		/// before
+		/// </summary>
+		LessThan,
+		/// <summary>
+		/// after
+		/// </summary>
+		GreaterThan,
+		/// <summary>
+		/// before-equal
+		/// </summary>
+		LessThanEqual,
+		/// <summary>
+		/// after-equal
+		/// </summary>
+		GreaterThanEqual
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum TargetVersionPart
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		Major,
+		/// <summary>
+		/// 
+		/// </summary>
+		Minor,
+		/// <summary>
+		/// 
+		/// </summary>
+		Revision,
+		/// <summary>
+		/// 
+		/// </summary>
+		Release
+	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum VersionStage
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Alpha,
+        /// <summary>
+        /// 
+        /// </summary>
+        Beta,
+        /// <summary>
+        /// 
+        /// </summary>
+        ReleaseCandidate,
+        /// <summary>
+        /// 
+        /// </summary>
+        Gamma,
+        /// <summary>
+        /// 
+        /// </summary>
+        Delta,
+        /// <summary>
+        /// 
+        /// </summary>
+        Stable
+    }
+
+	/// <summary>
+	/// 
+	/// </summary>
 	public class ModVersion
 	{
 		/// <summary>
@@ -682,6 +1161,10 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		/// 
 		/// </summary>
 		public int Revision;
+        /// <summary>
+        /// 
+        /// </summary>
+        public VersionStage Stage;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -700,6 +1183,7 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			this.Minor = 0;
 			this.Revision = 0;
 			this.Release = nullChar;
+            this.Stage = VersionStage.Stable;
 		}
 
 		/// <summary>
@@ -714,6 +1198,7 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			this.Minor = minor;
 			this.Revision = revision;
 			this.Release = nullChar;
+            this.Stage = VersionStage.Stable;
 		}
 
 		/// <summary>
@@ -729,6 +1214,7 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			this.Minor = minor;
 			this.Revision = revision;
 			this.Release = release;
+            this.Stage = VersionStage.Stable;
 		}
 
 		/// <summary>
@@ -739,11 +1225,11 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		{
 			if (this.Release == nullChar) 
 			{
-				return string.Format("{0}.{1}.{2}", this.Major.ToString(), this.Minor.ToString(), this.Revision.ToString());
+                return string.Format("{0}.{1}.{3}{2}", this.Major.ToString(), this.Minor.ToString(), this.Revision.ToString(), Mod.VersionStageToChar(this.Stage));
 			} 
 			else 
 			{
-				return string.Format("{0}.{1}.{2}{3}", this.Major.ToString(), this.Minor.ToString(), this.Revision.ToString(), this.Release.ToString());
+				return string.Format("{0}.{1}.{4}{2}{3}", this.Major.ToString(), this.Minor.ToString(), this.Revision.ToString(), this.Release.ToString(), Mod.VersionStageToChar(this.Stage));
 			}
 		}
 
@@ -756,10 +1242,10 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		{
 			char[] TrimChars = {' ', '\t', '\n', '\r', '\b'};
 			ModVersion MVersion = new ModVersion();
-			Match inputMatch = Regex.Match(input.Trim(TrimChars), @"(\d+)\.(\d+)\.(\d+)([a-z]?)", RegexOptions.IgnoreCase);
-			if (inputMatch.Groups.Count >= 5)
+            Match inputMatch = Regex.Match(input.Trim(TrimChars), @"(\d+)\.(\d+)\.(A|B|C|D|RC|)(\d+)([a-z]?)", RegexOptions.IgnoreCase);
+			if (inputMatch.Groups.Count >= 6)
 			{
-				input = string.Format("{0}.{1}.{2}.{3}", inputMatch.Groups[1].Value, inputMatch.Groups[2].Value, inputMatch.Groups[3].Value, inputMatch.Groups[4].Value);
+                input = string.Format("{0}.{1}.{4}{2}.{3}", inputMatch.Groups[1].Value, inputMatch.Groups[2].Value, inputMatch.Groups[4].Value, inputMatch.Groups[5].Value, inputMatch.Groups[3].Value);
 			}
 			string[] MV = input.Split('.');
 			try
@@ -779,7 +1265,36 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 				{
 					if (!(MV[2] == null)) 
 					{
-						MVersion.Revision = int.Parse(MV[2]);
+                        if (MV[2].StartsWith("A"))
+                        {
+                            MVersion.Stage = VersionStage.Alpha;
+                            MVersion.Revision = int.Parse(MV[2].Substring(1));
+                        }
+                        else if (MV[2].StartsWith("B"))
+                        {
+                            MVersion.Stage = VersionStage.Beta;
+                            MVersion.Revision = int.Parse(MV[2].Substring(1));
+                        }
+                        else if (MV[2].StartsWith("C"))
+                        {
+                            MVersion.Stage = VersionStage.Gamma;
+                            MVersion.Revision = int.Parse(MV[2].Substring(1));
+                        }
+                        else if (MV[2].StartsWith("D"))
+                        {
+                            MVersion.Stage = VersionStage.Delta;
+                            MVersion.Revision = int.Parse(MV[2].Substring(1));
+                        }
+                        else if (MV[2].StartsWith("RC"))
+                        {
+                            MVersion.Stage = VersionStage.ReleaseCandidate;
+                            MVersion.Revision = int.Parse(MV[2].Substring(2));
+                        }
+                        else
+                        {
+                            MVersion.Stage = VersionStage.Stable;
+                            MVersion.Revision = int.Parse(MV[2]);
+                        }
 					}
 				}
 				if (MV.Length >= 4) 

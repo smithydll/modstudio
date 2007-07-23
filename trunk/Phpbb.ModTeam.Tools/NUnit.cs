@@ -7,9 +7,15 @@ using System.IO;
 namespace Phpbb.ModTeam.Tools.DataStructures
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[TestFixture]
 	public class ModVersionTest
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void TestToString()
 		{
@@ -29,6 +35,10 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 				"3.2.11",
 				"3.21.11",
 				"1.14.9",
+                "1.14.B9",
+                "1.14.B9b",
+                "2.15.RC2",
+                "2.15.RC3a",
 				"43.32.21a"};
 			foreach (string input in inputArray)
 			{
@@ -38,7 +48,11 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			}
 		}
 
+        
 		// not really expected, but thats what is happening
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		//[ExpectedException(typeof(NotAModVersionException))]
 		public void AdvancedTestToString()
@@ -60,6 +74,9 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		[ExpectedException(typeof(NotAModVersionException))]
 		public void AdvancedTestWithException()
@@ -84,10 +101,16 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[TestFixture]
 	public class ModAuthorTest
 	{
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void TestToString()
 		{
@@ -101,10 +124,18 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			"ycl6 < n/a > (Y C Lin) http://macphpbbmod.sourceforge.net/",
 			"jwacalex < jwacalex@yahoo.de > (Alexander Böhm) http://www.s8d.de",
 			"damnian < damnian-no-spam at damnian dot com > (Dmitry Shechtman) http://damnian.com/dev",
-			"I'm Only 16 < n/a > (n/a) n/a"};
+			"I'm Only 16 < n/a > (n/a) n/a",
+			"Evil<3 < n/a > (n/a) n/a",
+			"Afterlife(69) < n/a > (n/a) n/a"};
 			foreach (string input in inputArray)
 			{
 				ModAuthor ma = ModAuthor.Parse("## MOD Author: " + input);
+				string output = ma.ToString();
+				Assert.AreEqual(input, output);
+			}
+			foreach (string input in inputArray)
+			{
+				ModAuthor ma = ModAuthor.Parse("## MOD Author:		" + input);
 				string output = ma.ToString();
 				Assert.AreEqual(input, output);
 			}
@@ -123,10 +154,16 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[TestFixture]
 	public class InstallationTimeTest
 	{
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void Test()
 		{
@@ -150,10 +187,16 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[TestFixture]
 	public class InstallationLevelTest
 	{
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void Test()
 		{
@@ -189,39 +232,52 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		}
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[TestFixture]
 	public class InputOutputTextModTest
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		public AppDomain domain = AppDomain.CreateDomain("NunitMODXdomain");
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void SimpleTest()
 		{
-			DirectoryInfo di = new DirectoryInfo(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\simpletest");
+            DirectoryInfo di = new DirectoryInfo(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\simpletest");
 			FileInfo[] modFiles = di.GetFiles();
 			foreach(FileInfo modFile in modFiles)
 			{
 				string input = OpenTextFile(modFile.FullName);
-				TextMod newMod = new TextMod(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
+                TextMod newMod = new TextMod(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
 				newMod.ReadString(input);
 				input = input.Replace("\r\n", "\n");
 				input = input.Replace("\r", "\n");
+                Console.Out.WriteLine(modFile.FullName);
 				Assert.AreEqual(input, newMod.ToString());
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void AdvancedTest_DeepCompare()
 		{
-			DirectoryInfo di = new DirectoryInfo(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\advancedtest");
+            DirectoryInfo di = new DirectoryInfo(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\advancedtest");
 			FileInfo[] modFiles = di.GetFiles();
 			foreach(FileInfo modFile in modFiles)
 			{
 				string input = OpenTextFile(modFile.FullName);
 				Console.WriteLine(modFile.FullName);
-				TextMod newMod = new TextMod(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
+                TextMod newMod = new TextMod(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
 				newMod.ReadString(input);
-				TextMod ultraMod = new TextMod(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
+                TextMod ultraMod = new TextMod(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
 				ultraMod.ReadString(newMod.ToString());
 				string temp = ultraMod.ToString();
 				Console.Error.WriteLine("Actions");
@@ -231,20 +287,23 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[Test]
 		public void TextToXmlAndBack()
 		{
-			DirectoryInfo di = new DirectoryInfo(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\xmlandback");
+            DirectoryInfo di = new DirectoryInfo(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug\xmlandback");
 			FileInfo[] modFiles = di.GetFiles();
 			foreach(FileInfo modFile in modFiles)
 			{
 				string input = OpenTextFile(modFile.FullName);
 				Console.WriteLine(modFile.FullName);
-				TextMod newMod = new TextMod(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
+                TextMod newMod = new TextMod(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
 				newMod.ReadString(input);
 				string xmlFileName = Path.Combine(Path.Combine(modFile.DirectoryName, "xml"), modFile.Name + ".xml");
 				((ModxMod)newMod).Write(xmlFileName);
-				TextMod ultraMod = new TextMod(@"\\slifer\david\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
+                TextMod ultraMod = new TextMod(@"C:\Users\Lachlan\Documents\Visual Studio Projects\Phpbb.ModTeam.Tools\bin\Debug");
 				((ModxMod)ultraMod).Read(xmlFileName);
 				ultraMod.AuthorNotesIndent = newMod.AuthorNotesIndent;
 				ultraMod.AuthorNotesStartLine = newMod.AuthorNotesStartLine;
@@ -260,6 +319,11 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
 		private static string OpenTextFile(string fileName)
 		{
 			StreamReader myStreamReader;
