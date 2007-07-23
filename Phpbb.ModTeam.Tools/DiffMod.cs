@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: DiffMod.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: DiffMod.cs,v 1.2 2007-07-23 11:17:24 smithydll Exp $
  *
  *
  ***************************************************************************/

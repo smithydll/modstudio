@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: TextMod.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: TextMod.cs,v 1.2 2007-07-23 11:17:39 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -51,6 +51,15 @@ namespace Phpbb.ModTeam.Tools
 		/// </summary>
 		/// <param name="templatePath">Path to the templates folder.</param>
 		public TextMod(string templatePath) : base()
+		{
+			LoadTemplate(templatePath);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="templatePath"></param>
+		public void LoadTemplate(string templatePath)
 		{
 			textTemplateReadOnly = false;
 			TextTemplate = OpenTextFile(Path.Combine(templatePath, "MOD.mot"));
@@ -109,7 +118,7 @@ namespace Phpbb.ModTeam.Tools
 			blankTemplate = blankTemplate.Replace("<mod.description/>", Header.Description.GetValue().Replace(newline.ToString(), newline.ToString() + descriptionStartOfLine));
 			blankTemplate = blankTemplate.Replace("<mod.version/>", Header.Version.ToString());
 			blankTemplate = blankTemplate.Replace("<mod.install_level/>", Header.InstallationLevel.ToString());
-			blankTemplate = blankTemplate.Replace("<mod.install_time/>", Math.Ceiling(Header.InstallationTime / 60) + " minutes");
+			blankTemplate = blankTemplate.Replace("<mod.install_time/>", Math.Ceiling(Header.InstallationTime / 60.0) + " minutes");
 
 			string filesToEditString = "";
 			string filesToEditStartOfLine = "## ";
@@ -604,7 +613,7 @@ namespace Phpbb.ModTeam.Tools
 					} // Switch
 				} // For i
 			} // For j
-			Header.PhpbbVersion = new ModVersion(2, 0, 0);
+			Header.PhpbbVersion = new TargetVersionCases(new ModVersion(2, 0, 0));
 			if (Header.AuthorNotes[defaultLanguage].StartsWith("\r\n") || Header.AuthorNotes[defaultLanguage].StartsWith("\n"))
 			{
 				if (Header.AuthorNotes[defaultLanguage].StartsWith("\r\n"))
@@ -615,8 +624,6 @@ namespace Phpbb.ModTeam.Tools
 				{
 					Header.AuthorNotes[defaultLanguage] = Header.AuthorNotes[defaultLanguage].Remove(0,1);
 				}
-				//char[] trimChars = {'\r','\n'};
-				//Header.ModAuthorNotes[defaultLanguage].TrimStart(trimChars);
 				AuthorNotesStartLine = StartLine.Next;
 			}
 			else
@@ -744,8 +751,33 @@ namespace Phpbb.ModTeam.Tools
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="fileName"></param>
 		/// <returns></returns>
-		public override Validation.Report Validate(string fileName)
+		public override Phpbb.ModTeam.Tools.Validation.Report Validate(string fileName)
+		{
+			return Validate(fileName, "english");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="language"></param>
+		/// <returns></returns>
+		public Validation.Report Validate(string fileName, string language)
+		{
+			return Validate(fileName, language, new ModVersion(2, 0, 0), true);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="language"></param>
+		/// <param name="version">Can alter the checks performed based on the version</param>
+		/// <param name="checks">Can disable addtional checks so they aren't duplicated in m|EAL</param>
+		/// <returns></returns>
+		public Validation.Report Validate(string fileName, string language, ModVersion version, bool checks)
 		{
 			Validation.Report Report = new Validation.Report();
 
@@ -793,10 +825,11 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], @"\# MOD Author(, Secondary|)")) 
 							{
-								if (!(Regex.IsMatch(TextModLines[i], @"\# MOD Author: ((?!n\/a)[\w\s\=\$\.\-\|@\']+?) <( |)(n\/a|[a-z0-9\(\) \.\-_\+\[\]@]+)( |)> (\((([\w\s\.\'\-]+?)|n\/a)\)|)( |)(([a-z]+?://){1}([a-z0-9\-\.,\?!%\*_\#:;~\\&$@\/=\+\(\)]+)|n\/a|)( |)$", RegexOptions.IgnoreCase))) 
+								if (!(Regex.IsMatch(TextModLines[i], @"\# MOD Author: ((?!n\/a)[\w\s\=\$\.\-\|@\'\:\[\]\(\)<> ]+?) <( |)(n\/a|[a-z0-9\(\) \.\-_\+\[\]@\|\*]+)( |)> (\((?! +)(([\w\s\.\'\-]+?)|n\/a)(?! +)\)|)( |)(([a-z]+?://){1}([a-z0-9\-\.,\?!%\*_\#:;~\\&$@\/=\+\(\)]+)|n\/a|)( |)$", RegexOptions.IgnoreCase))) 
 								{
 									li = i + 1;
-									Report.HeaderReport += string.Format("Incorrect MOD Author Syntax on line: {0}\n[code]{1}[/code]\n", li, TextModLines[i]);
+									Report.HeaderReport += string.Format("{2} Incorrect MOD Author Syntax on line: {0}\n[code]{1}[/code]\n",
+										li, TextModLines[i], Validator.fail);
 									validateFlag = false;
 								}
 							}
@@ -806,7 +839,8 @@ namespace Phpbb.ModTeam.Tools
 					{
 						if (Regex.IsMatch(TextModLines[i], "\\#\\# EasyMod (.+?) Compliant", RegexOptions.IgnoreCase)) 
 						{
-							Report.HeaderReport += "[i]## EasyMod Compliant[/i]\n";
+							Report.HeaderReport += string.Format("[i]## EasyMod Compliant[/i]\n",
+								Validator.fail);
 							Report.HeaderReport += "[i]EasyMod Compliant is not a ratified standard. It is not part of the MOD Template.[/i]\n";
 							validateFlag = false;
 						}
@@ -825,7 +859,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "Title", RegexOptions.IgnoreCase)) 
 							{
-								Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] [i]MOD Title[/i], may fail with some tools, Line {0}\n", (i + 1).ToString());
+								Report.HeaderReport += string.Format("{1} [i]MOD Title[/i], may fail with some tools, Line {0}\n",
+									(i + 1).ToString(), Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -833,7 +868,8 @@ namespace Phpbb.ModTeam.Tools
 							}
 							if (HeaderEndLine == row && warnFlag == false) 
 							{
-								Report.HeaderReport += "Missing or incorrect [i]MOD Title[/i]\n";
+								Report.HeaderReport += string.Format("{0} Missing or incorrect [i]MOD Title[/i]\n",
+									Validator.fail);
 								flag = true;
 								warnFlag = false;
 								validateFlag = false;
@@ -857,7 +893,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "Author", RegexOptions.IgnoreCase)) 
 							{
-								Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] [i]MOD Author[/i], may fail with some tools, Line {0}\n", (i + 1));
+								Report.HeaderReport += string.Format("{1} [i]MOD Author[/i], may fail with some tools, Line {0}\n",
+									(i + 1), Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -869,7 +906,8 @@ namespace Phpbb.ModTeam.Tools
 							}
 							if (HeaderEndLine == row) 
 							{
-								Report.HeaderReport += "Missing or incorrect [i]MOD Author[/i]\n";
+								Report.HeaderReport += string.Format("{0} Missing or incorrect [i]MOD Author[/i]\n",
+									Validator.fail);
 								flag = true;
 								validateWarnFlag = false;
 								check = 3;
@@ -892,7 +930,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "Description", RegexOptions.IgnoreCase)) 
 							{
-								Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] [i]MOD Description[/i], may fail with some tools, Line {0}\n", (i + 1));
+								Report.HeaderReport += string.Format("{1} [i]MOD Description[/i], may fail with some tools, Line {0}\n", 
+									(i + 1), Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -900,7 +939,8 @@ namespace Phpbb.ModTeam.Tools
 							}
 							if (HeaderEndLine == row) 
 							{
-								Report.HeaderReport += "Missing or incorrect [i]MOD Description[/i]\n";
+								Report.HeaderReport += string.Format("{0} Missing or incorrect [i]MOD Description[/i]\n",
+									Validator.fail);
 								flag = true;
 								validateFlag = false;
 								check = 4;
@@ -919,7 +959,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "\\#.Version", RegexOptions.IgnoreCase)) 
 							{
-								Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] [i]MOD Version[/i], may fail with some tools, Line {0}\n", (i + 1));
+								Report.HeaderReport += string.Format("{1} [i]MOD Version[/i], may fail with some tools, Line {0}\n",
+									(i + 1), Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -929,7 +970,8 @@ namespace Phpbb.ModTeam.Tools
 							{
 								if (CheckAbove(TextModLines, "Version", i)) 
 								{
-									Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]MOD Version[/i] in wrong order, may fail with some tools\n";
+									Report.HeaderReport += string.Format("{0} [i]MOD Version[/i] in wrong order, may fail with some tools\n",
+										Validator.warning);
 									flag = true;
 									warnFlag = true;
 									validateWarnFlag = false;
@@ -937,7 +979,8 @@ namespace Phpbb.ModTeam.Tools
 								} 
 								else 
 								{
-									Report.HeaderReport += "Missing [i]MOD Version[/i]. This is a mandatory field for the MOD Template.\n";
+									Report.HeaderReport += string.Format("{0} Missing [i]MOD Version[/i]. This is a mandatory field for the MOD Template.\n",
+										Validator.fail);
 									flag = true;
 									validateFlag = false;
 									check = 5;
@@ -957,7 +1000,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (CheckAbove(TextModLines, "Installation Level", i)) 
 							{
-								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]Installation Level[/i] in wrong order, may fail with some tools\n";
+								Report.HeaderReport += string.Format("{0} [i]Installation Level[/i] in wrong order, may fail with some tools\n",
+									Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -965,7 +1009,8 @@ namespace Phpbb.ModTeam.Tools
 							} 
 							else 
 							{
-								Report.HeaderReport += "Missing [i]Installation Level[/i]. This is a mandatory field for the MOD Template.\n";
+								Report.HeaderReport += string.Format("{0} Missing [i]Installation Level[/i]. This is a mandatory field for the MOD Template.\n",
+									Validator.fail);
 								flag = true;
 								validateFlag = false;
 								check = 6;
@@ -984,7 +1029,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (CheckAbove(TextModLines, "Installation Time", i)) 
 							{
-								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]Installation Time[/i] in wrong order, may fail with some tools.\n";
+								Report.HeaderReport += string.Format("{0} [i]Installation Time[/i] in wrong order, may fail with some tools.\n",
+									Validator.warning);
 								flag = true;
 								warnFlag = true;
 								validateWarnFlag = false;
@@ -992,7 +1038,8 @@ namespace Phpbb.ModTeam.Tools
 							} 
 							else 
 							{
-								Report.HeaderReport += "Missing [i]Installation Time[/i]. This is a mandatory field for the MOD Template.\n";
+								Report.HeaderReport += string.Format("{0} Missing [i]Installation Time[/i]. This is a mandatory field for the MOD Template.\n",
+									Validator.fail);
 								flag = true;
 								validateFlag = false;
 								check = 7;
@@ -1011,7 +1058,8 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "Files To Edit", RegexOptions.IgnoreCase)) 
 							{
-								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]Files To Edit[/i] is in the wrong case which may cause it to fail in some tools.\n";
+								Report.HeaderReport += string.Format("{0} [i]Files To Edit[/i] is in the wrong case which may cause it to fail in some tools.\n",
+									Validator.warning);
 								flag = true;
 								validateWarnFlag = false;
 								check = 8;
@@ -1019,7 +1067,8 @@ namespace Phpbb.ModTeam.Tools
 							}
 							if (HeaderEndLine == row) 
 							{
-								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]Files To Edit[/i] is missing. This is no cause for concern.\n";
+								Report.HeaderReport += string.Format("{0} [i]Files To Edit[/i] is missing. This is no cause for concern.\n",
+									Validator.warning);
 								flag = true;
 								validateWarnFlag = false;
 								check = 8;
@@ -1036,7 +1085,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]Included Files[/i] is missing. This is no cause for concern.\n";
+							Report.HeaderReport += string.Format("{0} [i]Included Files[/i] is missing. This is no cause for concern.\n",
+								Validator.warning);
 							flag = true;
 							validateWarnFlag = false;
 							check = 9;
@@ -1048,16 +1098,19 @@ namespace Phpbb.ModTeam.Tools
 						{
 							if (Regex.IsMatch(TextModLines[i], "http://opensource.org/licenses/gpl-license.php GNU General Public License v2"))
 							{
-								Report.HeaderReport += "[i]You are using the GNU GPL License[/i].\n";
+								Report.HeaderReport += string.Format("{0} [i]You are using the GNU GPL License[/i].\n",
+									Validator.ok);
 							}
 							else if (Regex.IsMatch(TextModLines[i], "http://opensource.org/licenses/gpl-license.php GNU Public License v2"))
 							{
-								Report.HeaderReport += "[b][color=orange]Warning[/color]:[/b] [i]You are using the GPL License, however the license statement in the MOD Template has been updated to include the word 'General', you should update accordingly[/i]. (16/08/2005)\n";
+								Report.HeaderReport += string.Format("{0} [i]You are using the GPL License, however the license statement in the MOD Template has been updated to include the word 'General', you should update accordingly[/i]. (16/08/2005)\n",
+									Validator.warning);
 								validateWarnFlag = false; // we will let them off with a warning, this time
 							}
 							else
 							{
-								Report.HeaderReport += "[i]You are not using the GPL License[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n";
+								Report.HeaderReport += string.Format("{0} [i]You are not using the GPL License[/i]. Please be aware that most MODs are automatically licensed under the GPL and you may be required to relicense your MOD in accordance with the terms of the GPL inherited from the core phpBB package.\n",
+									Validator.notice);
 							}
 							flag = true;
 							check = 10;
@@ -1065,7 +1118,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false)
 						{
-							Report.HeaderReport += "Missing or incorrect [i]License[/i] statement - A license statement is important for phpBB MODs. Please read the MOD docs for more information.\n";
+							Report.HeaderReport += string.Format("{0} Missing or incorrect [i]License[/i] statement - A license statement is important for phpBB MODs. Please read the MOD docs for more information.\n",
+								Validator.fail);
 							flag = true;
 							validateFlag = false;
 							check = 10;
@@ -1086,7 +1140,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "Missing or incorrect [i]Security Disclaimer[/i] - The disclaimer was recently updated 24 July 2005.\n";
+							Report.HeaderReport += string.Format("{0} Missing or incorrect [i]Security Disclaimer[/i] - The disclaimer was recently updated 24 July 2005.\n",
+								Validator.fail);
 							flag = true;
 							validateFlag = false;
 							check = 11;
@@ -1102,7 +1157,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "Missing or incorrect [i]Author Notes[/i]\n";
+							Report.HeaderReport += string.Format("{0} Missing or incorrect [i]Author Notes[/i]\n",
+								Validator.fail);
 							flag = true;
 							validateFlag = false;
 							check = 12;
@@ -1118,7 +1174,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "[color=green]not used [i]MOD History[/i][/color] - [u]This is not an error[/u]\n";
+							Report.HeaderReport += string.Format("{0} [color=green]not used [i]MOD History[/i][/color] - [u]This is not an error[/u]\n",
+								Validator.ok);
 							flag = true;
 							check = 13;
 						}
@@ -1133,7 +1190,8 @@ namespace Phpbb.ModTeam.Tools
 						}
 						if (HeaderEndLine == row && flag == false) 
 						{
-							Report.HeaderReport += "Missing or incorrect [i]Install disclaimer[/i]\n";
+							Report.HeaderReport += string.Format("{0} Missing or incorrect [i]Install disclaimer[/i]\n",
+								Validator.fail);
 							flag = true;
 							validateFlag = false;
 							check = 14;
@@ -1160,7 +1218,8 @@ namespace Phpbb.ModTeam.Tools
 				{
 					if (Regex.IsMatch(TextModLines[i], "\\#( |)EoM", RegexOptions.IgnoreCase)) 
 					{
-						Report.HeaderReport += "[b][color=red]Warning[/color]:[/b] [i]# EoM[/i] is the wrong syntax.\n";
+						Report.HeaderReport += string.Format("{0} [i]# EoM[/i] is the wrong syntax.\n",
+							Validator.warning);
 						flag = true;
 						warnFlag = true;
 						validateFlag = false;
@@ -1168,7 +1227,8 @@ namespace Phpbb.ModTeam.Tools
 					}
 					if (TextModLines.Length == row) 
 					{
-						Report.HeaderReport += "Missing or incorrect [i]# EoM[/i]\n";
+						Report.HeaderReport += string.Format("{0} Missing or incorrect [i]# EoM[/i]\n",
+							Validator.fail);
 						flag = true;
 						validateFlag = false;
 						check = 15;
@@ -1178,26 +1238,39 @@ namespace Phpbb.ModTeam.Tools
 
 			for (int i = HeaderEndLine; i < TextModLines.Length; i++) 
 			{
-				if (Regex.IsMatch(TextModLines[i], " \\[ ([A-Za-z0-9, ]+?) \\]", RegexOptions.Compiled)) 
+				// silly to check this if it is not an action definition
+				if (TextModLines[i].IndexOf("--") >= 0 && TextModLines[i].StartsWith("#"))
 				{
-					string db_info = Regex.Replace(TextModLines[i], "^\\#(\\-+?) \\[(.*?)$", "-$1^");
-
-					Report.HeaderReport += string.Format("Mod actions [b]must not[/b] have spaces in action definition. line {0}\n[quote][b][color=red]-- [[/color] [color=green]--[[/color][/b]\n--^\n{1}\n{2}[/quote]\n", (i + 1), TextModLines[i], db_info);
-					validateFlag = false;
-				}
-				if (Regex.IsMatch(TextModLines[i], "\\[ ([A-Za-z0-9, ]+?) \\] ", RegexOptions.Compiled)) 
-				{
-					string db_info = Regex.Replace(TextModLines[i], "^\\#(.*?)\\] -(.*?)$", "-$1-^");
-					int db_info_len = db_info.Length;
-					db_info = "-";
-					for (int j = 0; j <= db_info_len - 3; j++) 
+					if (Regex.IsMatch(TextModLines[i], " \\[ ([A-Za-z0-9, ]+?) \\]", RegexOptions.Compiled)) 
 					{
-						db_info += "-";
-					}
-					db_info += "^";
+						string db_info = Regex.Replace(TextModLines[i], "^\\#(\\-+?) \\[(.*?)$", "-$1^");
+						int db_info_len = db_info.IndexOf(" [");
+						db_info = "-";
+						for (int j = 0; j <= db_info_len - 2; j++) 
+						{
+							db_info += "-";
+						}
+						db_info += "^";
 
-					Report.HeaderReport += string.Format("Mod actions [b]must not[/b] have spaces in action definition. line {0}\n[quote][b][color=red]] --[/color] [color=green]]--[/color][/b]\n-^\n{1}\n{2}[/quote]\n", (i + 1), TextModLines[i], db_info);
-					validateFlag = false;
+						Report.HeaderReport += string.Format("{3} Mod actions [b]must not[/b] have spaces in action definition. line {0}\n[quote][b][color=red]-- [[/color] [color=green]--[[/color][/b]\n--^\n{1}\n{2}[/quote]\n", 
+							(i + 1), TextModLines[i], db_info, Validator.fail);
+						validateFlag = false;
+					}
+					if (Regex.IsMatch(TextModLines[i], "\\[ ([A-Za-z0-9, ]+?) \\] ", RegexOptions.Compiled)) 
+					{
+						string db_info = Regex.Replace(TextModLines[i], "^\\#(.*?)\\] -(.*?)$", "-$1-^");
+						int db_info_len = db_info.IndexOf("] ");
+						db_info = "-";
+						for (int j = 0; j <= db_info_len - 3; j++) 
+						{
+							db_info += "-";
+						}
+						db_info += "^";
+
+						Report.HeaderReport += string.Format("{3} Mod actions [b]must not[/b] have spaces in action definition. line {0}\n[quote][b][color=red]] --[/color] [color=green]]--[/color][/b]\n-^\n{1}\n{2}[/quote]\n", 
+							(i + 1), TextModLines[i], db_info, Validator.fail);
+						validateFlag = false;
+					}
 				}
 			}
 
@@ -1210,63 +1283,67 @@ namespace Phpbb.ModTeam.Tools
 			//{
 			//}
 
+			// Validate actions
 			if (modification.Actions != null)
 			{
-				Validator.LoadPhpbbFileList(); // Load the phpBB file list for comparison in the OPEN check
+				Validator.LoadPhpbbFileList(language, version); // Load the phpBB file list for comparison in the OPEN check
 				for (int i = 0; i < modification.Actions.Count; i++) 
 				{
 					if (modification.Actions[i].Type != modification.Actions[i].Type.ToUpper())
 					{
-						Report.HeaderReport += string.Format("Mod actions [b]must[/b] be in upper case. line {0}\n[code]{1}[/code]\n",
-							(i + 1), modification.Actions[i].StartLine);
+						Report.HeaderReport += string.Format("{2} Mod actions [b]must[/b] be in upper case. line {0}\n[code]{1}[/code]\n",
+							modification.Actions[i].StartLine, modification.Actions[i].Body, Validator.fail);
 						validateFlag = false;
 					}
 					if (Validation.ModActions.GetType(modification.Actions[i].Type) == Validation.ModActions.ModActionType.Edit ||
 						Validation.ModActions.GetType(modification.Actions[i].Type) == Validation.ModActions.ModActionType.InLineEdit)
 					{
-						if (modification.Actions[i].Body.IndexOf("<font") >= 0)
+						if (checks)
 						{
-							if (Regex.IsMatch(modification.Actions[i].Body, "<font(.*?)>")) 
+							if (modification.Actions[i].Body.IndexOf("<font") >= 0)
 							{
-								Report.HtmlReport += string.Format("Unauthorised usage of the FONT tag. Please use the span tag, starting line: {0}\n[quote]{1}[/quote]\n",
-									modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<font(.*?)>", "[b]<font$1>[/b]"));
+								if (Regex.IsMatch(modification.Actions[i].Body, "<font(.*?)>")) 
+								{
+									Report.HtmlReport += string.Format("{2} Unauthorised usage of the FONT tag. Please use the span tag, starting line: {0}\n[quote]{1}[/quote]\n",
+										modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<font(.*?)>", "[b]<font$1>[/b]"), Validator.fail);
+									validateFlag = false;
+								}
+							}
+							if (modification.Actions[i].Body.IndexOf("<br>") >= 0)
+							{
+								Report.HtmlReport += string.Format("Unauthorised usage of the <br> tag. Please use the <br /> tag., starting line: {0}\n[quote]{1}[/quote]\n",
+									modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<br>", "[b]<br>[/b]"));
 								validateFlag = false;
 							}
-						}
-						if (modification.Actions[i].Body.IndexOf("<br>") >= 0)
-						{
-							Report.HtmlReport += string.Format("Unauthorised usage of the <br> tag. Please use the <br /> tag., starting line: {0}\n[quote]{1}[/quote]\n",
-								modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<br>", "[b]<br>[/b]"));
-							validateFlag = false;
-						}
-						if (modification.Actions[i].Body.IndexOf("<img") >= 0 &&
-							modification.Actions[i].Body.IndexOf("/>") < 0)
-						{
-							Report.HtmlReport += string.Format("Unauthorised usage of the <img> tag. Please make sure you use XHTML entities e.g. <img />., starting line: {0}\n[quote]{1}[/quote]\n",
-								modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<img", "[b]<img[/b]"));
-							validateFlag = false;
-						}
-						if (modification.Actions[i].Body.IndexOf("mysql_") >= 0)
-						{
-							if (modification.Actions[i].Body.IndexOf("mysql_connect") >= 0)
+							if (modification.Actions[i].Body.IndexOf("<img") >= 0 &&
+								modification.Actions[i].Body.IndexOf("/>") < 0)
 							{
-								if (Regex.IsMatch(modification.Actions[i].Body, "mysql_connect\\((.*?)\\)")) 
+								Report.HtmlReport += string.Format("Unauthorised usage of the <img> tag. Please make sure you use XHTML entities e.g. <img />., starting line: {0}\n[quote]{1}[/quote]\n",
+									modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "<img", "[b]<img[/b]"));
+								validateFlag = false;
+							}
+							if (modification.Actions[i].Body.IndexOf("mysql_") >= 0)
+							{
+								if (modification.Actions[i].Body.IndexOf("mysql_connect") >= 0)
 								{
-									Report.DbalReport += string.Format("Unauthorised usage of mysql_connect, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
-										modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
-									validateFlag = false;
+									if (Regex.IsMatch(modification.Actions[i].Body, "mysql_connect\\((.*?)\\)")) 
+									{
+										Report.DbalReport += string.Format("Unauthorised usage of mysql_connect, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
+											modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "mysql_connect\\((.*?)\\)", "[b]mysql_connect($1)[/b]"));
+										validateFlag = false;
+									}
+								}
+								if (modification.Actions[i].Body.IndexOf("mysql_error") >= 0)
+								{
+									if (Regex.IsMatch(modification.Actions[i].Body, "mysql_error\\((.*?)\\)")) 
+									{
+										Report.DbalReport += string.Format("Unauthorised usage of mysql_error, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
+											modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
+										validateFlag = false;
+									}
 								}
 							}
-							if (modification.Actions[i].Body.IndexOf("mysql_error") >= 0)
-							{
-								if (Regex.IsMatch(modification.Actions[i].Body, "mysql_error\\((.*?)\\)")) 
-								{
-									Report.DbalReport += string.Format("Unauthorised usage of mysql_error, please use the DBAL, starting line: {0}\n[quote]{1}[/quote]\n",
-										modification.Actions[i].StartLine, Regex.Replace(modification.Actions[i].ToString(), "mysql_error\\((.*?)\\)", "[b]mysql_error($1)[/b]"));
-									validateFlag = false;
-								}
-							}
-						}
+						} // check
 					}
 					if (Validation.ModActions.GetType(modification.Actions[i].Type) == Validation.ModActions.ModActionType.File)
 						//if (ModActions.Parse(((ModAction)Modification.Actions[i]).ActionType).Type == ModActions.ModActionType.File) 
@@ -1371,8 +1448,8 @@ namespace Phpbb.ModTeam.Tools
 					modification.UpdateInstallationTime();
 					if (Math.Abs(installTime - modification.Header.InstallationTime) / installTime > 0.5)
 					{
-						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Installation time of {0} minutes is more than 50% out of realistic expectation, expectation was {1} minutes\n",
-							installTime / 60, Math.Round((float)modification.Header.InstallationTime / 60));
+						Report.HeaderReport += string.Format("{2} Installation time of {0} minutes is more than 50% out of realistic expectation, expectation was {1} minutes\n",
+							installTime / 60, Math.Round((float)modification.Header.InstallationTime / 60), Validator.warning);
 						validateWarnFlag = false;
 					}
 
@@ -1380,7 +1457,8 @@ namespace Phpbb.ModTeam.Tools
 					modification.UpdateFilesToEdit();
 					if (!CompareStringCollection(filesToEdit, modification.Header.FilesToEdit))
 					{
-						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Files To Edit in header does not equal files edited in MOD\n");
+						Report.HeaderReport += string.Format("{0} Files To Edit in header does not equal files edited in MOD\n",
+							Validator.warning);
 						validateWarnFlag = false;
 					}
 
@@ -1388,14 +1466,16 @@ namespace Phpbb.ModTeam.Tools
 					modification.UpdateFilesToEdit();
 					if (!CompareStringCollection(includedFiles, modification.Header.IncludedFiles))
 					{
-						Report.HeaderReport += string.Format("[b][color=orange]Warning[/color]:[/b] Included Files in header does not equal filed copied over in MOD\n");
+						Report.HeaderReport += string.Format("{0} Included Files in header does not equal filed copied over in MOD\n",
+							Validator.warning);
 						validateWarnFlag = false;
 					}
 				}
 			}
 			catch
 			{
-				Report.HeaderReport += string.Format("[b][color=red]Error[/color]:[/b] Couldn't parse MOD header.\n");
+				Report.HeaderReport += string.Format("{0} Couldn't parse MOD header.\n",
+					Validator.error);
 				validateFlag = false;
 			}
 
@@ -1415,15 +1495,15 @@ namespace Phpbb.ModTeam.Tools
 				Report.Rating += "\nThere were some [b][color=orange]warnings[/color][/b] which should be looked at but aren't causes for denial. These warnings may cause your MOD to act in undetermined ways in tools other than EasyMod, and should be fixed for maximum compatibility.";
 				Report.Passed = false;
 			}
-			if (validateFlag && validateWarnFlag) 
+			if (validateFlag && validateWarnFlag && checks) 
 			{
 				Report.ActionsReport += "\n[color=green]No problems[/color] were detected in this MODs Template in accordance with the phpBB MOD Team guidelines.";
 			}
-			if (Report.HtmlReport == null) 
+			if (Report.HtmlReport == null  && checks) 
 			{
 				Report.HtmlReport = "[color=green]No problems[/color] were detected in this MODs use HTML elements in accordance with the phpBB2 coding standards.";
 			}
-			if (Report.DbalReport == null) 
+			if (Report.DbalReport == null  && checks) 
 			{
 				Report.DbalReport = "[color=green]No problems[/color] were detected in this MODs use of databases [size=9](if used)[/size] in accordance with the phpBB2 coding standards.";
 			}

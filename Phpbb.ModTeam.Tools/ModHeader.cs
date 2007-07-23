@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModHeader.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: ModHeader.cs,v 1.2 2007-07-23 11:17:29 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -91,7 +91,7 @@ namespace Phpbb.ModTeam.Tools.DataStructures
 		/// <summary>
 		/// Version of phpBB designed for
 		/// </summary>
-		public ModVersion PhpbbVersion;
+		public TargetVersionCases PhpbbVersion;
 		/// <summary>
 		/// Meta data
 		/// </summary>

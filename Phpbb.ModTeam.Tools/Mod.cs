@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Mod.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: Mod.cs,v 1.2 2007-07-23 11:17:26 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -85,9 +85,9 @@ namespace Phpbb.ModTeam.Tools
 		/// </summary>
 		protected bool textTemplateReadOnly = false;
 		/// <summary>
-		/// The default language MOD files are written in. By default this is "en-gb" and should not be changed.
+		/// The default language MOD files are written in. By default this is "en" and should not be changed.
 		/// </summary>
-		protected static string defaultLanguage = "en-gb";
+		protected static string defaultLanguage = "en";
 
 		/// <summary>
 		/// The new line character used by the system.
@@ -273,8 +273,56 @@ namespace Phpbb.ModTeam.Tools
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static TargetVersionPart TargetVersionPartParse(string input)
+        {
+            switch (input.ToUpper())
+            {
+                case "MAJOR":
+                    return TargetVersionPart.Major;
+                case "MINOR":
+                    return TargetVersionPart.Minor;
+                case "REVISION":
+                    return TargetVersionPart.Revision;
+                case "RELEASE":
+                    return TargetVersionPart.Release;
+                default:
+                    return TargetVersionPart.Major;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static TargetVersionComparisson TargetVersionComparissonParse(string input)
+        {
+            switch (input.ToUpper().Replace(" ", ""))
+            {
+                case "EQUALTO":
+                    return TargetVersionComparisson.EqualTo;
+                case "GREATERTHAN":
+                    return TargetVersionComparisson.GreaterThan;
+                case "GREATERTHANEQUAL":
+                    return TargetVersionComparisson.GreaterThanEqual;
+                case "LESSTHAN":
+                    return TargetVersionComparisson.LessThan;
+                case "LESSTHANEQUAL":
+                    return TargetVersionComparisson.LessThanEqual;
+                case "NOTEQUALTO":
+                    return TargetVersionComparisson.NotEqualTo;
+                default:
+                    return TargetVersionComparisson.EqualTo;
+            }
+        }
+
 		/// <summary>
-		/// The default language MOD files are written in. By default this is "en-gb" and should not be changed.
+		/// The default language MOD files are written in. By default this is "en" and should not be changed.
 		/// </summary>
 		public static string DefaultLanguage
 		{
@@ -315,6 +363,79 @@ namespace Phpbb.ModTeam.Tools
 			}
 			return seconds;
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static VersionStage StringToVersionStage(string input)
+        {
+            switch (input)
+            {
+                case "alpha":
+                    return VersionStage.Alpha;
+                case "beta":
+                    return VersionStage.Beta;
+                case "release-candidate":
+                    return VersionStage.ReleaseCandidate;
+                case "gamma":
+                    return VersionStage.Gamma;
+                case "delta":
+                    return VersionStage.Delta;
+            }
+            return VersionStage.Stable;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stage"></param>
+        /// <returns></returns>
+        public static string VersionStageToString(VersionStage stage)
+        {
+            switch (stage)
+            {
+                case VersionStage.Alpha:
+                    return "alpha";
+                case VersionStage.Beta:
+                    return "beta";
+                case VersionStage.ReleaseCandidate:
+                    return "release-candidate";
+                case VersionStage.Gamma:
+                    return "gamma";
+                case VersionStage.Delta:
+                    return "delta";
+                case VersionStage.Stable:
+                    return "stable";
+            }
+            return "stable";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stage"></param>
+        /// <returns></returns>
+        public static string VersionStageToChar(VersionStage stage)
+        {
+            switch (stage)
+            {
+                case VersionStage.Alpha:
+                    return "A";
+                case VersionStage.Beta:
+                    return "B";
+                case VersionStage.ReleaseCandidate:
+                    return "RC";
+                case VersionStage.Gamma:
+                    return "C";
+                case VersionStage.Delta:
+                    return "D";
+                case VersionStage.Stable:
+                    return "";
+            }
+            return "";
+        }
 
 		/// <summary>
 		/// 

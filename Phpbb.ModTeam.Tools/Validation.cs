@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Validation.cs,v 1.1 2006-07-03 12:49:23 smithydll Exp $
+ *   $Id: Validation.cs,v 1.2 2007-07-23 11:17:40 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -29,6 +29,7 @@ using System.Xml;
 using System.Xml.Xsl;
 using System.Data;
 using m = Phpbb.ModTeam.Tools.Validation;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace Phpbb.ModTeam.Tools
 {
@@ -37,6 +38,34 @@ namespace Phpbb.ModTeam.Tools
 	/// </summary>
 	public class Validator
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string notice = "[b][ [color=blue]NOTICE[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string error = "[b][ [color=red]ERROR[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string fail = "[b][ [color=red]FAIL[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string warning = "[b][ [color=orange]WARNING[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string ok = "[b][ [color=green]OK[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string pass = "[b][ [color=green]PASS[/color] ][/b]";
+		/// <summary>
+		/// 
+		/// </summary>
+		public const string info = "[b][ [color=purple]INFO[/color] ][/b]";
 
 		private static AppDomain domain = AppDomain.CreateDomain("MODXdomain");
 
@@ -95,7 +124,6 @@ namespace Phpbb.ModTeam.Tools
 			input = input.Replace("&", "&amp;");
 			input = input.Replace("<", "&lt;");
 			input = input.Replace(">", "&gt;");
-			input = input.Replace("\"", "&quot;");
 
 			input = input.Replace("[b]", "<strong>");
 			input = input.Replace("[/b]", "</strong>");
@@ -103,13 +131,19 @@ namespace Phpbb.ModTeam.Tools
 			input = input.Replace("[i]", "<em>");
 			input = input.Replace("[/i]", "</em>");
 
+			input = input.Replace("[u]", "<u>");
+			input = input.Replace("[/u]", "</u>");
+
 			input = input.Replace("[code]","<pre><code>");
 			input = input.Replace("[/code]","</code></pre>");
 
 			input = input.Replace("[quote]","<blockquote>");
+			input = Regex.Replace(input, "\\[quote\\=\"(.+?)\"\\]", "<strong>$1</strong><blockquote>");
 			input = input.Replace("[/quote]","</blockquote>");
 
-			input = Regex.Replace(input, "\\[color\\=(([A-Fa-f0-9]+?)|green|orange|red|purple|blue)\\]", "<span style=\"color: $1\">");
+			input = input.Replace("\"", "&quot;");
+
+			input = Regex.Replace(input, "\\[color\\=(#([A-Fa-f0-9]+?)|green|orange|red|purple|blue|magenta)\\]", "<span style=\"color: $1\">");
 			input = input.Replace("[/color]","</span>");
 
 			input = Regex.Replace(input, "\\[size\\=([0-9]+?)\\]", "<span style=\"font-size: $1pt\">");
@@ -123,9 +157,52 @@ namespace Phpbb.ModTeam.Tools
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="language"></param>
+		/// <param name="version"></param>
+		public static void LoadPhpbbFileList(string language, ModVersion version)
+		{
+			PhpbbFileList.Clear();
+			if (version.Major == 2 && version.Minor == 0)
+			{
+				PhpbbFileList.AddRange(OpenTextFile(Path.Combine(domain.BaseDirectory, "files.txt")).Replace("\r\n", "\n").Split('\n'));
+			}
+			else if (version.Major == 3 && version.Minor == 0)
+			{
+				PhpbbFileList.AddRange(OpenTextFile(Path.Combine(domain.BaseDirectory, "files_3.0.txt")).Replace("\r\n", "\n").Split('\n'));
+			}
+			if (language != "english")
+			{
+				for (int i = 0; i < PhpbbFileList.Count; i++)
+				{
+					PhpbbFileList[i] = PhpbbFileList[i].Replace("english", language);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="language"></param>
+		public static void LoadPhpbbFileList(string language)
+		{
+			LoadPhpbbFileList(language, new ModVersion(2, 0, 0));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="version"></param>
+		public static void LoadPhpbbFileList(ModVersion version)
+		{
+			LoadPhpbbFileList("english", version);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public static void LoadPhpbbFileList()
 		{
-			PhpbbFileList.AddRange(OpenTextFile(Path.Combine(domain.BaseDirectory, "files.txt")).Replace("\r\n", "\n").Split('\n'));
+			LoadPhpbbFileList("english");
 		}
 
 		#region File Handling
@@ -233,6 +310,29 @@ namespace Phpbb.ModTeam.Tools.Validation
 				this.HeaderReport, this.ActionsReport, this.HtmlReport, this.DbalReport, this.Rating);
 
 			return Report;
+		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="checks"></param>
+        /// <returns></returns>
+		public string ToString(bool checks)
+		{
+			if (checks)
+			{
+				return this.ToString();
+			}
+			else
+			{
+				string Report;
+
+				Report = string.Format("{0}\n{1}\n" + 
+					"[size=13][b]Overall[/b][/size]\n{4}\n",
+					this.HeaderReport, this.ActionsReport, this.HtmlReport, this.DbalReport, this.Rating);
+
+				return Report;
+			}
 		}
 
 		/// <summary>
