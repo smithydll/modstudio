@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: AboutBox.cs,v 1.8 2006-07-03 13:05:58 smithydll Exp $
+ *   $Id: AboutBox.cs,v 1.9 2007-07-23 09:03:43 smithydll Exp $
  *
  *
  ***************************************************************************/

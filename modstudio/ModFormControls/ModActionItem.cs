@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionItem.cs,v 1.12 2006-07-03 12:54:28 smithydll Exp $
+ *   $Id: ModActionItem.cs,v 1.13 2007-07-23 09:03:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -139,7 +139,11 @@ namespace ModFormControls
 			this.Controls.Add(this.panel3);
 			this.Name = "ModActionItem";
 			this.Size = new System.Drawing.Size(480, 90);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ModActionItem_KeyPress);
 			this.Resize += new System.EventHandler(this.ModActionItem_Resize);
+			this.Enter += new System.EventHandler(this.ModActionItem_Enter);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyUp);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyDown);
 			this.panel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -158,6 +162,10 @@ namespace ModFormControls
 		public delegate void ActionItemClickHandler(object sender, ActionItemClickEventArgs e);
 		public event ActionItemClickHandler ItemClick;
 		public event ActionItemClickHandler ItemDoubleClick;
+		public delegate void ActionItemSwitchHandler(object sender, ActionItemSwitchEventArgs e);
+		public event ActionItemSwitchHandler ItemSwitch;
+		public delegate void ActionItemEnterHandler(object sender, ActionItemEnterEventArgs e);
+		public event ActionItemEnterHandler ItemEnter;
 
 		private void ModActionItem_Resize(object sender, System.EventArgs e)
 		{
@@ -194,6 +202,51 @@ namespace ModFormControls
 		private void panel2_DoubleClick(object sender, System.EventArgs e)
 		{
 			this.ItemDoubleClick(this, new ActionItemClickEventArgs(ActionIndex));
+		}
+
+		private void ModActionItem_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
+			{
+				Clipboard.SetDataObject(this.ActionBody, true);
+			}
+			else if (e.Modifiers == Keys.None)
+			{
+				switch (e.KeyCode)
+				{
+					case Keys.Up:
+						this.ItemSwitch(this, new ActionItemSwitchEventArgs(SwitchTo.Previous));
+						break;
+					case Keys.Down:
+						this.ItemSwitch(this, new ActionItemSwitchEventArgs(SwitchTo.Next));
+						break;
+					case Keys.Enter:
+						e.Handled = true;
+						this.ItemEnter(this, new ActionItemEnterEventArgs(ActionIndex));
+						break;
+				}
+			}
+		}
+
+		private void ModActionItem_Enter(object sender, System.EventArgs e)
+		{
+		}
+
+		private void ModActionItem_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Enter)
+			{
+				return true;
+			}
+			return base.IsInputKey (keyData);
+		}
+
+		private void ModActionItem_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
 		}
 	
 		public override Color BackColor
@@ -241,6 +294,30 @@ namespace ModFormControls
 	{
 		public int Index;
 		public ActionItemClickEventArgs(int index) 
+		{
+			this.Index = index;
+		}
+	}
+
+	public enum SwitchTo
+	{
+		Next,
+		Previous
+	}
+
+	public class ActionItemSwitchEventArgs: EventArgs
+	{
+		public SwitchTo SwitchTo;
+		public ActionItemSwitchEventArgs(SwitchTo switchTo) 
+		{
+			this.SwitchTo = switchTo;
+		}
+	}
+
+	public class ActionItemEnterEventArgs: EventArgs
+	{
+		public int Index;
+		public ActionItemEnterEventArgs(int index) 
 		{
 			this.Index = index;
 		}

@@ -1,0 +1,5 @@
+<mod-project xmlns="http://tempuri.org/mod_project.xsd">
+    <build-path>/build</build-path>
+    <file path="license.txt" build="package" />
+    <file path="templates/subSilver.xml" build="package" />
+</mod-project>

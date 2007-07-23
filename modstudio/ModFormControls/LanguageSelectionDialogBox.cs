@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LanguageSelectionDialogBox.cs,v 1.6 2006-07-03 12:54:27 smithydll Exp $
+ *   $Id: LanguageSelectionDialogBox.cs,v 1.7 2007-07-23 09:03:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -103,7 +103,7 @@ namespace ModFormControls
 			this.comboBoxLanguage.Items.AddRange(new object[] {
 																  "en",
 																  "en-AU",
-																  "en-GB",
+																  "en",
 																  "en-NZ",
 																  "en-US",
 																  "fr",

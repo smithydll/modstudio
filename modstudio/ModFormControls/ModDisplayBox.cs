@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModDisplayBox.cs,v 1.14 2006-07-03 12:54:28 smithydll Exp $
+ *   $Id: ModDisplayBox.cs,v 1.15 2007-07-23 09:03:41 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -44,6 +44,17 @@ namespace ModFormControls
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
+			this.SetStyle(ControlStyles.Selectable, true);
+			this.UpdateStyles();
+			this.CreateControl();
+			IntPtr handle = this.Handle;
+			Console.WriteLine(this.CanFocus + ":f");
+			Console.WriteLine(this.CanSelect);
+			Console.WriteLine(this.Enabled);
+			Console.WriteLine(this.Visible);
+			Console.WriteLine(this.Handle);
+			//this.CanFocus = true;
+			//this.CanSelect = true;
 
 			// TODO: Add any initialization after the InitializeComponent call
 		}
@@ -70,47 +81,22 @@ namespace ModFormControls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.ModDisplayPanel = new System.Windows.Forms.Panel();
-			this.ModBoxScrollBar = new System.Windows.Forms.VScrollBar();
-			this.SuspendLayout();
-			// 
-			// ModDisplayPanel
-			// 
-			this.ModDisplayPanel.AutoScroll = true;
-			this.ModDisplayPanel.BackColor = System.Drawing.Color.AliceBlue;
-			this.ModDisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ModDisplayPanel.Location = new System.Drawing.Point(0, 0);
-			this.ModDisplayPanel.Name = "ModDisplayPanel";
-			this.ModDisplayPanel.Size = new System.Drawing.Size(480, 320);
-			this.ModDisplayPanel.TabIndex = 0;
-			this.ModDisplayPanel.TabStop = true;
-			// 
-			// ModBoxScrollBar
-			// 
-			this.ModBoxScrollBar.Dock = System.Windows.Forms.DockStyle.Right;
-			this.ModBoxScrollBar.LargeChange = 1;
-			this.ModBoxScrollBar.Location = new System.Drawing.Point(463, 0);
-			this.ModBoxScrollBar.Maximum = 0;
-			this.ModBoxScrollBar.Name = "ModBoxScrollBar";
-			this.ModBoxScrollBar.Size = new System.Drawing.Size(17, 320);
-			this.ModBoxScrollBar.TabIndex = 1;
-			this.ModBoxScrollBar.Visible = false;
 			// 
 			// ModDisplayBox
 			// 
-			this.Controls.Add(this.ModBoxScrollBar);
-			this.Controls.Add(this.ModDisplayPanel);
+			this.AutoScroll = true;
+			this.BackColor = System.Drawing.Color.AliceBlue;
 			this.Name = "ModDisplayBox";
 			this.Size = new System.Drawing.Size(480, 320);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ModDisplayBox_KeyPress);
+			this.Load += new System.EventHandler(this.ModDisplayBox_Load);
 			this.Enter += new System.EventHandler(this.ModDisplayBox_Enter);
-			this.ResumeLayout(false);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ModDisplayBox_KeyDown);
 
 		}
 		#endregion
 
 		private ModActions Actions;
-		private System.Windows.Forms.Panel ModDisplayPanel;
-		private System.Windows.Forms.VScrollBar ModBoxScrollBar;
 		private ModActionItemCollection ActionItems;
 		private int selectedIndex = 0;
 		const int scrollBarWidth = 17;
@@ -141,9 +127,9 @@ namespace ModFormControls
 					// create a new array of the right length
 					ActionItems = new ModActionItemCollection();
 
-					this.ModDisplayPanel.SuspendLayout();
+					//this.ModDisplayPanel.SuspendLayout();
 					this.SuspendLayout();
-					ModDisplayPanel.Height = ActionItems.Count * itemRealHeight;
+					//ModDisplayPanel.Height = ActionItems.Count * itemRealHeight;
 					for (int i = 0; i < Actions.Count; i++)
 					{
 						ModActionItem tempActionItem = new ModActionItem();
@@ -151,13 +137,15 @@ namespace ModFormControls
 						tempActionItem.Index = i;
 						tempActionItem.ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
 						tempActionItem.ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
+						tempActionItem.ItemSwitch += new ModFormControls.ModActionItem.ActionItemSwitchHandler(this.ActionItmes_ItemSwitch);
+						tempActionItem.ItemEnter += new ModFormControls.ModActionItem.ActionItemEnterHandler(this.ActionItems_ItemEnter);
 						
 						ActionItems.Add(tempActionItem);
-						this.ModDisplayPanel.Controls.Add(tempActionItem);
+						this.Controls.Add(tempActionItem);
 					}
 					//this.ModDisplayPanel.Height = Actions.Count * 100;
 					UpdateLayout();
-					this.ModDisplayPanel.ResumeLayout(false);
+					//this.ModDisplayPanel.ResumeLayout(false);
 					this.ResumeLayout(false);
 				}
 			}
@@ -168,8 +156,8 @@ namespace ModFormControls
 
 		private void ActionItems_SelectedIndexChanged(object sender, ActionItemClickEventArgs e)
 		{
-			selectedIndex = e.Index;
-			UpdateColours();
+			SelectedIndex = e.Index;
+			//UpdateColours();
 			this.SelectedIndexChanged(this, new EventArgs());
 		}
 
@@ -180,7 +168,7 @@ namespace ModFormControls
 
 		public void UpdateColours()
 		{
-			this.ModDisplayPanel.SuspendLayout();
+			//this.ModDisplayPanel.SuspendLayout();
 			this.SuspendLayout();
 			if (Actions != null)
 			{
@@ -195,13 +183,13 @@ namespace ModFormControls
 					ActionItems[i].Refresh();
 				}
 			}
-			this.ModDisplayPanel.ResumeLayout();
+			//this.ModDisplayPanel.ResumeLayout();
 			this.ResumeLayout();
 		}
 
 		public void UpdateSize()
 		{
-			this.ModDisplayPanel.SuspendLayout();
+			//this.ModDisplayPanel.SuspendLayout();
 			this.SuspendLayout();
 			if (Actions != null)
 			{
@@ -219,30 +207,30 @@ namespace ModFormControls
 						case "SAVE/CLOSE ALL FILES":
 						case "OPEN":
 						case "DIY INSTRUCTIONS":
-							ActionItems[i].Width = this.Width - 20 - ModBoxScrollBar.Width;
+							ActionItems[i].Width = this.Width - 20 - 16;
 							break;
 						case "FIND":
-							ActionItems[i].Width = this.Width - 40 - ModBoxScrollBar.Width;
+							ActionItems[i].Width = this.Width - 40 - 16;
 							break;
 						case "IN-LINE FIND":
 						case "REPLACE WITH":
 						case "AFTER, ADD":
 						case "BEFORE, ADD":
 						case "INCREMENT":
-							ActionItems[i].Width = this.Width - 60 - ModBoxScrollBar.Width;
+							ActionItems[i].Width = this.Width - 60 - 16;
 							break;
 						case "IN-LINE REPLACE WITH":
 						case "IN-LINE AFTER, ADD":
 						case "IN-LINE BEFORE, ADD":
 						case "IN-LINE INCREMENT":
-							ActionItems[i].Width = this.Width - 80 - ModBoxScrollBar.Width;
+							ActionItems[i].Width = this.Width - 80 - 16;
 							break;
 
 					}
 					ActionItems[i].Refresh();
 				}
 			}
-			this.ModDisplayPanel.ResumeLayout();
+			//this.ModDisplayPanel.ResumeLayout();
 			this.ResumeLayout();
 		}
 
@@ -250,7 +238,6 @@ namespace ModFormControls
 		{
 			if (Actions != null)
 			{
-				ModBoxScrollBar.Maximum = Actions.Count * itemRealHeight;
 
 				//ModDisplayPanel.ScrollControlIntoView(ActionItems[0]);
 				for (int i = 0; i < ActionItems.Count; i++)
@@ -268,18 +255,17 @@ namespace ModFormControls
 		/// </summary>
 		public void UpdateLayout()
 		{
-			this.ModDisplayPanel.SuspendLayout();
+			//this.ModDisplayPanel.SuspendLayout();
 			this.SuspendLayout();
 			int offset = 0;
 			Point scrollPosn = new Point(0,0);
 			if (Actions != null)
 			{
-				ModBoxScrollBar.Maximum = Actions.Count * itemRealHeight;
 
 				if (ActionItems.Count > 0)
 				{
-					scrollPosn = ModDisplayPanel.AutoScrollPosition;
-					ModDisplayPanel.AutoScrollPosition = new Point(0,0);
+					scrollPosn = this.AutoScrollPosition;
+					this.AutoScrollPosition = new Point(0,0);
 				}
 				for (int i = 0; i < ActionItems.Count; i++)
 				{
@@ -306,16 +292,16 @@ namespace ModFormControls
 					ActionItems[i].Refresh();
 				}
 
-				ModDisplayPanel.AutoScrollPosition = scrollPosn;
-				ModDisplayPanel.ScrollControlIntoView(ActionItems[selectedIndex]);
+				this.AutoScrollPosition = scrollPosn;
+				this.ScrollControlIntoView(ActionItems[selectedIndex]);
 			}
-			this.ModDisplayPanel.ResumeLayout();
+			//this.ModDisplayPanel.ResumeLayout();
 			this.ResumeLayout();
 		}
 
 		private void ModDisplayBox_Enter(object sender, System.EventArgs e)
 		{
-			ModDisplayPanel.Select();
+			this.Focus();
 		}
 
 		public int SelectedIndex
@@ -326,10 +312,16 @@ namespace ModFormControls
 				{
 					if (value < ActionItems.Count)
 					{
-						UpdateColours();
 						selectedIndex = value;
-						ModDisplayPanel.ScrollControlIntoView(ActionItems[value]);
+						UpdateColours();
+						this.ScrollControlIntoView(ActionItems[value]);
 						this.SelectedIndexChanged(this, new EventArgs());
+						
+						if (selectedIndex >= 0)
+						{
+							//ActionItems[selectedIndex].Index = selectedIndex;
+							ActionItems[selectedIndex].Focus();
+						}
 					}
 					else
 					{
@@ -456,9 +448,11 @@ namespace ModFormControls
 
 			tempActionItem.ItemClick += new ModActionItem.ActionItemClickHandler(this.ActionItems_SelectedIndexChanged);
 			tempActionItem.ItemDoubleClick += new ModActionItem.ActionItemClickHandler(this.ActionItmes_ItemDoubleClick);
+			tempActionItem.ItemSwitch += new ModFormControls.ModActionItem.ActionItemSwitchHandler(this.ActionItmes_ItemSwitch);
+			tempActionItem.ItemEnter += new ModFormControls.ModActionItem.ActionItemEnterHandler(this.ActionItems_ItemEnter);
 
 			ActionItems.Insert(index, tempActionItem);
-			this.ModDisplayPanel.Controls.Add(tempActionItem);
+			this.Controls.Add(tempActionItem);
 
 			for (int i = index; i < ActionItems.Count; i++)
 			{
@@ -476,7 +470,7 @@ namespace ModFormControls
 		public void RemoveAt(int index)
 		{
 			Actions.RemoveAt(index);
-			this.ModDisplayPanel.Controls.Remove(ActionItems[index]);
+			this.Controls.Remove(ActionItems[index]);
 			ActionItems[index].Dispose();
 			ActionItems.RemoveAt(index);
 
@@ -507,6 +501,71 @@ namespace ModFormControls
 				retValue += splitValue[i] + "\r\n";
 			}
 			return retValue;
+		}
+
+		private void ModDisplayBox_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+		}
+
+		private void ModDisplayBox_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			Console.WriteLine(e.Modifiers.ToString() + " + " + e.KeyCode.ToString());
+			if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
+			{
+				Clipboard.SetDataObject(Actions[selectedIndex].Body, true);
+			}
+			Console.WriteLine(this.SelectedIndex);
+		}
+
+		private void ModDisplayBox_Load(object sender, System.EventArgs e)
+		{
+			this.SetStyle(ControlStyles.Selectable, true);
+			this.UpdateStyles();
+			InitializeComponent();
+			this.CreateControl();
+			IntPtr handle = this.Handle;
+			Console.WriteLine("-");
+			Console.WriteLine(this.CanFocus + ":f");
+			Console.WriteLine(this.CanSelect);
+			Console.WriteLine(this.Enabled);
+			Console.WriteLine(this.Visible);
+			Console.WriteLine(this.Handle);
+		}
+
+		int ipp = 0;
+		private void ActionItmes_ItemSwitch(object snder, ActionItemSwitchEventArgs e)
+		{
+			ipp++;
+			Console.WriteLine("boo:" + ipp);
+			switch (e.SwitchTo)
+			{
+				case SwitchTo.Next:
+					if (selectedIndex < Actions.Count)
+					{
+						this.SelectedIndex += 1;
+					}
+					break;
+				case SwitchTo.Previous:
+					if (selectedIndex > 0)
+					{
+						this.SelectedIndex -= 1;
+					}
+					break;
+			}
+		}
+
+		protected override bool IsInputKey(Keys keyData)
+		{
+			if (keyData == Keys.Up || keyData == Keys.Down)
+			{
+				//return true;
+			}
+			return base.IsInputKey (keyData);
+		}
+
+		private void ActionItems_ItemEnter(object sender, ActionItemEnterEventArgs e)
+		{
+			this.ItemDoubleClick(this, new ActionItemClickEventArgs(e.Index));
 		}
 	}
 
