@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialog.cs,v 1.10 2006-07-03 13:05:58 smithydll Exp $
+ *   $Id: OpenActionDialog.cs,v 1.11 2007-07-23 09:03:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,6 +22,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 /*
  * Inspired by:
@@ -35,6 +36,7 @@ namespace ModStudio
 	public class OpenActionDialog : System.Windows.Forms.CommonDialog
 	{
 		private string filename = null;
+        private TargetVersionCases phpbbVersion;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -51,6 +53,23 @@ namespace ModStudio
 				filename = value;
 			}
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [DefaultValue(null)]
+        public TargetVersionCases PhpbbVersion
+        {
+            get
+            {
+                return phpbbVersion;
+            }
+
+            set
+            {
+                phpbbVersion = value;
+            }
+        }
 
 		/// <summary>
 		/// 
@@ -77,6 +96,7 @@ namespace ModStudio
 			try
 			{
 				dialogInstance = new OpenActionDialogBox();
+                dialogInstance.SetPhpbbVersion(phpbbVersion);
 				dialogInstance.Owner = (Form.FromHandle(hWndOwner) as Form);
 				dialogInstance.textBoxFile.Text = this.fileName;
 				if (dialogInstance.ShowDialog() == DialogResult.OK)

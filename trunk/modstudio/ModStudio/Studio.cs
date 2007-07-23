@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.15 2006-07-03 13:05:58 smithydll Exp $
+ *   $Id: Studio.cs,v 1.16 2007-07-23 09:03:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -31,6 +31,7 @@ using Phpbb.ModTeam.Tools.DataStructures;
 using Phpbb.ModTeam.Tools.Validation;
 using System.IO;
 using System.Net;
+using ModFormControls;
 
 namespace ModStudio
 {
@@ -74,6 +75,40 @@ namespace ModStudio
 
 		private Point lastCoOrdinates;
 		private System.Windows.Forms.OpenFileDialog openFileDialog2;
+		private System.Windows.Forms.MenuItem menuItem1;
+		private System.Windows.Forms.MenuItem menuItem2;
+		private System.Windows.Forms.MenuItem menuItem3;
+		private System.Windows.Forms.MenuItem menuItem4;
+		private System.Windows.Forms.MenuItem menuItem5;
+		private System.Windows.Forms.MenuItem menuItem6;
+		private System.Windows.Forms.MenuItem menuItem7;
+		private System.Windows.Forms.MenuItem menuItem8;
+		private System.Windows.Forms.MenuItem menuItem9;
+		private System.Windows.Forms.MenuItem menuItem10;
+		private System.Windows.Forms.MenuItem menuItem11;
+		private System.Windows.Forms.MenuItem menuItem12;
+		private System.Windows.Forms.MenuItem menuItem13;
+		private System.Windows.Forms.ImageList imageList2;
+		private ModFormControls.TabBar tabBar1;
+		private ModFormControls.ProjectPanel projectPanel1;
+		private System.Windows.Forms.Splitter splitter1;
+		private System.Windows.Forms.MenuItem menuItem14;
+		private System.Windows.Forms.MenuItem menuItem15;
+		private System.Windows.Forms.MenuItem menuItem16;
+		private System.Windows.Forms.MenuItem menuItem17;
+		private System.Windows.Forms.MenuItem menuItem18;
+		private System.Windows.Forms.MenuItem menuItem19;
+		private System.Windows.Forms.MenuItem menuItem20;
+		private System.Windows.Forms.MenuItem menuItem21;
+		private System.Windows.Forms.MenuItem menuItem22;
+		private System.Windows.Forms.MenuItem menuItem23;
+		private System.Windows.Forms.ToolBarButton toolBarButtonSeparator1;
+		private System.Windows.Forms.ToolBarButton toolBarButtonCut;
+		private System.Windows.Forms.ToolBarButton toolBarButtonCopy;
+		private System.Windows.Forms.ToolBarButton toolBarButtonPaste;
+		private System.Windows.Forms.MenuItem menuItem24;
+		private System.Windows.Forms.MenuItem menuItem25;
+		private System.Windows.Forms.MenuItem menuItem26;
 		private Size lastSize;
 		/// <summary>
 		/// 
@@ -106,30 +141,33 @@ namespace ModStudio
 			if (!keyFound) Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio", true).CreateSubKey("mod-settings");
 
 			RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("VB and VBA Program Settings").OpenSubKey("MODStudio").OpenSubKey("mod-settings");
-			string defaultLanguage = reg.GetValue("language", "en-GB").ToString();
+			string defaultLanguage = reg.GetValue("language", "en").ToString();
 
 			/*ModEditors = new ModEditor[1];
 			ModEditors[0] = new ModEditor();
-			ModEditors[0].ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en-GB");
+			ModEditors[0].ThisMod.Header.ModTitle.AddLanguage("Untitled Mod", "en");
 			ModEditors[0].MdiParent = this;
 			ModEditors[0].Show();*/
 
 			if (args.Length > 0)
 			{
-				if (args[0].ToLower().EndsWith(".mod") || args[0].ToLower().EndsWith(".txt") || args[0].ToLower().EndsWith(".xml"))
-				{
-					ModEditor newEditor = new ModEditor(args[0]);
-					newEditor.MdiParent = this;
-					newEditor.Text = args[0];
-					newEditor.Show();
-				}
+                if (args[0].ToLower().EndsWith(".mod") || args[0].ToLower().EndsWith(".txt") || args[0].ToLower().EndsWith(".xml"))
+                {
+                    ModEditor newEditor = new ModEditor(args[0]);
+                    newEditor.MdiParent = this;
+                    newEditor.Text = args[0];
+                    newEditor.Show();
+                }
+                else
+                {
+                }
 			}
 			else
 			{
-				ModEditor newEditor = new ModEditor();
+				ModEditor newEditor = new ModEditor(true);
 				newEditor.MdiParent = this;
 				//newEditor.ThisMod.Header.ModTitle = new PropertyLang();
-				newEditor.ThisMod.Header.Title[defaultLanguage] = "Untitled Mod";
+                newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
 				newEditor.Show();
 			}
 		}
@@ -156,391 +194,521 @@ namespace ModStudio
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Studio));
-			this.mainMenu = new System.Windows.Forms.MainMenu();
-			this.menuItemFile = new System.Windows.Forms.MenuItem();
-			this.menuItemFileNew = new System.Windows.Forms.MenuItem();
-			this.menuItemFileOpen = new System.Windows.Forms.MenuItem();
-			this.menuItemFileClose = new System.Windows.Forms.MenuItem();
-			this.menuItemSep1 = new System.Windows.Forms.MenuItem();
-			this.menuItemFileSave = new System.Windows.Forms.MenuItem();
-			this.menuItemFileSaveAs = new System.Windows.Forms.MenuItem();
-			this.menuItemFileSaveAll = new System.Windows.Forms.MenuItem();
-			this.menuItemSep3 = new System.Windows.Forms.MenuItem();
-			this.menuItemFileExport = new System.Windows.Forms.MenuItem();
-			this.menuItemFileValidate = new System.Windows.Forms.MenuItem();
-			this.menuItemSep2 = new System.Windows.Forms.MenuItem();
-			this.menuItemFileExit = new System.Windows.Forms.MenuItem();
-			this.menuItemEdit = new System.Windows.Forms.MenuItem();
-			this.menuItemView = new System.Windows.Forms.MenuItem();
-			this.menuItemTools = new System.Windows.Forms.MenuItem();
-			this.menuItemToolsOptions = new System.Windows.Forms.MenuItem();
-			this.menuItemWindow = new System.Windows.Forms.MenuItem();
-			this.menuItemHelp = new System.Windows.Forms.MenuItem();
-			this.menuItemHelpHelp = new System.Windows.Forms.MenuItem();
-			this.menuItemSep4 = new System.Windows.Forms.MenuItem();
-			this.menuItemHelpAbout = new System.Windows.Forms.MenuItem();
-			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-			this.toolBar1 = new System.Windows.Forms.ToolBar();
-			this.toolBarButtonNew = new System.Windows.Forms.ToolBarButton();
-			this.toolBarButtonOpen = new System.Windows.Forms.ToolBarButton();
-			this.toolBarButtonSave = new System.Windows.Forms.ToolBarButton();
-			this.toolBarButtonSaveAll = new System.Windows.Forms.ToolBarButton();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.SuspendLayout();
-			// 
-			// mainMenu
-			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuItemFile,
-																					 this.menuItemEdit,
-																					 this.menuItemView,
-																					 this.menuItemTools,
-																					 this.menuItemWindow,
-																					 this.menuItemHelp});
-			this.mainMenu.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("mainMenu.RightToLeft")));
-			// 
-			// menuItemFile
-			// 
-			this.menuItemFile.Enabled = ((bool)(resources.GetObject("menuItemFile.Enabled")));
-			this.menuItemFile.Index = 0;
-			this.menuItemFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuItemFileNew,
-																						 this.menuItemFileOpen,
-																						 this.menuItemFileClose,
-																						 this.menuItemSep1,
-																						 this.menuItemFileSave,
-																						 this.menuItemFileSaveAs,
-																						 this.menuItemFileSaveAll,
-																						 this.menuItemSep3,
-																						 this.menuItemFileExport,
-																						 this.menuItemFileValidate,
-																						 this.menuItemSep2,
-																						 this.menuItemFileExit});
-			this.menuItemFile.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFile.Shortcut")));
-			this.menuItemFile.ShowShortcut = ((bool)(resources.GetObject("menuItemFile.ShowShortcut")));
-			this.menuItemFile.Text = resources.GetString("menuItemFile.Text");
-			this.menuItemFile.Visible = ((bool)(resources.GetObject("menuItemFile.Visible")));
-			// 
-			// menuItemFileNew
-			// 
-			this.menuItemFileNew.Enabled = ((bool)(resources.GetObject("menuItemFileNew.Enabled")));
-			this.menuItemFileNew.Index = 0;
-			this.menuItemFileNew.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileNew.Shortcut")));
-			this.menuItemFileNew.ShowShortcut = ((bool)(resources.GetObject("menuItemFileNew.ShowShortcut")));
-			this.menuItemFileNew.Text = resources.GetString("menuItemFileNew.Text");
-			this.menuItemFileNew.Visible = ((bool)(resources.GetObject("menuItemFileNew.Visible")));
-			this.menuItemFileNew.Click += new System.EventHandler(this.menuItemFileNew_Click);
-			// 
-			// menuItemFileOpen
-			// 
-			this.menuItemFileOpen.Enabled = ((bool)(resources.GetObject("menuItemFileOpen.Enabled")));
-			this.menuItemFileOpen.Index = 1;
-			this.menuItemFileOpen.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileOpen.Shortcut")));
-			this.menuItemFileOpen.ShowShortcut = ((bool)(resources.GetObject("menuItemFileOpen.ShowShortcut")));
-			this.menuItemFileOpen.Text = resources.GetString("menuItemFileOpen.Text");
-			this.menuItemFileOpen.Visible = ((bool)(resources.GetObject("menuItemFileOpen.Visible")));
-			this.menuItemFileOpen.Click += new System.EventHandler(this.menuItemFileOpen_Click);
-			// 
-			// menuItemFileClose
-			// 
-			this.menuItemFileClose.Enabled = ((bool)(resources.GetObject("menuItemFileClose.Enabled")));
-			this.menuItemFileClose.Index = 2;
-			this.menuItemFileClose.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileClose.Shortcut")));
-			this.menuItemFileClose.ShowShortcut = ((bool)(resources.GetObject("menuItemFileClose.ShowShortcut")));
-			this.menuItemFileClose.Text = resources.GetString("menuItemFileClose.Text");
-			this.menuItemFileClose.Visible = ((bool)(resources.GetObject("menuItemFileClose.Visible")));
-			this.menuItemFileClose.Click += new System.EventHandler(this.menuItemFileClose_Click);
-			// 
-			// menuItemSep1
-			// 
-			this.menuItemSep1.Enabled = ((bool)(resources.GetObject("menuItemSep1.Enabled")));
-			this.menuItemSep1.Index = 3;
-			this.menuItemSep1.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep1.Shortcut")));
-			this.menuItemSep1.ShowShortcut = ((bool)(resources.GetObject("menuItemSep1.ShowShortcut")));
-			this.menuItemSep1.Text = resources.GetString("menuItemSep1.Text");
-			this.menuItemSep1.Visible = ((bool)(resources.GetObject("menuItemSep1.Visible")));
-			// 
-			// menuItemFileSave
-			// 
-			this.menuItemFileSave.Enabled = ((bool)(resources.GetObject("menuItemFileSave.Enabled")));
-			this.menuItemFileSave.Index = 4;
-			this.menuItemFileSave.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileSave.Shortcut")));
-			this.menuItemFileSave.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSave.ShowShortcut")));
-			this.menuItemFileSave.Text = resources.GetString("menuItemFileSave.Text");
-			this.menuItemFileSave.Visible = ((bool)(resources.GetObject("menuItemFileSave.Visible")));
-			this.menuItemFileSave.Click += new System.EventHandler(this.menuItemFileSave_Click);
-			// 
-			// menuItemFileSaveAs
-			// 
-			this.menuItemFileSaveAs.Enabled = ((bool)(resources.GetObject("menuItemFileSaveAs.Enabled")));
-			this.menuItemFileSaveAs.Index = 5;
-			this.menuItemFileSaveAs.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileSaveAs.Shortcut")));
-			this.menuItemFileSaveAs.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSaveAs.ShowShortcut")));
-			this.menuItemFileSaveAs.Text = resources.GetString("menuItemFileSaveAs.Text");
-			this.menuItemFileSaveAs.Visible = ((bool)(resources.GetObject("menuItemFileSaveAs.Visible")));
-			this.menuItemFileSaveAs.Click += new System.EventHandler(this.menuItemFileSaveAs_Click);
-			// 
-			// menuItemFileSaveAll
-			// 
-			this.menuItemFileSaveAll.Enabled = ((bool)(resources.GetObject("menuItemFileSaveAll.Enabled")));
-			this.menuItemFileSaveAll.Index = 6;
-			this.menuItemFileSaveAll.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileSaveAll.Shortcut")));
-			this.menuItemFileSaveAll.ShowShortcut = ((bool)(resources.GetObject("menuItemFileSaveAll.ShowShortcut")));
-			this.menuItemFileSaveAll.Text = resources.GetString("menuItemFileSaveAll.Text");
-			this.menuItemFileSaveAll.Visible = ((bool)(resources.GetObject("menuItemFileSaveAll.Visible")));
-			this.menuItemFileSaveAll.Click += new System.EventHandler(this.menuItemFileSaveAll_Click);
-			// 
-			// menuItemSep3
-			// 
-			this.menuItemSep3.Enabled = ((bool)(resources.GetObject("menuItemSep3.Enabled")));
-			this.menuItemSep3.Index = 7;
-			this.menuItemSep3.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep3.Shortcut")));
-			this.menuItemSep3.ShowShortcut = ((bool)(resources.GetObject("menuItemSep3.ShowShortcut")));
-			this.menuItemSep3.Text = resources.GetString("menuItemSep3.Text");
-			this.menuItemSep3.Visible = ((bool)(resources.GetObject("menuItemSep3.Visible")));
-			// 
-			// menuItemFileExport
-			// 
-			this.menuItemFileExport.Enabled = ((bool)(resources.GetObject("menuItemFileExport.Enabled")));
-			this.menuItemFileExport.Index = 8;
-			this.menuItemFileExport.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileExport.Shortcut")));
-			this.menuItemFileExport.ShowShortcut = ((bool)(resources.GetObject("menuItemFileExport.ShowShortcut")));
-			this.menuItemFileExport.Text = resources.GetString("menuItemFileExport.Text");
-			this.menuItemFileExport.Visible = ((bool)(resources.GetObject("menuItemFileExport.Visible")));
-			// 
-			// menuItemFileValidate
-			// 
-			this.menuItemFileValidate.Enabled = ((bool)(resources.GetObject("menuItemFileValidate.Enabled")));
-			this.menuItemFileValidate.Index = 9;
-			this.menuItemFileValidate.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileValidate.Shortcut")));
-			this.menuItemFileValidate.ShowShortcut = ((bool)(resources.GetObject("menuItemFileValidate.ShowShortcut")));
-			this.menuItemFileValidate.Text = resources.GetString("menuItemFileValidate.Text");
-			this.menuItemFileValidate.Visible = ((bool)(resources.GetObject("menuItemFileValidate.Visible")));
-			this.menuItemFileValidate.Click += new System.EventHandler(this.menuItemFileValidate_Click);
-			// 
-			// menuItemSep2
-			// 
-			this.menuItemSep2.Enabled = ((bool)(resources.GetObject("menuItemSep2.Enabled")));
-			this.menuItemSep2.Index = 10;
-			this.menuItemSep2.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep2.Shortcut")));
-			this.menuItemSep2.ShowShortcut = ((bool)(resources.GetObject("menuItemSep2.ShowShortcut")));
-			this.menuItemSep2.Text = resources.GetString("menuItemSep2.Text");
-			this.menuItemSep2.Visible = ((bool)(resources.GetObject("menuItemSep2.Visible")));
-			// 
-			// menuItemFileExit
-			// 
-			this.menuItemFileExit.Enabled = ((bool)(resources.GetObject("menuItemFileExit.Enabled")));
-			this.menuItemFileExit.Index = 11;
-			this.menuItemFileExit.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemFileExit.Shortcut")));
-			this.menuItemFileExit.ShowShortcut = ((bool)(resources.GetObject("menuItemFileExit.ShowShortcut")));
-			this.menuItemFileExit.Text = resources.GetString("menuItemFileExit.Text");
-			this.menuItemFileExit.Visible = ((bool)(resources.GetObject("menuItemFileExit.Visible")));
-			this.menuItemFileExit.Click += new System.EventHandler(this.menuItemFileExit_Click);
-			// 
-			// menuItemEdit
-			// 
-			this.menuItemEdit.Enabled = ((bool)(resources.GetObject("menuItemEdit.Enabled")));
-			this.menuItemEdit.Index = 1;
-			this.menuItemEdit.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemEdit.Shortcut")));
-			this.menuItemEdit.ShowShortcut = ((bool)(resources.GetObject("menuItemEdit.ShowShortcut")));
-			this.menuItemEdit.Text = resources.GetString("menuItemEdit.Text");
-			this.menuItemEdit.Visible = ((bool)(resources.GetObject("menuItemEdit.Visible")));
-			// 
-			// menuItemView
-			// 
-			this.menuItemView.Enabled = ((bool)(resources.GetObject("menuItemView.Enabled")));
-			this.menuItemView.Index = 2;
-			this.menuItemView.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemView.Shortcut")));
-			this.menuItemView.ShowShortcut = ((bool)(resources.GetObject("menuItemView.ShowShortcut")));
-			this.menuItemView.Text = resources.GetString("menuItemView.Text");
-			this.menuItemView.Visible = ((bool)(resources.GetObject("menuItemView.Visible")));
-			// 
-			// menuItemTools
-			// 
-			this.menuItemTools.Enabled = ((bool)(resources.GetObject("menuItemTools.Enabled")));
-			this.menuItemTools.Index = 3;
-			this.menuItemTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						  this.menuItemToolsOptions});
-			this.menuItemTools.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemTools.Shortcut")));
-			this.menuItemTools.ShowShortcut = ((bool)(resources.GetObject("menuItemTools.ShowShortcut")));
-			this.menuItemTools.Text = resources.GetString("menuItemTools.Text");
-			this.menuItemTools.Visible = ((bool)(resources.GetObject("menuItemTools.Visible")));
-			// 
-			// menuItemToolsOptions
-			// 
-			this.menuItemToolsOptions.Enabled = ((bool)(resources.GetObject("menuItemToolsOptions.Enabled")));
-			this.menuItemToolsOptions.Index = 0;
-			this.menuItemToolsOptions.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemToolsOptions.Shortcut")));
-			this.menuItemToolsOptions.ShowShortcut = ((bool)(resources.GetObject("menuItemToolsOptions.ShowShortcut")));
-			this.menuItemToolsOptions.Text = resources.GetString("menuItemToolsOptions.Text");
-			this.menuItemToolsOptions.Visible = ((bool)(resources.GetObject("menuItemToolsOptions.Visible")));
-			this.menuItemToolsOptions.Click += new System.EventHandler(this.menuItemToolsOptions_Click);
-			// 
-			// menuItemWindow
-			// 
-			this.menuItemWindow.Enabled = ((bool)(resources.GetObject("menuItemWindow.Enabled")));
-			this.menuItemWindow.Index = 4;
-			this.menuItemWindow.MdiList = true;
-			this.menuItemWindow.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemWindow.Shortcut")));
-			this.menuItemWindow.ShowShortcut = ((bool)(resources.GetObject("menuItemWindow.ShowShortcut")));
-			this.menuItemWindow.Text = resources.GetString("menuItemWindow.Text");
-			this.menuItemWindow.Visible = ((bool)(resources.GetObject("menuItemWindow.Visible")));
-			// 
-			// menuItemHelp
-			// 
-			this.menuItemHelp.Enabled = ((bool)(resources.GetObject("menuItemHelp.Enabled")));
-			this.menuItemHelp.Index = 5;
-			this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.menuItemHelpHelp,
-																						 this.menuItemSep4,
-																						 this.menuItemHelpAbout});
-			this.menuItemHelp.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemHelp.Shortcut")));
-			this.menuItemHelp.ShowShortcut = ((bool)(resources.GetObject("menuItemHelp.ShowShortcut")));
-			this.menuItemHelp.Text = resources.GetString("menuItemHelp.Text");
-			this.menuItemHelp.Visible = ((bool)(resources.GetObject("menuItemHelp.Visible")));
-			// 
-			// menuItemHelpHelp
-			// 
-			this.menuItemHelpHelp.Enabled = ((bool)(resources.GetObject("menuItemHelpHelp.Enabled")));
-			this.menuItemHelpHelp.Index = 0;
-			this.menuItemHelpHelp.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemHelpHelp.Shortcut")));
-			this.menuItemHelpHelp.ShowShortcut = ((bool)(resources.GetObject("menuItemHelpHelp.ShowShortcut")));
-			this.menuItemHelpHelp.Text = resources.GetString("menuItemHelpHelp.Text");
-			this.menuItemHelpHelp.Visible = ((bool)(resources.GetObject("menuItemHelpHelp.Visible")));
-			// 
-			// menuItemSep4
-			// 
-			this.menuItemSep4.Enabled = ((bool)(resources.GetObject("menuItemSep4.Enabled")));
-			this.menuItemSep4.Index = 1;
-			this.menuItemSep4.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemSep4.Shortcut")));
-			this.menuItemSep4.ShowShortcut = ((bool)(resources.GetObject("menuItemSep4.ShowShortcut")));
-			this.menuItemSep4.Text = resources.GetString("menuItemSep4.Text");
-			this.menuItemSep4.Visible = ((bool)(resources.GetObject("menuItemSep4.Visible")));
-			// 
-			// menuItemHelpAbout
-			// 
-			this.menuItemHelpAbout.Enabled = ((bool)(resources.GetObject("menuItemHelpAbout.Enabled")));
-			this.menuItemHelpAbout.Index = 2;
-			this.menuItemHelpAbout.Shortcut = ((System.Windows.Forms.Shortcut)(resources.GetObject("menuItemHelpAbout.Shortcut")));
-			this.menuItemHelpAbout.ShowShortcut = ((bool)(resources.GetObject("menuItemHelpAbout.ShowShortcut")));
-			this.menuItemHelpAbout.Text = resources.GetString("menuItemHelpAbout.Text");
-			this.menuItemHelpAbout.Visible = ((bool)(resources.GetObject("menuItemHelpAbout.Visible")));
-			this.menuItemHelpAbout.Click += new System.EventHandler(this.menuItemHelpAbout_Click);
-			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.Filter = resources.GetString("openFileDialog1.Filter");
-			this.openFileDialog1.Title = resources.GetString("openFileDialog1.Title");
-			this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
-			// 
-			// toolBar1
-			// 
-			this.toolBar1.AccessibleDescription = resources.GetString("toolBar1.AccessibleDescription");
-			this.toolBar1.AccessibleName = resources.GetString("toolBar1.AccessibleName");
-			this.toolBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("toolBar1.Anchor")));
-			this.toolBar1.Appearance = ((System.Windows.Forms.ToolBarAppearance)(resources.GetObject("toolBar1.Appearance")));
-			this.toolBar1.AutoSize = ((bool)(resources.GetObject("toolBar1.AutoSize")));
-			this.toolBar1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("toolBar1.BackgroundImage")));
-			this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																						this.toolBarButtonNew,
-																						this.toolBarButtonOpen,
-																						this.toolBarButtonSave,
-																						this.toolBarButtonSaveAll});
-			this.toolBar1.ButtonSize = ((System.Drawing.Size)(resources.GetObject("toolBar1.ButtonSize")));
-			this.toolBar1.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("toolBar1.Dock")));
-			this.toolBar1.DropDownArrows = ((bool)(resources.GetObject("toolBar1.DropDownArrows")));
-			this.toolBar1.Enabled = ((bool)(resources.GetObject("toolBar1.Enabled")));
-			this.toolBar1.Font = ((System.Drawing.Font)(resources.GetObject("toolBar1.Font")));
-			this.toolBar1.ImageList = this.imageList1;
-			this.toolBar1.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("toolBar1.ImeMode")));
-			this.toolBar1.Location = ((System.Drawing.Point)(resources.GetObject("toolBar1.Location")));
-			this.toolBar1.Name = "toolBar1";
-			this.toolBar1.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("toolBar1.RightToLeft")));
-			this.toolBar1.ShowToolTips = ((bool)(resources.GetObject("toolBar1.ShowToolTips")));
-			this.toolBar1.Size = ((System.Drawing.Size)(resources.GetObject("toolBar1.Size")));
-			this.toolBar1.TabIndex = ((int)(resources.GetObject("toolBar1.TabIndex")));
-			this.toolBar1.TextAlign = ((System.Windows.Forms.ToolBarTextAlign)(resources.GetObject("toolBar1.TextAlign")));
-			this.toolBar1.Visible = ((bool)(resources.GetObject("toolBar1.Visible")));
-			this.toolBar1.Wrappable = ((bool)(resources.GetObject("toolBar1.Wrappable")));
-			this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
-			// 
-			// toolBarButtonNew
-			// 
-			this.toolBarButtonNew.Enabled = ((bool)(resources.GetObject("toolBarButtonNew.Enabled")));
-			this.toolBarButtonNew.ImageIndex = ((int)(resources.GetObject("toolBarButtonNew.ImageIndex")));
-			this.toolBarButtonNew.Text = resources.GetString("toolBarButtonNew.Text");
-			this.toolBarButtonNew.ToolTipText = resources.GetString("toolBarButtonNew.ToolTipText");
-			this.toolBarButtonNew.Visible = ((bool)(resources.GetObject("toolBarButtonNew.Visible")));
-			// 
-			// toolBarButtonOpen
-			// 
-			this.toolBarButtonOpen.Enabled = ((bool)(resources.GetObject("toolBarButtonOpen.Enabled")));
-			this.toolBarButtonOpen.ImageIndex = ((int)(resources.GetObject("toolBarButtonOpen.ImageIndex")));
-			this.toolBarButtonOpen.Text = resources.GetString("toolBarButtonOpen.Text");
-			this.toolBarButtonOpen.ToolTipText = resources.GetString("toolBarButtonOpen.ToolTipText");
-			this.toolBarButtonOpen.Visible = ((bool)(resources.GetObject("toolBarButtonOpen.Visible")));
-			// 
-			// toolBarButtonSave
-			// 
-			this.toolBarButtonSave.Enabled = ((bool)(resources.GetObject("toolBarButtonSave.Enabled")));
-			this.toolBarButtonSave.ImageIndex = ((int)(resources.GetObject("toolBarButtonSave.ImageIndex")));
-			this.toolBarButtonSave.Text = resources.GetString("toolBarButtonSave.Text");
-			this.toolBarButtonSave.ToolTipText = resources.GetString("toolBarButtonSave.ToolTipText");
-			this.toolBarButtonSave.Visible = ((bool)(resources.GetObject("toolBarButtonSave.Visible")));
-			// 
-			// toolBarButtonSaveAll
-			// 
-			this.toolBarButtonSaveAll.Enabled = ((bool)(resources.GetObject("toolBarButtonSaveAll.Enabled")));
-			this.toolBarButtonSaveAll.ImageIndex = ((int)(resources.GetObject("toolBarButtonSaveAll.ImageIndex")));
-			this.toolBarButtonSaveAll.Text = resources.GetString("toolBarButtonSaveAll.Text");
-			this.toolBarButtonSaveAll.ToolTipText = resources.GetString("toolBarButtonSaveAll.ToolTipText");
-			this.toolBarButtonSaveAll.Visible = ((bool)(resources.GetObject("toolBarButtonSaveAll.Visible")));
-			// 
-			// imageList1
-			// 
-			this.imageList1.ImageSize = ((System.Drawing.Size)(resources.GetObject("imageList1.ImageSize")));
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// openFileDialog2
-			// 
-			this.openFileDialog2.Filter = resources.GetString("openFileDialog2.Filter");
-			this.openFileDialog2.Title = resources.GetString("openFileDialog2.Title");
-			this.openFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog2_FileOk);
-			// 
-			// Studio
-			// 
-			this.AccessibleDescription = resources.GetString("$this.AccessibleDescription");
-			this.AccessibleName = resources.GetString("$this.AccessibleName");
-			this.AutoScaleBaseSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScaleBaseSize")));
-			this.AutoScroll = ((bool)(resources.GetObject("$this.AutoScroll")));
-			this.AutoScrollMargin = ((System.Drawing.Size)(resources.GetObject("$this.AutoScrollMargin")));
-			this.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScrollMinSize")));
-			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = ((System.Drawing.Size)(resources.GetObject("$this.ClientSize")));
-			this.Controls.Add(this.toolBar1);
-			this.Enabled = ((bool)(resources.GetObject("$this.Enabled")));
-			this.Font = ((System.Drawing.Font)(resources.GetObject("$this.Font")));
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("$this.ImeMode")));
-			this.IsMdiContainer = true;
-			this.Location = ((System.Drawing.Point)(resources.GetObject("$this.Location")));
-			this.MaximumSize = ((System.Drawing.Size)(resources.GetObject("$this.MaximumSize")));
-			this.Menu = this.mainMenu;
-			this.MinimumSize = ((System.Drawing.Size)(resources.GetObject("$this.MinimumSize")));
-			this.Name = "Studio";
-			this.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("$this.RightToLeft")));
-			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
-			this.Text = resources.GetString("$this.Text");
-			this.Resize += new System.EventHandler(this.Studio_Resize);
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.Studio_Closing);
-			this.Load += new System.EventHandler(this.Studio_Load);
-			this.LocationChanged += new System.EventHandler(this.Studio_LocationChanged);
-			this.Closed += new System.EventHandler(this.Studio_Closed);
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Studio));
+            this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItemFile = new System.Windows.Forms.MenuItem();
+            this.menuItemFileNew = new System.Windows.Forms.MenuItem();
+            this.menuItem10 = new System.Windows.Forms.MenuItem();
+            this.menuItem11 = new System.Windows.Forms.MenuItem();
+            this.menuItem12 = new System.Windows.Forms.MenuItem();
+            this.menuItem13 = new System.Windows.Forms.MenuItem();
+            this.menuItem17 = new System.Windows.Forms.MenuItem();
+            this.menuItemFileOpen = new System.Windows.Forms.MenuItem();
+            this.menuItemFileClose = new System.Windows.Forms.MenuItem();
+            this.menuItem14 = new System.Windows.Forms.MenuItem();
+            this.menuItem15 = new System.Windows.Forms.MenuItem();
+            this.menuItem16 = new System.Windows.Forms.MenuItem();
+            this.menuItemSep1 = new System.Windows.Forms.MenuItem();
+            this.menuItemFileSave = new System.Windows.Forms.MenuItem();
+            this.menuItemFileSaveAs = new System.Windows.Forms.MenuItem();
+            this.menuItemFileSaveAll = new System.Windows.Forms.MenuItem();
+            this.menuItemSep3 = new System.Windows.Forms.MenuItem();
+            this.menuItemFileExport = new System.Windows.Forms.MenuItem();
+            this.menuItemFileValidate = new System.Windows.Forms.MenuItem();
+            this.menuItem26 = new System.Windows.Forms.MenuItem();
+            this.menuItem25 = new System.Windows.Forms.MenuItem();
+            this.menuItemSep2 = new System.Windows.Forms.MenuItem();
+            this.menuItemFileExit = new System.Windows.Forms.MenuItem();
+            this.menuItemEdit = new System.Windows.Forms.MenuItem();
+            this.menuItem18 = new System.Windows.Forms.MenuItem();
+            this.menuItem19 = new System.Windows.Forms.MenuItem();
+            this.menuItem20 = new System.Windows.Forms.MenuItem();
+            this.menuItem21 = new System.Windows.Forms.MenuItem();
+            this.menuItem22 = new System.Windows.Forms.MenuItem();
+            this.menuItem23 = new System.Windows.Forms.MenuItem();
+            this.menuItemView = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.menuItem9 = new System.Windows.Forms.MenuItem();
+            this.menuItemTools = new System.Windows.Forms.MenuItem();
+            this.menuItemToolsOptions = new System.Windows.Forms.MenuItem();
+            this.menuItemWindow = new System.Windows.Forms.MenuItem();
+            this.menuItem24 = new System.Windows.Forms.MenuItem();
+            this.menuItemHelp = new System.Windows.Forms.MenuItem();
+            this.menuItemHelpHelp = new System.Windows.Forms.MenuItem();
+            this.menuItemSep4 = new System.Windows.Forms.MenuItem();
+            this.menuItemHelpAbout = new System.Windows.Forms.MenuItem();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.toolBar1 = new System.Windows.Forms.ToolBar();
+            this.toolBarButtonNew = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonOpen = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonSave = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonSaveAll = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonSeparator1 = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonCut = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonCopy = new System.Windows.Forms.ToolBarButton();
+            this.toolBarButtonPaste = new System.Windows.Forms.ToolBarButton();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.imageList2 = new System.Windows.Forms.ImageList(this.components);
+            this.tabBar1 = new ModFormControls.TabBar();
+            this.projectPanel1 = new ModFormControls.ProjectPanel();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.SuspendLayout();
+            // 
+            // mainMenu
+            // 
+            this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemFile,
+            this.menuItemEdit,
+            this.menuItemView,
+            this.menuItem1,
+            this.menuItemTools,
+            this.menuItemWindow,
+            this.menuItemHelp});
+            // 
+            // menuItemFile
+            // 
+            this.menuItemFile.Index = 0;
+            this.menuItemFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemFileNew,
+            this.menuItemFileOpen,
+            this.menuItemFileClose,
+            this.menuItem14,
+            this.menuItem15,
+            this.menuItem16,
+            this.menuItemSep1,
+            this.menuItemFileSave,
+            this.menuItemFileSaveAs,
+            this.menuItemFileSaveAll,
+            this.menuItemSep3,
+            this.menuItemFileExport,
+            this.menuItemFileValidate,
+            this.menuItem26,
+            this.menuItem25,
+            this.menuItemSep2,
+            this.menuItemFileExit});
+            resources.ApplyResources(this.menuItemFile, "menuItemFile");
+            // 
+            // menuItemFileNew
+            // 
+            this.menuItemFileNew.Index = 0;
+            this.menuItemFileNew.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem10,
+            this.menuItem11,
+            this.menuItem12,
+            this.menuItem13,
+            this.menuItem17});
+            resources.ApplyResources(this.menuItemFileNew, "menuItemFileNew");
+            this.menuItemFileNew.Click += new System.EventHandler(this.menuItemFileNew_Click);
+            this.menuItemFileNew.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.menuItemFileNew_DrawItem);
+            this.menuItemFileNew.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.menuItemFileNew_MeasureItem);
+            // 
+            // menuItem10
+            // 
+            this.menuItem10.Index = 0;
+            resources.ApplyResources(this.menuItem10, "menuItem10");
+            this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
+            // 
+            // menuItem11
+            // 
+            this.menuItem11.Index = 1;
+            resources.ApplyResources(this.menuItem11, "menuItem11");
+            // 
+            // menuItem12
+            // 
+            this.menuItem12.Index = 2;
+            resources.ApplyResources(this.menuItem12, "menuItem12");
+            this.menuItem12.Click += new System.EventHandler(this.menuItem12_Click);
+            // 
+            // menuItem13
+            // 
+            this.menuItem13.Index = 3;
+            resources.ApplyResources(this.menuItem13, "menuItem13");
+            this.menuItem13.Click += new System.EventHandler(this.menuItem13_Click);
+            // 
+            // menuItem17
+            // 
+            resources.ApplyResources(this.menuItem17, "menuItem17");
+            this.menuItem17.Index = 4;
+            // 
+            // menuItemFileOpen
+            // 
+            this.menuItemFileOpen.Index = 1;
+            resources.ApplyResources(this.menuItemFileOpen, "menuItemFileOpen");
+            this.menuItemFileOpen.Click += new System.EventHandler(this.menuItemFileOpen_Click);
+            // 
+            // menuItemFileClose
+            // 
+            this.menuItemFileClose.Index = 2;
+            resources.ApplyResources(this.menuItemFileClose, "menuItemFileClose");
+            this.menuItemFileClose.Click += new System.EventHandler(this.menuItemFileClose_Click);
+            // 
+            // menuItem14
+            // 
+            this.menuItem14.Index = 3;
+            resources.ApplyResources(this.menuItem14, "menuItem14");
+            // 
+            // menuItem15
+            // 
+            this.menuItem15.Index = 4;
+            resources.ApplyResources(this.menuItem15, "menuItem15");
+            // 
+            // menuItem16
+            // 
+            resources.ApplyResources(this.menuItem16, "menuItem16");
+            this.menuItem16.Index = 5;
+            // 
+            // menuItemSep1
+            // 
+            this.menuItemSep1.Index = 6;
+            resources.ApplyResources(this.menuItemSep1, "menuItemSep1");
+            // 
+            // menuItemFileSave
+            // 
+            this.menuItemFileSave.Index = 7;
+            resources.ApplyResources(this.menuItemFileSave, "menuItemFileSave");
+            this.menuItemFileSave.Click += new System.EventHandler(this.menuItemFileSave_Click);
+            // 
+            // menuItemFileSaveAs
+            // 
+            this.menuItemFileSaveAs.Index = 8;
+            resources.ApplyResources(this.menuItemFileSaveAs, "menuItemFileSaveAs");
+            this.menuItemFileSaveAs.Click += new System.EventHandler(this.menuItemFileSaveAs_Click);
+            // 
+            // menuItemFileSaveAll
+            // 
+            this.menuItemFileSaveAll.Index = 9;
+            resources.ApplyResources(this.menuItemFileSaveAll, "menuItemFileSaveAll");
+            this.menuItemFileSaveAll.Click += new System.EventHandler(this.menuItemFileSaveAll_Click);
+            // 
+            // menuItemSep3
+            // 
+            this.menuItemSep3.Index = 10;
+            resources.ApplyResources(this.menuItemSep3, "menuItemSep3");
+            // 
+            // menuItemFileExport
+            // 
+            resources.ApplyResources(this.menuItemFileExport, "menuItemFileExport");
+            this.menuItemFileExport.Index = 11;
+            // 
+            // menuItemFileValidate
+            // 
+            this.menuItemFileValidate.Index = 12;
+            resources.ApplyResources(this.menuItemFileValidate, "menuItemFileValidate");
+            this.menuItemFileValidate.Click += new System.EventHandler(this.menuItemFileValidate_Click);
+            // 
+            // menuItem26
+            // 
+            this.menuItem26.Index = 13;
+            resources.ApplyResources(this.menuItem26, "menuItem26");
+            // 
+            // menuItem25
+            // 
+            this.menuItem25.Index = 14;
+            resources.ApplyResources(this.menuItem25, "menuItem25");
+            // 
+            // menuItemSep2
+            // 
+            this.menuItemSep2.Index = 15;
+            resources.ApplyResources(this.menuItemSep2, "menuItemSep2");
+            // 
+            // menuItemFileExit
+            // 
+            this.menuItemFileExit.Index = 16;
+            resources.ApplyResources(this.menuItemFileExit, "menuItemFileExit");
+            this.menuItemFileExit.Click += new System.EventHandler(this.menuItemFileExit_Click);
+            // 
+            // menuItemEdit
+            // 
+            this.menuItemEdit.Index = 1;
+            this.menuItemEdit.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem18,
+            this.menuItem19,
+            this.menuItem20,
+            this.menuItem21,
+            this.menuItem22,
+            this.menuItem23});
+            resources.ApplyResources(this.menuItemEdit, "menuItemEdit");
+            // 
+            // menuItem18
+            // 
+            resources.ApplyResources(this.menuItem18, "menuItem18");
+            this.menuItem18.Index = 0;
+            // 
+            // menuItem19
+            // 
+            resources.ApplyResources(this.menuItem19, "menuItem19");
+            this.menuItem19.Index = 1;
+            // 
+            // menuItem20
+            // 
+            this.menuItem20.Index = 2;
+            resources.ApplyResources(this.menuItem20, "menuItem20");
+            // 
+            // menuItem21
+            // 
+            resources.ApplyResources(this.menuItem21, "menuItem21");
+            this.menuItem21.Index = 3;
+            this.menuItem21.Click += new System.EventHandler(this.menuItem21_Click);
+            // 
+            // menuItem22
+            // 
+            resources.ApplyResources(this.menuItem22, "menuItem22");
+            this.menuItem22.Index = 4;
+            // 
+            // menuItem23
+            // 
+            resources.ApplyResources(this.menuItem23, "menuItem23");
+            this.menuItem23.Index = 5;
+            // 
+            // menuItemView
+            // 
+            resources.ApplyResources(this.menuItemView, "menuItemView");
+            this.menuItemView.Index = 2;
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 3;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem2,
+            this.menuItem3,
+            this.menuItem4,
+            this.menuItem5,
+            this.menuItem6,
+            this.menuItem7,
+            this.menuItem8,
+            this.menuItem9});
+            resources.ApplyResources(this.menuItem1, "menuItem1");
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 0;
+            resources.ApplyResources(this.menuItem2, "menuItem2");
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 1;
+            resources.ApplyResources(this.menuItem3, "menuItem3");
+            this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 2;
+            resources.ApplyResources(this.menuItem4, "menuItem4");
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 3;
+            resources.ApplyResources(this.menuItem5, "menuItem5");
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 4;
+            resources.ApplyResources(this.menuItem6, "menuItem6");
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 5;
+            resources.ApplyResources(this.menuItem7, "menuItem7");
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 6;
+            resources.ApplyResources(this.menuItem8, "menuItem8");
+            // 
+            // menuItem9
+            // 
+            this.menuItem9.Index = 7;
+            resources.ApplyResources(this.menuItem9, "menuItem9");
+            // 
+            // menuItemTools
+            // 
+            this.menuItemTools.Index = 4;
+            this.menuItemTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemToolsOptions});
+            resources.ApplyResources(this.menuItemTools, "menuItemTools");
+            // 
+            // menuItemToolsOptions
+            // 
+            this.menuItemToolsOptions.Index = 0;
+            resources.ApplyResources(this.menuItemToolsOptions, "menuItemToolsOptions");
+            this.menuItemToolsOptions.Click += new System.EventHandler(this.menuItemToolsOptions_Click);
+            // 
+            // menuItemWindow
+            // 
+            this.menuItemWindow.Index = 5;
+            this.menuItemWindow.MdiList = true;
+            this.menuItemWindow.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem24});
+            resources.ApplyResources(this.menuItemWindow, "menuItemWindow");
+            // 
+            // menuItem24
+            // 
+            this.menuItem24.Index = 0;
+            resources.ApplyResources(this.menuItem24, "menuItem24");
+            this.menuItem24.Click += new System.EventHandler(this.menuItem24_Click);
+            // 
+            // menuItemHelp
+            // 
+            this.menuItemHelp.Index = 6;
+            this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemHelpHelp,
+            this.menuItemSep4,
+            this.menuItemHelpAbout});
+            resources.ApplyResources(this.menuItemHelp, "menuItemHelp");
+            // 
+            // menuItemHelpHelp
+            // 
+            resources.ApplyResources(this.menuItemHelpHelp, "menuItemHelpHelp");
+            this.menuItemHelpHelp.Index = 0;
+            // 
+            // menuItemSep4
+            // 
+            this.menuItemSep4.Index = 1;
+            resources.ApplyResources(this.menuItemSep4, "menuItemSep4");
+            // 
+            // menuItemHelpAbout
+            // 
+            this.menuItemHelpAbout.Index = 2;
+            resources.ApplyResources(this.menuItemHelpAbout, "menuItemHelpAbout");
+            this.menuItemHelpAbout.Click += new System.EventHandler(this.menuItemHelpAbout_Click);
+            // 
+            // openFileDialog1
+            // 
+            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            // 
+            // toolBar1
+            // 
+            resources.ApplyResources(this.toolBar1, "toolBar1");
+            this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+            this.toolBarButtonNew,
+            this.toolBarButtonOpen,
+            this.toolBarButtonSave,
+            this.toolBarButtonSaveAll,
+            this.toolBarButtonSeparator1,
+            this.toolBarButtonCut,
+            this.toolBarButtonCopy,
+            this.toolBarButtonPaste});
+            this.toolBar1.ImageList = this.imageList1;
+            this.toolBar1.Name = "toolBar1";
+            this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
+            // 
+            // toolBarButtonNew
+            // 
+            resources.ApplyResources(this.toolBarButtonNew, "toolBarButtonNew");
+            this.toolBarButtonNew.Name = "toolBarButtonNew";
+            // 
+            // toolBarButtonOpen
+            // 
+            resources.ApplyResources(this.toolBarButtonOpen, "toolBarButtonOpen");
+            this.toolBarButtonOpen.Name = "toolBarButtonOpen";
+            // 
+            // toolBarButtonSave
+            // 
+            resources.ApplyResources(this.toolBarButtonSave, "toolBarButtonSave");
+            this.toolBarButtonSave.Name = "toolBarButtonSave";
+            // 
+            // toolBarButtonSaveAll
+            // 
+            resources.ApplyResources(this.toolBarButtonSaveAll, "toolBarButtonSaveAll");
+            this.toolBarButtonSaveAll.Name = "toolBarButtonSaveAll";
+            // 
+            // toolBarButtonSeparator1
+            // 
+            this.toolBarButtonSeparator1.Name = "toolBarButtonSeparator1";
+            this.toolBarButtonSeparator1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
+            // 
+            // toolBarButtonCut
+            // 
+            resources.ApplyResources(this.toolBarButtonCut, "toolBarButtonCut");
+            this.toolBarButtonCut.Name = "toolBarButtonCut";
+            // 
+            // toolBarButtonCopy
+            // 
+            resources.ApplyResources(this.toolBarButtonCopy, "toolBarButtonCopy");
+            this.toolBarButtonCopy.Name = "toolBarButtonCopy";
+            // 
+            // toolBarButtonPaste
+            // 
+            resources.ApplyResources(this.toolBarButtonPaste, "toolBarButtonPaste");
+            this.toolBarButtonPaste.Name = "toolBarButtonPaste";
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "");
+            this.imageList1.Images.SetKeyName(1, "");
+            this.imageList1.Images.SetKeyName(2, "");
+            this.imageList1.Images.SetKeyName(3, "");
+            this.imageList1.Images.SetKeyName(4, "");
+            this.imageList1.Images.SetKeyName(5, "");
+            this.imageList1.Images.SetKeyName(6, "");
+            // 
+            // openFileDialog2
+            // 
+            resources.ApplyResources(this.openFileDialog2, "openFileDialog2");
+            this.openFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog2_FileOk);
+            // 
+            // imageList2
+            // 
+            this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
+            this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList2.Images.SetKeyName(0, "");
+            this.imageList2.Images.SetKeyName(1, "");
+            // 
+            // tabBar1
+            // 
+            this.tabBar1.BackColor = System.Drawing.Color.FloralWhite;
+            resources.ApplyResources(this.tabBar1, "tabBar1");
+            this.tabBar1.Name = "tabBar1";
+            this.tabBar1.SelectedIndex = -1;
+            this.tabBar1.SelectedTab = null;
+            this.tabBar1.TabSelectedIndexChanged += new ModFormControls.TabBar.TabSelectedIndexChangedHandler(this.tabBar1_TabSelectedIndexChanged);
+            this.tabBar1.TabClose += new ModFormControls.TabBar.TabCloseHandler(this.tabBar1_TabClose);
+            // 
+            // projectPanel1
+            // 
+            this.projectPanel1.Actions = null;
+            resources.ApplyResources(this.projectPanel1, "projectPanel1");
+            this.projectPanel1.Name = "projectPanel1";
+            // 
+            // splitter1
+            // 
+            resources.ApplyResources(this.splitter1, "splitter1");
+            this.splitter1.Name = "splitter1";
+            this.splitter1.TabStop = false;
+            // 
+            // Studio
+            // 
+            resources.ApplyResources(this, "$this");
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.projectPanel1);
+            this.Controls.Add(this.tabBar1);
+            this.Controls.Add(this.toolBar1);
+            this.IsMdiContainer = true;
+            this.Menu = this.mainMenu;
+            this.Name = "Studio";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Studio_Paint);
+            this.Closed += new System.EventHandler(this.Studio_Closed);
+            this.Resize += new System.EventHandler(this.Studio_Resize);
+            this.MdiChildActivate += new System.EventHandler(this.Studio_MdiChildActivate);
+            this.ContextMenuChanged += new System.EventHandler(this.Studio_ContextMenuChanged);
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.Studio_Closing);
+            this.LocationChanged += new System.EventHandler(this.Studio_LocationChanged);
+            this.Load += new System.EventHandler(this.Studio_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -552,6 +720,7 @@ namespace ModStudio
 		static void Main(string[] args) 
 		{
 			Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(true);
 			Application.DoEvents();
 			Application.Run(new Studio(args));
 		}
@@ -577,15 +746,32 @@ namespace ModStudio
 		{
 			if (this.MdiChildren.Length > 0)
 			{
-				if (((ModEditor)this.ActiveMdiChild).Text == "untitled")
+				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
 				{
-					this.ActiveMdiChild.Close();
+					if (((ModEditor)this.ActiveMdiChild).Text == "untitled")
+					{
+						this.ActiveMdiChild.Close();
+					}
 				}
 			}
-			ModEditor newEditor = new ModEditor(filename);
-			newEditor.MdiParent = this;
-			newEditor.Text = filename;
-			newEditor.Show();
+			if (filename.ToLower().EndsWith(".mod") ||
+				filename.ToLower().EndsWith(".txt") ||
+				filename.ToLower().EndsWith(".xml"))
+			{
+				ModEditor newEditor = new ModEditor(filename);
+				newEditor.MdiParent = this;
+				newEditor.Text = filename;
+				newEditor.Show();
+			}
+			else if (filename.ToLower().EndsWith(".php"))
+			{
+				// assume language file for the moment, later add SMART filtering
+				LanguageEditor newEditor = new LanguageEditor();
+				newEditor.MdiParent = this;
+				newEditor.Text = filename;
+				newEditor.Open(filename);
+				newEditor.Show();
+			}
 		}
 
 		private void menuItemFileOpen_Click(object sender, System.EventArgs e)
@@ -603,7 +789,7 @@ namespace ModStudio
 			switch (toolBar1.Buttons.IndexOf(e.Button))
 			{
 				case 0: // new
-					menuItemFileNew_Click(null, null);
+					menuItem13_Click(null, null);
 					break;
 				case 1: // open
 					menuItemFileOpen_Click(null, null);
@@ -614,6 +800,15 @@ namespace ModStudio
 				case 3: // saveall
 					menuItemFileSaveAll_Click(null, null);
 					break;
+				case 4: // separator
+					break;
+				case 5: // cut
+					menuItem21_Click(null, null);
+					break;
+				case 6: // copy
+					break;
+				case 7: // paste
+					break;
 			}
 		}
 
@@ -621,7 +816,14 @@ namespace ModStudio
 		{
 			if (this.MdiChildren.Length > 0)
 			{
-				((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFile();
+				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+				{
+					((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFile();
+				}
+				else if (this.ActiveMdiChild.GetType() == typeof(LanguageEditor))
+				{
+					((LanguageEditor)(this.ActiveMdiChild)).SaveFile();
+				}
 			}
 		}
 
@@ -629,7 +831,14 @@ namespace ModStudio
 		{
 			if (this.MdiChildren.Length > 0)
 			{
-				((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFileAs();
+				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+				{
+					((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFileAs();
+				}
+				else if (this.ActiveMdiChild.GetType() == typeof(LanguageEditor))
+				{
+					((LanguageEditor)(this.ActiveMdiChild)).SaveFileAs();
+				}
 			}
 		}
 
@@ -658,10 +867,6 @@ namespace ModStudio
 
 		private void menuItemFileNew_Click(object sender, System.EventArgs e)
 		{
-			ModEditor newEditor = new ModEditor();
-			newEditor.MdiParent = this;
-			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en-GB");
-			newEditor.Show();
 		}
 
 		private void menuItemHelpAbout_Click(object sender, System.EventArgs e)
@@ -817,7 +1022,16 @@ namespace ModStudio
 			byte[] bytes;
 			bytes = webClient.DownloadData("http://modstudio.sf.net/updatecheck/4-0-x.txt");
 			string version = System.Text.ASCIIEncoding.ASCII.GetString(bytes);
-			ModVersion newVersion = ModVersion.Parse(version);
+            if (version == "") return false;
+            ModVersion newVersion = new ModVersion() ;
+            try
+            {
+                newVersion = ModVersion.Parse(version);
+            }
+            catch
+            {
+                return false;
+            }
 			ModVersion thisVersion = ModVersion.Parse(Application.ProductVersion);
 			Console.WriteLine(newVersion.ToString() + " [...] " + thisVersion.ToString());
 			if (newVersion.Major > thisVersion.Major)
@@ -825,12 +1039,12 @@ namespace ModStudio
 				return true;
 			}
 			else if (newVersion.Major == thisVersion.Major
-				&& newVersion.Minor > newVersion.Minor)
+                && newVersion.Minor > thisVersion.Minor)
 			{
 				return true;
 			}
 			else if (newVersion.Release == thisVersion.Release
-				&& newVersion.Release > newVersion.Release)
+                && newVersion.Release > thisVersion.Release)
 			{
 				return true;
 			}
@@ -870,5 +1084,354 @@ namespace ModStudio
 			myStreamWriter.Write(filetosave);
 			myStreamWriter.Close();
 		}
+
+		private void menuItem2_Click(object sender, System.EventArgs e)
+		{
+		
+		}
+
+		private void menuItem3_Click(object sender, System.EventArgs e)
+		{
+		
+		}
+
+		private bool suspendSelectedIndexChanged = true;
+		private void Studio_MdiChildActivate(object sender, System.EventArgs e)
+		{
+			/*if (!((Form)sender).IsDisposed)
+			{
+				((Form)sender).Disposed += new EventHandler(frm_Disposed);
+			}*/
+			/*foreach(Form frm in this.MdiChildren)
+			{
+				frm.Disposed += new EventHandler(frm_Disposed);
+			}*/
+			UpdateTabBar();
+			updateCutCopyPaste();
+			if (this.MdiChildren.Length > 0)
+			{
+				if (!(this.ActiveMdiChild == null))
+				{
+					if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+					{
+						ModEditor me = (ModEditor)this.ActiveMdiChild;
+						this.projectPanel1.Actions = me.ThisMod.Actions;
+						this.projectPanel1.UpdateActions();
+					}
+				}
+			}
+		}
+
+		private void tabControl1_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			/*if (tabControl1.SelectedIndex >= 0 && tabControl1.TabPages.Count > 0 && !suspendSelectedIndexChanged)
+			/{
+				this.SuspendLayout();
+				this.MdiChildren[tabControl1.SelectedIndex].Select();
+				this.ResumeLayout();
+			}*/
+		}
+
+		private void tabControl1_Click(object sender, System.EventArgs e)
+		{
+		}
+
+		private void tabControl1_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Middle)
+			{
+				tabControl1_MouseUp(sender, new System.Windows.Forms.MouseEventArgs(MouseButtons.Left, e.Clicks, e.X, e.Y, e.Delta));
+				tabControl1_Click(sender, null);
+				//foreach (TabPage tp in tabControl1.TabPages)
+				//{
+					/*if (e.X > tp.Left && e.X < tp.Left + tp.Width)
+					{
+						Console.WriteLine("{0},{1},{2}", e.X, tp.Left, tp.Right);
+						MessageBox.Show(this, tabControl1.TabPages.IndexOf(tp).ToString());
+					}*/
+				//}
+			}
+		}
+
+		private void UpdateTabBar()
+		{
+			if (!this.Disposing)
+			{
+				suspendSelectedIndexChanged = true;
+				//tabControl1.TabPages.Clear();
+				tabBar1.Tabs.Clear();
+				int i = 0;
+				bool disposing = false;
+				foreach(Form frm in this.MdiChildren)
+				{
+					if (frm.Disposing)
+					{
+						disposing = true;
+						continue;
+					}
+					//TabPage tp = new TabPage(frm.Text.Split('\\')[frm.Text.Split('\\').Length - 1]);
+					//tabControl1.TabPages.Add(tp);
+					TabBarTab tbt = new TabBarTab(frm.Text.Split('\\')[frm.Text.Split('\\').Length - 1]);
+					tabBar1.Tabs.Add(tbt);
+					if (this.ActiveMdiChild != null)
+					{
+						if (this.ActiveMdiChild.Equals(frm))
+						{
+							//tabControl1.SelectedTab = tp;
+							tabBar1.SelectedTab = tbt;
+						}
+					}
+					if (frm.GetType() == typeof(ModEditor))
+					{
+						ModEditor frmme = (ModEditor)frm;
+						if (frmme.ThisMod.GetType() == typeof(TextMod))
+						{
+							//tp.ImageIndex = 0;
+							tbt.IconIndex = 0;
+						}
+						else if (frmme.ThisMod.GetType() == typeof(ModxMod))
+						{
+							//tp.ImageIndex = 1;
+							tbt.IconIndex = 1;
+						}
+					}
+					i++;
+				}
+				tabBar1.updateTabs();
+				if (disposing)
+				{
+					tabBar1.UpdateRightMargin();
+				}
+				suspendSelectedIndexChanged = false;
+			}
+		}
+
+		private void updateCutCopyPaste()
+		{
+			if (this.MdiChildren.Length == 0)
+			{
+				DisableCut();
+				DisableCopy();
+				DisablePaste();
+			}
+			else
+			{
+				// ask the active child form if cut/copy/paste is allowed for the active control
+				if (this.ActiveMdiChild == null)
+				{
+					return;
+				}
+				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+				{
+					if (((ModEditor)this.ActiveMdiChild).IsCutCopyPaste())
+					{
+						if (((ModEditor)this.ActiveMdiChild).IsCut())
+						{
+							EnableCut();
+						}
+						else
+						{
+							DisableCut();
+						}
+						if (((ModEditor)this.ActiveMdiChild).IsCopy())
+						{
+							EnableCopy();
+						}
+						else
+						{
+							DisableCopy();
+						}
+						EnablePaste();
+					}
+					else
+					{
+						DisableCut();
+						DisableCopy();
+						DisablePaste();
+					}
+				}
+				else if (this.ActiveMdiChild.GetType() == typeof(LanguageEditor))
+				{
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void UpdateCutCopyPaste(object sender, EventArgs e)
+		{
+			updateCutCopyPaste();
+		}
+
+		private void frm_Disposed(object sender, EventArgs e)
+		{
+			UpdateTabBar();
+			tabBar1.UpdateRightMargin();
+		}
+
+		private void Studio_ContextMenuChanged(object sender, System.EventArgs e)
+		{
+		
+		}
+
+		private void tabBar1_TabSelectedIndexChanged(object sender, ModFormControls.TabSelectedIndexChangedEventArgs e)
+		{
+			if (e.Index >= 0)
+			{
+				if (e.Index < this.MdiChildren.Length)
+				{
+					this.SuspendLayout();
+					//this.MdiChildren[e.Index].Select();
+					//this.MdiChildren[e.Index].Activate();
+					//this.MdiChildren[e.Index].BringToFront();
+					this.MdiChildren[e.Index].Focus();
+					//this.ActivateMdiChild(this.MdiChildren[e.Index]);
+					//this.Invalidate(true);
+					//this.MdiChildren[e.Index].f
+					this.ResumeLayout();
+				}
+			}
+		}
+
+		private void tabBar1_TabClose(object sender, ModFormControls.TabCloseEventArgs e)
+		{
+			if (e.Index >= 0)
+			{
+				if (e.Index < this.MdiChildren.Length)
+				{
+					this.MdiChildren[e.Index].Close();
+				}
+			}
+		}
+
+		private void Studio_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void EnableCut()
+		{
+			menuItem21.Enabled = true;
+			toolBarButtonCut.Enabled = true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void DisableCut()
+		{
+			menuItem21.Enabled = false;
+			toolBarButtonCut.Enabled = false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void EnableCopy()
+		{
+			menuItem22.Enabled = true;
+			toolBarButtonCopy.Enabled = true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void DisableCopy()
+		{
+			menuItem22.Enabled = false;
+			toolBarButtonCopy.Enabled = false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void EnablePaste()
+		{
+			IDataObject iData = Clipboard.GetDataObject();
+			if (iData.GetDataPresent(DataFormats.Text))
+			{
+				menuItem23.Enabled = true;
+				toolBarButtonPaste.Enabled = true;
+			}
+			else
+			{
+				DisablePaste();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void DisablePaste()
+		{
+			menuItem23.Enabled = false;
+			toolBarButtonPaste.Enabled = false;
+		}
+
+		private void menuItem13_Click(object sender, System.EventArgs e)
+		{
+			ModEditor newEditor = new ModEditor(true);
+			newEditor.MdiParent = this;
+			//newEditor.ThisMod = new ModxMod();
+			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
+			newEditor.Show();
+		}
+
+		private void menuItem12_Click(object sender, System.EventArgs e)
+		{
+			ModEditor newEditor = new ModEditor();
+			newEditor.MdiParent = this;
+			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
+			newEditor.Show();
+		}
+
+		private void menuItem24_Click(object sender, System.EventArgs e)
+		{
+			foreach (Form childForm in this.MdiChildren)
+			{
+				childForm.Close();
+			}
+		}
+
+		private void menuItem25_Click(object sender, System.EventArgs e)
+		{
+		
+		}
+
+		private void menuItemFileNew_MeasureItem(object sender, System.Windows.Forms.MeasureItemEventArgs e)
+		{
+		
+		}
+
+		private void menuItemFileNew_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
+		{
+		}
+
+		/// <summary>
+		/// cut
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void menuItem21_Click(object sender, System.EventArgs e)
+		{
+			if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+			{
+				((ModEditor)this.ActiveMdiChild).DoCut();
+			}
+		}
+
+        private void menuItem10_Click(object sender, EventArgs e)
+        {
+
+        }
+
 	}
+
+
+
 }

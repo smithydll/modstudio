@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.13 2006-07-03 13:05:58 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.14 2007-07-23 09:03:47 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -25,6 +25,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
+using Phpbb.ModTeam.Tools.DataStructures;
 
 namespace ModStudio
 {
@@ -56,13 +57,25 @@ namespace ModStudio
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
-			LoadPhpbbFileList();
-			listBoxFiles.Items.Clear();
-			for (int i = 0; i < PhpbbFileList.Length; i++)
-			{
-				listBoxFiles.Items.Add(PhpbbFileList[i]);
-			}
+            SetPhpbbVersion(new TargetVersionCases(new ModVersion(2, 0, 0)));
 		}
+
+        public void SetPhpbbVersion(TargetVersionCases phpbbVersion)
+        {
+            if (phpbbVersion.Primary.StartsWith("3"))
+            {
+                LoadPhpbb3FileList();
+            }
+            else
+            {
+                LoadPhpbb2FileList();
+            }
+            listBoxFiles.Items.Clear();
+            for (int i = 0; i < PhpbbFileList.Length; i++)
+            {
+                listBoxFiles.Items.Add(PhpbbFileList[i]);
+            }
+        }
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -86,87 +99,89 @@ namespace ModStudio
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.buttonCancel = new System.Windows.Forms.Button();
-			this.buttonOk = new System.Windows.Forms.Button();
-			this.textBoxFile = new System.Windows.Forms.TextBox();
-			this.listBoxFiles = new System.Windows.Forms.ListBox();
-			this.panel1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.buttonCancel);
-			this.panel1.Controls.Add(this.buttonOk);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 158);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(456, 40);
-			this.panel1.TabIndex = 0;
-			// 
-			// buttonCancel
-			// 
-			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonCancel.Location = new System.Drawing.Point(296, 8);
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.TabIndex = 1;
-			this.buttonCancel.Text = "&Cancel";
-			this.buttonCancel.Click += new System.EventHandler(this.button2_Click);
-			// 
-			// buttonOk
-			// 
-			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.buttonOk.Location = new System.Drawing.Point(376, 8);
-			this.buttonOk.Name = "buttonOk";
-			this.buttonOk.TabIndex = 0;
-			this.buttonOk.Text = "&OK";
-			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
-			// 
-			// textBoxFile
-			// 
-			this.textBoxFile.Dock = System.Windows.Forms.DockStyle.Top;
-			this.textBoxFile.Location = new System.Drawing.Point(0, 0);
-			this.textBoxFile.Name = "textBoxFile";
-			this.textBoxFile.Size = new System.Drawing.Size(456, 20);
-			this.textBoxFile.TabIndex = 1;
-			this.textBoxFile.Text = "";
-			this.textBoxFile.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFile_KeyPress);
-			this.textBoxFile.TextChanged += new System.EventHandler(this.textBoxFile_TextChanged);
-			this.textBoxFile.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFile_KeyUp);
-			// 
-			// listBoxFiles
-			// 
-			this.listBoxFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listBoxFiles.Location = new System.Drawing.Point(0, 20);
-			this.listBoxFiles.Name = "listBoxFiles";
-			this.listBoxFiles.Size = new System.Drawing.Size(456, 134);
-			this.listBoxFiles.TabIndex = 2;
-			this.listBoxFiles.DoubleClick += new System.EventHandler(this.listBoxFiles_DoubleClick);
-			this.listBoxFiles.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
-			// 
-			// OpenActionDialogBox
-			// 
-			this.AcceptButton = this.buttonOk;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(456, 198);
-			this.ControlBox = false;
-			this.Controls.Add(this.listBoxFiles);
-			this.Controls.Add(this.textBoxFile);
-			this.Controls.Add(this.panel1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "OpenActionDialogBox";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Select a file to open";
-			this.Load += new System.EventHandler(this.OpenActionDialogBox_Load);
-			this.VisibleChanged += new System.EventHandler(this.OpenActionDialogBox_VisibleChanged);
-			this.panel1.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonOk = new System.Windows.Forms.Button();
+            this.textBoxFile = new System.Windows.Forms.TextBox();
+            this.listBoxFiles = new System.Windows.Forms.ListBox();
+            this.panel1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttonCancel);
+            this.panel1.Controls.Add(this.buttonOk);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 158);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(456, 40);
+            this.panel1.TabIndex = 0;
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonCancel.Location = new System.Drawing.Point(296, 8);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 1;
+            this.buttonCancel.Text = "&Cancel";
+            this.buttonCancel.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // buttonOk
+            // 
+            this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonOk.Location = new System.Drawing.Point(376, 8);
+            this.buttonOk.Name = "buttonOk";
+            this.buttonOk.Size = new System.Drawing.Size(75, 23);
+            this.buttonOk.TabIndex = 0;
+            this.buttonOk.Text = "&OK";
+            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            // 
+            // textBoxFile
+            // 
+            this.textBoxFile.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxFile.Location = new System.Drawing.Point(0, 0);
+            this.textBoxFile.Name = "textBoxFile";
+            this.textBoxFile.Size = new System.Drawing.Size(456, 20);
+            this.textBoxFile.TabIndex = 1;
+            this.textBoxFile.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFile_KeyUp);
+            this.textBoxFile.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFile_KeyPress);
+            this.textBoxFile.TextChanged += new System.EventHandler(this.textBoxFile_TextChanged);
+            // 
+            // listBoxFiles
+            // 
+            this.listBoxFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxFiles.Location = new System.Drawing.Point(0, 20);
+            this.listBoxFiles.Name = "listBoxFiles";
+            this.listBoxFiles.Size = new System.Drawing.Size(456, 134);
+            this.listBoxFiles.TabIndex = 2;
+            this.listBoxFiles.DoubleClick += new System.EventHandler(this.listBoxFiles_DoubleClick);
+            this.listBoxFiles.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
+            // 
+            // OpenActionDialogBox
+            // 
+            this.AcceptButton = this.buttonOk;
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.CancelButton = this.buttonCancel;
+            this.ClientSize = new System.Drawing.Size(456, 198);
+            this.ControlBox = false;
+            this.Controls.Add(this.listBoxFiles);
+            this.Controls.Add(this.textBoxFile);
+            this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "OpenActionDialogBox";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Select a file to open";
+            this.VisibleChanged += new System.EventHandler(this.OpenActionDialogBox_VisibleChanged);
+            this.Load += new System.EventHandler(this.OpenActionDialogBox_Load);
+            this.panel1.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -176,11 +191,15 @@ namespace ModStudio
 		/// <summary>
 		/// 
 		/// </summary>
-		private void LoadPhpbbFileList()
+		private void LoadPhpbb2FileList()
 		{
-			PhpbbFileList = OpenTextFile(Application.StartupPath + "\\files.txt").Replace("\r\n", "\n").Split('\n');
-			//Console.WriteLine(":" + PhpbbFileList.Length);
+			PhpbbFileList = OpenTextFile(Application.StartupPath + @"\files.txt").Replace("\r\n", "\n").Split('\n');
 		}
+
+        private void LoadPhpbb3FileList()
+        {
+            PhpbbFileList = OpenTextFile(Application.StartupPath + @"\files_3.0.txt").Replace("\r\n", "\n").Split('\n');
+        }
 
 		/// <summary>
 		/// 

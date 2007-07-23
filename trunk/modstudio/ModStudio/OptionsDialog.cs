@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.7 2006-07-03 13:05:58 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.8 2007-07-23 09:03:48 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -425,33 +425,75 @@ namespace ModStudio
 			labelModAuthor.Text += "\r\nReal Name: " + (String)reg.GetValue("author_realname", "RealName");
 			labelModAuthor.Text += "\r\nE-mail: " + (String)reg.GetValue("author_email", "invalid@invalid.invalid");
 			labelModAuthor.Text += "\r\nWebsite: " + (String)reg.GetValue("author_homepage", "http://invalid.invalid/");
+			if (((Form)this.Owner).MdiChildren.GetLength(0) > 0)
+			{
+				if (((Form)this.Owner).ActiveMdiChild.GetType() == typeof(ModEditor))
+				{
+					CodeIndents DescriptionIndent;
+					CodeIndents FilesToEditIndent;
+					CodeIndents IncludedFilesIndent;
+					CodeIndents AuthorNotesIndent;
+					StartLine AuthorNotesStartLine;
+
+					DescriptionIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent;
+					FilesToEditIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent;
+					IncludedFilesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent;
+					AuthorNotesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent;
+					AuthorNotesStartLine = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine;
+
+					comboBoxDescriptionTabbing.SelectedIndex = (int)DescriptionIndent;
+					comboBoxFilesToEditTabbing.SelectedIndex = (int)FilesToEditIndent;
+					comboBoxIncludedFilesTabbing.SelectedIndex = (int)IncludedFilesIndent;
+					comboBoxAuthorNotesTabbing.SelectedIndex = (int)AuthorNotesIndent;
+					comboBoxAuthorNotesStartLine.SelectedIndex = (int)AuthorNotesStartLine;
+				}
+				else
+				{
+					setupDefaultIndents(reg);
+				}
+			}
+			else
+			{
+				setupDefaultIndents(reg);
+			}
+			reg.Close();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="reg"></param>
+		private void setupDefaultIndents(RegistryKey reg)
+		{
 			CodeIndents DescriptionIndent;
 			CodeIndents FilesToEditIndent;
 			CodeIndents IncludedFilesIndent;
 			CodeIndents AuthorNotesIndent;
 			StartLine AuthorNotesStartLine;
-			if (((Form)this.Owner).MdiChildren.GetLength(0) > 0)
-			{
-				DescriptionIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent;
-				FilesToEditIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent;
-				IncludedFilesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent;
-				AuthorNotesIndent = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent;
-				AuthorNotesStartLine = ((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine;
-			}
-			else
-			{
-				DescriptionIndent = (CodeIndents)((int)reg.GetValue("description_indent", CodeIndents.Space));
-				FilesToEditIndent = (CodeIndents)((int)reg.GetValue("files-to-edit_indent", CodeIndents.RightAligned));
-				IncludedFilesIndent = (CodeIndents)((int)reg.GetValue("included-files_indent", CodeIndents.RightAligned));
-				AuthorNotesIndent = (CodeIndents)((int)reg.GetValue("authornotes_indent", CodeIndents.Space));
-				AuthorNotesStartLine = (StartLine)((int)reg.GetValue("authornotes_startline", StartLine.Same));
-			}
+
+			DescriptionIndent = (CodeIndents)((int)reg.GetValue("description_indent", CodeIndents.Space));
+			FilesToEditIndent = (CodeIndents)((int)reg.GetValue("files-to-edit_indent", CodeIndents.RightAligned));
+			IncludedFilesIndent = (CodeIndents)((int)reg.GetValue("included-files_indent", CodeIndents.RightAligned));
+			AuthorNotesIndent = (CodeIndents)((int)reg.GetValue("authornotes_indent", CodeIndents.Space));
+			AuthorNotesStartLine = (StartLine)((int)reg.GetValue("authornotes_startline", StartLine.Same));
+
 			comboBoxDescriptionTabbing.SelectedIndex = (int)DescriptionIndent;
 			comboBoxFilesToEditTabbing.SelectedIndex = (int)FilesToEditIndent;
 			comboBoxIncludedFilesTabbing.SelectedIndex = (int)IncludedFilesIndent;
 			comboBoxAuthorNotesTabbing.SelectedIndex = (int)AuthorNotesIndent;
 			comboBoxAuthorNotesStartLine.SelectedIndex = (int)AuthorNotesStartLine;
-			reg.Close();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void applyIndents()
+		{
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent = (CodeIndents)comboBoxDescriptionTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent = (CodeIndents)comboBoxFilesToEditTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent = (CodeIndents)comboBoxIncludedFilesTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent = (CodeIndents)comboBoxAuthorNotesTabbing.SelectedIndex;
+			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine = (StartLine)comboBoxAuthorNotesStartLine.SelectedIndex;
 		}
 
 		private void button1_Click(object sender, System.EventArgs e)
@@ -470,11 +512,11 @@ namespace ModStudio
 			reg.SetValue("authornotes_startline", comboBoxAuthorNotesStartLine.SelectedIndex);
 			reg.Close();
 
-			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.DescriptionIndent = (CodeIndents)comboBoxDescriptionTabbing.SelectedIndex;
-			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModFilesToEditIndent = (CodeIndents)comboBoxFilesToEditTabbing.SelectedIndex;
-			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.ModIncludedFilesIndent = (CodeIndents)comboBoxIncludedFilesTabbing.SelectedIndex;
-			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesIndent = (CodeIndents)comboBoxAuthorNotesTabbing.SelectedIndex;
-			((ModEditor)((Form)this.Owner).ActiveMdiChild).ThisMod.AuthorNotesStartLine = (StartLine)comboBoxAuthorNotesStartLine.SelectedIndex;
+			if (((Form)this.Owner).ActiveMdiChild.GetType() == typeof(ModEditor))
+			{
+				applyIndents();
+			}
+
 			this.Close();
 			this.Dispose();
 		}

@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LocalisedTextBox.cs,v 1.7 2006-07-03 12:54:28 smithydll Exp $
+ *   $Id: LocalisedTextBox.cs,v 1.8 2007-07-23 09:03:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -95,6 +95,11 @@ namespace ModFormControls
 			this.textBox1.Size = new System.Drawing.Size(280, 20);
 			this.textBox1.TabIndex = 0;
 			this.textBox1.Text = "";
+			this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+			this.textBox1.TextChanged += new System.EventHandler(this.textBox1_Enter);
+			this.textBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBox1_MouseUp);
+			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
+			this.textBox1.Enter += new System.EventHandler(this.textBox1_Enter);
 			// 
 			// label1
 			// 
@@ -105,7 +110,7 @@ namespace ModFormControls
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(40, 20);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "en-GB";
+			this.label1.Text = "en";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.label1.Click += new System.EventHandler(this.label1_Click);
 			// 
@@ -128,7 +133,7 @@ namespace ModFormControls
 			// 
 			// languageSelectionDialog1
 			// 
-			this.languageSelectionDialog1.Language = "en-GB";
+			this.languageSelectionDialog1.Language = "en";
 			this.languageSelectionDialog1.Save += new ModFormControls.LanguageSelectionDialogBox.LanguageSelectionDialogBoxSaveHandler(this.languageSelectionDialog1_Save);
 			// 
 			// LocalisedTextBox
@@ -142,6 +147,9 @@ namespace ModFormControls
 		}
 		#endregion
 
+		private int lastSelectionLength = 0;
+		private int lastSelectionStart = 0;
+
 		private void label1_Click(object sender, System.EventArgs e)
 		{
 			contextMenuLanguages.Show(label1, new Point(0, 20));
@@ -154,9 +162,24 @@ namespace ModFormControls
 
 		public void menuItems_Click(object sender, System.EventArgs e)
 		{
+			lastSelectionLength = textBox1.SelectionLength;
+			lastSelectionStart = textBox1.SelectionStart;
+
 			textLang[label1.Text] = textBox1.Text.Replace("\r","");
 			textBox1.Text = textLang[((MenuItem)sender).Text].Replace("\r","").Replace("\n","\r\n"); //textLang.GetValue(((MenuItem)sender).Text);
 			label1.Text = ((MenuItem)sender).Text;
+
+			try
+			{
+				textBox1.SelectionLength = lastSelectionLength;
+				textBox1.SelectionStart = lastSelectionStart;
+			}
+			catch
+			{
+				lastSelectionLength = textBox1.SelectionLength;
+				lastSelectionStart = textBox1.SelectionStart;
+			}
+
 		}
 
 		private void languageSelectionDialog1_Save(object sender, ModFormControls.LanguageSelectionDialogBoxSaveEventArgs e)
@@ -177,6 +200,9 @@ namespace ModFormControls
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public StringLocalised TextLang
 		{
 			get
@@ -191,6 +217,9 @@ namespace ModFormControls
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private void UpdateDisplay()
 		{
 			if (textLang != null)
@@ -219,6 +248,9 @@ namespace ModFormControls
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool LanguageSelectorVisible
 		{
 			get
@@ -231,6 +263,9 @@ namespace ModFormControls
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool Multiline
 		{
 			get
@@ -242,5 +277,83 @@ namespace ModFormControls
 				textBox1.Multiline = value;
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool IsTextSelected()
+		{
+			if (textBox1.SelectionLength > 0)
+			{
+				 return true;
+			}
+			return false;
+		}
+
+		private void textBox1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+		{
+			if (textBox1.SelectionLength != lastSelectionLength ||
+				textBox1.SelectionStart != lastSelectionStart)
+			{
+				SelectionChanged(this, new EventArgs());
+				lastSelectionLength = textBox1.SelectionLength;
+				lastSelectionStart = textBox1.SelectionStart;
+			}
+		}
+
+		private void textBox1_Enter(object sender, System.EventArgs e)
+		{
+			if (textBox1.SelectionLength != lastSelectionLength ||
+				textBox1.SelectionStart != lastSelectionStart)
+			{
+				try
+				{
+					SelectionChanged(this, new EventArgs());
+				}
+				catch
+				{
+				}
+				lastSelectionLength = textBox1.SelectionLength;
+				lastSelectionStart = textBox1.SelectionStart;
+			}
+		}
+
+		private void textBox1_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+		{
+			if (textBox1.SelectionLength != lastSelectionLength ||
+				textBox1.SelectionStart != lastSelectionStart)
+			{
+				SelectionChanged(this, new EventArgs());
+				lastSelectionLength = textBox1.SelectionLength;
+				lastSelectionStart = textBox1.SelectionStart;
+			}
+		}
+
+		private void textBox1_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (textBox1.SelectionLength != lastSelectionLength ||
+				textBox1.SelectionStart != lastSelectionStart)
+			{
+				SelectionChanged(this, new EventArgs());
+				lastSelectionLength = textBox1.SelectionLength;
+				lastSelectionStart = textBox1.SelectionStart;
+			}
+		}
+
+		public void DoCut()
+		{
+			Clipboard.SetDataObject(textBox1.SelectedText);
+			textBox1.SelectedText = "";
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public delegate void SelectionChangedHandler(object sender, EventArgs e);
+		/// <summary>
+		/// 
+		/// </summary>
+		public event SelectionChangedHandler SelectionChanged;
 	}
 }
