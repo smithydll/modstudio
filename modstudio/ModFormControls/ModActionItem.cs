@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModActionItem.cs,v 1.13 2007-07-23 09:03:37 smithydll Exp $
+ *   $Id: ModActionItem.cs,v 1.14 2007-09-01 13:52:35 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -69,83 +69,86 @@ namespace ModFormControls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.panel3 = new System.Windows.Forms.Panel();
-			this.panel2.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// panel1
-			// 
-			this.panel1.BackColor = System.Drawing.Color.SlateGray;
-			this.panel1.Location = new System.Drawing.Point(4, 4);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(472, 84);
-			this.panel1.TabIndex = 0;
-			// 
-			// panel2
-			// 
-			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel2.Controls.Add(this.label2);
-			this.panel2.Controls.Add(this.label1);
-			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(472, 84);
-			this.panel2.TabIndex = 1;
-			this.panel2.Click += new System.EventHandler(this.panel2_Click);
-			this.panel2.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
-			// 
-			// label2
-			// 
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label2.Location = new System.Drawing.Point(0, 22);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(470, 60);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "label2";
-			this.label2.Click += new System.EventHandler(this.label2_Click);
-			this.label2.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.label1.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(58, 22);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "label1";
-			this.label1.Click += new System.EventHandler(this.label2_Click);
-			this.label1.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
-			// 
-			// panel3
-			// 
-			this.panel3.BackColor = System.Drawing.Color.AliceBlue;
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel3.Location = new System.Drawing.Point(0, 0);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(480, 90);
-			this.panel3.TabIndex = 2;
-			// 
-			// ModActionItem
-			// 
-			this.BackColor = System.Drawing.Color.AliceBlue;
-			this.Controls.Add(this.panel2);
-			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.panel3);
-			this.Name = "ModActionItem";
-			this.Size = new System.Drawing.Size(480, 90);
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ModActionItem_KeyPress);
-			this.Resize += new System.EventHandler(this.ModActionItem_Resize);
-			this.Enter += new System.EventHandler(this.ModActionItem_Enter);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyUp);
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyDown);
-			this.panel2.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel2.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(472, 84);
+            this.panel1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label2);
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(472, 84);
+            this.panel2.TabIndex = 1;
+            this.panel2.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
+            this.panel2.Click += new System.EventHandler(this.panel2_Click);
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(0, 18);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(470, 64);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "label2";
+            this.label2.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 18);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "label1";
+            this.label1.DoubleClick += new System.EventHandler(this.panel2_DoubleClick);
+            this.label1.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(480, 90);
+            this.panel3.TabIndex = 2;
+            // 
+            // ModActionItem
+            // 
+            this.BackColor = System.Drawing.Color.AliceBlue;
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel3);
+            this.Name = "ModActionItem";
+            this.Size = new System.Drawing.Size(480, 90);
+            this.Enter += new System.EventHandler(this.ModActionItem_Enter);
+            this.Resize += new System.EventHandler(this.ModActionItem_Resize);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyUp);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ModActionItem_KeyPress);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ModActionItem_KeyDown);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -169,10 +172,35 @@ namespace ModFormControls
 
 		private void ModActionItem_Resize(object sender, System.EventArgs e)
 		{
-			panel1.Width = this.Width - 8;
-			panel2.Width = this.Width - 8;
-			panel1.Height = this.Height - 6;
-			panel2.Height = this.Height - 6;
+            bool isSelected = false;
+            try
+            {
+                if (this.ActionIndex == ((ModDisplayBox)this.Parent).SelectedIndex)
+                {
+                    isSelected = true;
+                }
+            }
+            catch
+            {
+            }
+
+            if (isSelected)
+            {
+                panel1.Width = this.Width - 8;
+                panel2.Width = this.Width - 8;
+                panel1.Height = this.Height - 6;
+                panel2.Height = this.Height - 6;
+            }
+            else
+            {
+                panel1.Width = this.Width - 16;
+                panel2.Width = this.Width - 16;
+                panel1.Height = this.Height - 12;
+                panel2.Height = this.Height - 12;
+            }
+
+            panel3.Width = this.Width;
+            panel3.Height = this.Height;
 		}
 
 		public int Index
@@ -262,6 +290,8 @@ namespace ModFormControls
 
 				panel2.BackColor = value;
 				base.BackColor = Color.AliceBlue;
+
+                ModActionItem_Resize(null, null);
 			}
 		}
 

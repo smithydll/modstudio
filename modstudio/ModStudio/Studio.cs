@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: Studio.cs,v 1.16 2007-07-23 09:03:48 smithydll Exp $
+ *   $Id: Studio.cs,v 1.17 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -22,6 +22,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -32,6 +33,10 @@ using Phpbb.ModTeam.Tools.Validation;
 using System.IO;
 using System.Net;
 using ModFormControls;
+using ModProjects;
+
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace ModStudio
 {
@@ -110,6 +115,19 @@ namespace ModStudio
 		private System.Windows.Forms.MenuItem menuItem25;
 		private System.Windows.Forms.MenuItem menuItem26;
 		private Size lastSize;
+        private NewProjectDialog newProjectDialog1;
+
+        private ModProject openProject;
+        private string openProjectPath;
+        private string openProjectFile;
+
+        private Dictionary<IEditor, string> openDocumentList = new Dictionary<IEditor, string>();
+        private OpenFileDialog openFileDialog3;
+        private MenuItem menuItem27;
+        private NewFileDialog newFileDialog1;
+
+        private static AppDomain domain = AppDomain.CreateDomain("MODStudioDomain");
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -153,22 +171,12 @@ namespace ModStudio
 			{
                 if (args[0].ToLower().EndsWith(".mod") || args[0].ToLower().EndsWith(".txt") || args[0].ToLower().EndsWith(".xml"))
                 {
-                    ModEditor newEditor = new ModEditor(args[0]);
-                    newEditor.MdiParent = this;
-                    newEditor.Text = args[0];
-                    newEditor.Show();
-                }
-                else
-                {
+                    OpenModFileWindow(args[0]);
                 }
 			}
 			else
 			{
-				ModEditor newEditor = new ModEditor(true);
-				newEditor.MdiParent = this;
-				//newEditor.ThisMod.Header.ModTitle = new PropertyLang();
-                newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
-				newEditor.Show();
+                NewModxFileWindow();
 			}
 		}
 
@@ -232,6 +240,7 @@ namespace ModStudio
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem27 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
@@ -258,9 +267,12 @@ namespace ModStudio
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
-            this.tabBar1 = new ModFormControls.TabBar();
-            this.projectPanel1 = new ModFormControls.ProjectPanel();
             this.splitter1 = new System.Windows.Forms.Splitter();
+            this.projectPanel1 = new ModFormControls.ProjectPanel();
+            this.tabBar1 = new ModFormControls.TabBar();
+            this.newProjectDialog1 = new ModStudio.NewProjectDialog();
+            this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
+            this.newFileDialog1 = new ModStudio.NewFileDialog();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -468,6 +480,7 @@ namespace ModStudio
             // 
             resources.ApplyResources(this.menuItem23, "menuItem23");
             this.menuItem23.Index = 5;
+            this.menuItem23.Click += new System.EventHandler(this.menuItem23_Click);
             // 
             // menuItemView
             // 
@@ -481,6 +494,7 @@ namespace ModStudio
             this.menuItem2,
             this.menuItem3,
             this.menuItem4,
+            this.menuItem27,
             this.menuItem5,
             this.menuItem6,
             this.menuItem7,
@@ -505,29 +519,36 @@ namespace ModStudio
             this.menuItem4.Index = 2;
             resources.ApplyResources(this.menuItem4, "menuItem4");
             // 
+            // menuItem27
+            // 
+            this.menuItem27.Index = 3;
+            resources.ApplyResources(this.menuItem27, "menuItem27");
+            this.menuItem27.Click += new System.EventHandler(this.menuItem27_Click);
+            // 
             // menuItem5
             // 
-            this.menuItem5.Index = 3;
+            this.menuItem5.Index = 4;
             resources.ApplyResources(this.menuItem5, "menuItem5");
+            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // menuItem6
             // 
-            this.menuItem6.Index = 4;
+            this.menuItem6.Index = 5;
             resources.ApplyResources(this.menuItem6, "menuItem6");
             // 
             // menuItem7
             // 
-            this.menuItem7.Index = 5;
+            this.menuItem7.Index = 6;
             resources.ApplyResources(this.menuItem7, "menuItem7");
             // 
             // menuItem8
             // 
-            this.menuItem8.Index = 6;
+            this.menuItem8.Index = 7;
             resources.ApplyResources(this.menuItem8, "menuItem8");
             // 
             // menuItem9
             // 
-            this.menuItem9.Index = 7;
+            this.menuItem9.Index = 8;
             resources.ApplyResources(this.menuItem9, "menuItem9");
             // 
             // menuItemTools
@@ -667,15 +688,11 @@ namespace ModStudio
             this.imageList2.Images.SetKeyName(0, "");
             this.imageList2.Images.SetKeyName(1, "");
             // 
-            // tabBar1
+            // splitter1
             // 
-            this.tabBar1.BackColor = System.Drawing.Color.FloralWhite;
-            resources.ApplyResources(this.tabBar1, "tabBar1");
-            this.tabBar1.Name = "tabBar1";
-            this.tabBar1.SelectedIndex = -1;
-            this.tabBar1.SelectedTab = null;
-            this.tabBar1.TabSelectedIndexChanged += new ModFormControls.TabBar.TabSelectedIndexChangedHandler(this.tabBar1_TabSelectedIndexChanged);
-            this.tabBar1.TabClose += new ModFormControls.TabBar.TabCloseHandler(this.tabBar1_TabClose);
+            resources.ApplyResources(this.splitter1, "splitter1");
+            this.splitter1.Name = "splitter1";
+            this.splitter1.TabStop = false;
             // 
             // projectPanel1
             // 
@@ -683,11 +700,28 @@ namespace ModStudio
             resources.ApplyResources(this.projectPanel1, "projectPanel1");
             this.projectPanel1.Name = "projectPanel1";
             // 
-            // splitter1
+            // tabBar1
             // 
-            resources.ApplyResources(this.splitter1, "splitter1");
-            this.splitter1.Name = "splitter1";
-            this.splitter1.TabStop = false;
+            this.tabBar1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.tabBar1, "tabBar1");
+            this.tabBar1.Name = "tabBar1";
+            this.tabBar1.SelectedIndex = -1;
+            this.tabBar1.SelectedTab = null;
+            this.tabBar1.TabSelectedIndexChanged += new ModFormControls.TabBar.TabSelectedIndexChangedHandler(this.tabBar1_TabSelectedIndexChanged);
+            this.tabBar1.TabClose += new ModFormControls.TabBar.TabCloseHandler(this.tabBar1_TabClose);
+            // 
+            // newProjectDialog1
+            // 
+            this.newProjectDialog1.NewProject += new ModStudio.NewProjectDialogBox.NewProjectDialogBoxSaveNewHandler(this.newProjectDialog1_NewProject);
+            // 
+            // openFileDialog3
+            // 
+            this.openFileDialog3.FileName = "openFileDialog3";
+            this.openFileDialog3.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog3_FileOk);
+            // 
+            // newFileDialog1
+            // 
+            this.newFileDialog1.NewFile += new ModStudio.NewFileDialogBox.NewFileDialogBoxSaveNewHandler(this.newFileDialog1_NewFile);
             // 
             // Studio
             // 
@@ -742,6 +776,63 @@ namespace ModStudio
 			Application.Exit();
 		}
 
+        private void OpenProject(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                MessageBox.Show("Invalid project file");
+                return;
+            }
+            FileInfo fi = new FileInfo(filename);
+
+            // TODO: close all files opened under an already opened project
+
+            XmlSerializer xs = new XmlSerializer(typeof(ModProject), "mod-proj");
+            FileStream fs = new FileStream(filename, FileMode.Open);
+            openProject = (ModProject)xs.Deserialize(fs);
+            fs.Close();
+            openProject.ReSyncAllParents();
+
+            openProjectFile = filename;
+            openProjectPath = fi.Directory.FullName;
+
+            projectPanel1.ProjectPath = openProjectPath;
+            projectPanel1.Project = openProject;
+            projectPanel1.Visible = true;
+
+            // open all files that were last time open
+            foreach (ProjectFolder pf in openProject.Folders)
+            {
+                OpenOpenProjectFiles(pf);
+            }
+
+        }
+
+        private void OpenOpenProjectFiles(ProjectFolder projectFolder)
+        {
+            foreach (ProjectFolder pf in projectFolder.Folders)
+            {
+                OpenOpenProjectFiles(pf);
+            }
+
+            foreach (ProjectFile pf in projectFolder.Files)
+            {
+                if (pf.IsOpen)
+                {
+                    string fileFullPath = "";
+                    if (projectFolder.FolderName == "")
+                    {
+                        fileFullPath = Path.Combine(openProjectPath, pf.FileName);
+                    }
+                    else
+                    {
+                        fileFullPath = Path.Combine(Path.Combine(openProjectPath, projectFolder.GetFolderPath()), pf.FileName);
+                    }
+                    OpenFile(fileFullPath);
+                }
+            }
+        }
+
 		private void OpenFile(string filename)
 		{
 			if (this.MdiChildren.Length > 0)
@@ -754,23 +845,56 @@ namespace ModStudio
 					}
 				}
 			}
-			if (filename.ToLower().EndsWith(".mod") ||
+
+            ProjectFileType pft = ProjectPanel.ReadFirstBytesInFile(filename);
+            if (filename.ToLower().EndsWith(".modproj"))
+            {
+                // open a project
+                OpenProject(filename);
+            }
+			else if (filename.ToLower().EndsWith(".mod") ||
 				filename.ToLower().EndsWith(".txt") ||
 				filename.ToLower().EndsWith(".xml"))
 			{
-				ModEditor newEditor = new ModEditor(filename);
-				newEditor.MdiParent = this;
-				newEditor.Text = filename;
-				newEditor.Show();
+                switch (pft)
+                {
+                    case ProjectFileType.TextMod:
+                    case ProjectFileType.ModxMox:
+                        OpenModxFileWindow(filename);
+                        break;
+                    case ProjectFileType.TextFile:
+                    case ProjectFileType.Gpl:
+                    case ProjectFileType.Lgpl:
+                        TextEditor newTextEditor = new TextEditor(filename);
+                        newTextEditor.MdiParent = this;
+                        newTextEditor.Text = filename;
+                        newTextEditor.Show();
+                        break;
+                }
+
+                //openDocumentList.Add(newEditor);
 			}
 			else if (filename.ToLower().EndsWith(".php"))
 			{
 				// assume language file for the moment, later add SMART filtering
-				LanguageEditor newEditor = new LanguageEditor();
-				newEditor.MdiParent = this;
-				newEditor.Text = filename;
-				newEditor.Open(filename);
-				newEditor.Show();
+                switch (pft)
+                {
+                    case ProjectFileType.LanguageFile:
+                        LanguageEditor newEditor = new LanguageEditor();
+                        newEditor.MdiParent = this;
+                        newEditor.Text = filename;
+                        newEditor.Open(filename);
+                        newEditor.Show();
+                        break;
+                    case ProjectFileType.PhpFile:
+                        TextEditor newTextEditor = new TextEditor(filename);
+                        newTextEditor.MdiParent = this;
+                        newTextEditor.Text = filename;
+                        newTextEditor.Show();
+                        break;
+                }
+
+                //openDocumentList.Add(newEditor);
 			}
 		}
 
@@ -808,6 +932,7 @@ namespace ModStudio
 				case 6: // copy
 					break;
 				case 7: // paste
+                    menuItem23_Click(null, null);
 					break;
 			}
 		}
@@ -816,9 +941,9 @@ namespace ModStudio
 		{
 			if (this.MdiChildren.Length > 0)
 			{
-				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+				if (this.ActiveMdiChild is IEditor)
 				{
-					((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFile();
+                    ((IEditor)(this.ActiveMdiChild)).SaveFile();
 				}
 				else if (this.ActiveMdiChild.GetType() == typeof(LanguageEditor))
 				{
@@ -833,7 +958,7 @@ namespace ModStudio
 			{
 				if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
 				{
-					((ModStudio.ModEditor)(this.ActiveMdiChild)).SaveFileAs();
+					((ModEditor)(this.ActiveMdiChild)).SaveFileAs();
 				}
 				else if (this.ActiveMdiChild.GetType() == typeof(LanguageEditor))
 				{
@@ -960,7 +1085,64 @@ namespace ModStudio
 			reg.SetValue("window-left", this.Left);
 			reg.SetValue("window-top", this.Top);
 			reg.Close();
+
+            /* save open project */
+            if (openProject != null)
+            {
+                if (!string.IsNullOrEmpty(openProjectFile))
+                {
+                    SaveOpenProject();
+                }
+            }
 		}
+
+        private void SaveOpenProject()
+        {
+            if (openProject != null)
+            {
+                foreach (ProjectFolder pf in openProject.Folders)
+                {
+                    UpdateOpenProjectFolder(pf);
+                }
+
+                XmlSerializer xs = new XmlSerializer(typeof(ModProject), "mod-proj");
+                FileStream projectOut = new FileStream(openProjectFile, FileMode.Create);
+                xs.Serialize(projectOut, openProject);
+                projectOut.Close();
+            }
+        }
+
+        private void UpdateOpenProjectFolder(ProjectFolder projectFolder)
+        {
+            foreach (ProjectFolder pf in projectFolder.Folders)
+            {
+                UpdateOpenProjectFolder(pf);
+            }
+
+            foreach (ProjectFile pf in projectFolder.Files)
+            {
+                // generate the full file path
+                string fileFullPath = "";
+                if (projectFolder.FolderName == "")
+                {
+                    fileFullPath = Path.Combine(openProjectPath, pf.FileName);
+                }
+                else
+                {
+                    fileFullPath = Path.Combine(Path.Combine(openProjectPath, projectFolder.GetFolderPath()), pf.FileName);
+                }
+
+                // update file open status
+                if (openDocumentList.ContainsValue(fileFullPath))
+                {
+                    pf.IsOpen = true;
+                }
+                else
+                {
+                    pf.IsOpen = false;
+                }
+            }
+        }
 
 		private void menuItemToolsOptions_Click(object sender, System.EventArgs e)
 		{
@@ -1020,7 +1202,16 @@ namespace ModStudio
 		{
 			WebClient webClient = new WebClient();
 			byte[] bytes;
-			bytes = webClient.DownloadData("http://modstudio.sf.net/updatecheck/4-0-x.txt");
+            try
+            {
+                bytes = webClient.DownloadData("http://modstudio.sf.net/updatecheck/4-0-x.txt");
+            }
+            catch (System.Net.WebException)
+            {
+                // catch the exception of not having an internet connection to connect through
+                return false;
+            }
+
 			string version = System.Text.ASCIIEncoding.ASCII.GetString(bytes);
             if (version == "") return false;
             ModVersion newVersion = new ModVersion() ;
@@ -1087,12 +1278,20 @@ namespace ModStudio
 
 		private void menuItem2_Click(object sender, System.EventArgs e)
 		{
-		
+            if (openProject != null)
+            {
+                // TODO: set default file type
+                newFileDialog1.ShowDialog();
+            }
 		}
 
 		private void menuItem3_Click(object sender, System.EventArgs e)
 		{
-		
+            if (openProject != null)
+            {
+                // TODO: set the default file type
+                newFileDialog1.ShowDialog();
+            }
 		}
 
 		private bool suspendSelectedIndexChanged = true;
@@ -1102,10 +1301,26 @@ namespace ModStudio
 			{
 				((Form)sender).Disposed += new EventHandler(frm_Disposed);
 			}*/
-			/*foreach(Form frm in this.MdiChildren)
+			foreach(Form frm in this.MdiChildren)
 			{
-				frm.Disposed += new EventHandler(frm_Disposed);
-			}*/
+				//frm.Disposed += new EventHandler(frm_Disposed);
+
+                if (frm.GetType() == typeof(ModEditor))
+                {
+                    if (!openDocumentList.ContainsKey((IEditor)frm))
+                    {
+                        frm.Disposed += new EventHandler(frm_Disposed);
+                        openDocumentList.Add((IEditor)frm, frm.Text);
+                    }
+                }
+                else if (frm is IEditor)
+                {
+                    if (!openDocumentList.ContainsKey((IEditor)frm))
+                    {
+                        openDocumentList.Add((IEditor)frm, frm.Text);
+                    }
+                }
+			}
 			UpdateTabBar();
 			updateCutCopyPaste();
 			if (this.MdiChildren.Length > 0)
@@ -1116,7 +1331,7 @@ namespace ModStudio
 					{
 						ModEditor me = (ModEditor)this.ActiveMdiChild;
 						this.projectPanel1.Actions = me.ThisMod.Actions;
-						this.projectPanel1.UpdateActions();
+						//this.projectPanel1.UpdateActions();
 					}
 				}
 			}
@@ -1270,6 +1485,17 @@ namespace ModStudio
 		{
 			UpdateTabBar();
 			tabBar1.UpdateRightMargin();
+            if (sender.GetType() == typeof(ModEditor))
+            {
+                if (openProject != null)
+                {
+                    Console.WriteLine(((ModEditor)sender).Text);
+                    if (openDocumentList[(ModEditor)sender].StartsWith(openProjectPath))
+                    {
+                        projectPanel1.CloseMod(openDocumentList[(ModEditor)sender].TrimEnd(new char[] { '*' }).Remove(0, openProjectPath.Length).TrimStart(new char[] { Path.DirectorySeparatorChar }));
+                    }
+                }
+            }
 		}
 
 		private void Studio_ContextMenuChanged(object sender, System.EventArgs e)
@@ -1375,19 +1601,12 @@ namespace ModStudio
 
 		private void menuItem13_Click(object sender, System.EventArgs e)
 		{
-			ModEditor newEditor = new ModEditor(true);
-			newEditor.MdiParent = this;
-			//newEditor.ThisMod = new ModxMod();
-			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
-			newEditor.Show();
+            NewModxFileWindow();
 		}
 
 		private void menuItem12_Click(object sender, System.EventArgs e)
 		{
-			ModEditor newEditor = new ModEditor();
-			newEditor.MdiParent = this;
-			newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
-			newEditor.Show();
+            NewTextModFileWindow();
 		}
 
 		private void menuItem24_Click(object sender, System.EventArgs e)
@@ -1419,15 +1638,391 @@ namespace ModStudio
 		/// <param name="e"></param>
 		private void menuItem21_Click(object sender, System.EventArgs e)
 		{
-			if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+			if (this.ActiveMdiChild is IEditor)
 			{
-				((ModEditor)this.ActiveMdiChild).DoCut();
+				((IEditor)this.ActiveMdiChild).DoCut();
 			}
 		}
 
         private void menuItem10_Click(object sender, EventArgs e)
         {
+            newProjectDialog1.ShowDialog();
+            //openProject = new ModProject();
 
+            if (openProject != null)
+            {
+                projectPanel1.Visible = true;
+            }
+        }
+
+        private void newProjectDialog1_NewProject(object sender, NewProjectDialogBoxSaveNewEventArgs e)
+        {
+            string projectDirectory = Path.Combine(e.ProjectPath, e.ProjectName);
+            if (!Directory.Exists(projectDirectory))
+            {
+                /* generate a new project */
+                openProject = new ModProject();
+                projectPanel1.Visible = true;
+
+                openProject.BuildPath = "publish";
+                openProject.PhpbbVersion = e.PhpbbVersion;
+                openProject.ProjectName = e.ProjectName;
+                openProject.AddFolder(new ProjectFolder(""));
+
+                Directory.CreateDirectory(projectDirectory);
+                Directory.CreateDirectory(Path.Combine(projectDirectory, openProject.BuildPath));
+
+                openProjectPath = projectDirectory;
+                openProjectFile = Path.Combine(projectDirectory, e.ProjectName + ".modproj");
+
+                // close the untitled document created by default
+                if (this.MdiChildren.Length > 0)
+                {
+                    if (this.ActiveMdiChild.GetType() == typeof(ModEditor))
+                    {
+                        if (((ModEditor)this.ActiveMdiChild).Text == "untitled")
+                        {
+                            this.ActiveMdiChild.Close();
+                        }
+                    }
+                }
+
+                NewProjectFile("license.txt", ModStudioFileTypes.Gpl2License);
+
+                if (e.PhpbbVersion.DeterminePrimary() == "2.0")
+                {
+                    NewTextModFileWindow(Path.Combine(openProjectPath, "install.mod"));
+                }
+                else if (e.PhpbbVersion.DeterminePrimary() == "3.0")
+                {
+                    NewProjectFile("modx.prosilver.en.xsl", ModStudioFileTypes.ProsilverXslt);
+                    NewModxFileWindow(Path.Combine(openProjectPath, "install.xml"));
+                }
+
+                SaveOpenProject();
+
+                projectPanel1.ProjectPath = openProjectPath;
+                projectPanel1.Project = openProject;
+            }
+            else
+            {
+                MessageBox.Show("A project with that name already exists at the folder given, opening existing project.");
+                OpenProject(Path.Combine(e.ProjectPath, e.ProjectName + ".modproj"));
+            }
+        }
+
+        private void menuItem5_Click(object sender, EventArgs e)
+        {
+            openFileDialog3.ShowDialog();
+        }
+
+        private void openFileDialog3_FileOk(object sender, CancelEventArgs e)
+        {
+            if (openProject != null)
+            {
+                string filename = "";
+                if (openFileDialog3.FileName.StartsWith(openProjectPath))
+                {
+                    filename = openFileDialog3.FileName.Remove(0, openProjectPath.Length).TrimStart(new char[] { Path.DirectorySeparatorChar });
+                }
+                else
+                {
+                    FileInfo fi = new FileInfo(openFileDialog3.FileName);
+                    File.Copy(openFileDialog3.FileName, Path.Combine(openProjectPath, fi.Name));
+                    filename = fi.Name;
+                }
+
+                if (filename != "")
+                {
+                    FileInfo fi = new FileInfo(filename);
+                    ProjectFile pf = new ProjectFile(fi.Name, BuildAction.Package, false);
+                    AddFileToCurrentProjectFolder(pf);
+                }
+            }
+        }
+
+        private void AddFileToCurrentProjectFolder(ProjectFile projectFile)
+        {
+            projectPanel1.GetCurrentlySelectedFolder().AddFile(projectFile);
+        }
+
+        private void menuItem23_Click(object sender, EventArgs e)
+        {
+            if (this.ActiveMdiChild is IEditor)
+            {
+                ((IEditor)this.ActiveMdiChild).DoPaste();
+            }
+        }
+
+        private void menuItem27_Click(object sender, EventArgs e)
+        {
+            newFileDialog1.ShowDialog();
+        }
+
+        private void newFileDialog1_NewFile(object sender, NewFileDialogBoxSaveNewEventArgs e)
+        {
+            NewProjectFile(e.FileName, e.FileType, true);
+        }
+
+        private void NewProjectFile(string fileName, ModStudioFileTypes fileType)
+        {
+            NewProjectFile(fileName, fileType, false);
+        }
+
+        private void NewProjectFile(string fileName, ModStudioFileTypes fileType, bool open)
+        {
+            // ignore if we don't have an open project
+            if (openProject == null)
+            {
+                return;
+            }
+
+            string templateDirectory = Path.Combine(domain.BaseDirectory, "templates");
+            string templateFile = "";
+            string fileFullPath = "";
+            ProjectFolder selectedFolder = projectPanel1.GetCurrentlySelectedFolder();
+            if (selectedFolder.FolderName == "")
+            {
+                fileFullPath = Path.Combine(openProjectPath, fileName);
+            }
+            else
+            {
+                fileFullPath = Path.Combine(Path.Combine(openProjectPath, selectedFolder.GetFolderPath()), fileName);
+            }
+
+            switch (fileType)
+            {
+                case ModStudioFileTypes.ModxMod:
+                    NewModxFileWindow(fileFullPath);
+                    return;
+                case ModStudioFileTypes.TextMod:
+                    NewTextModFileWindow(fileFullPath);
+                    return;
+                case ModStudioFileTypes.PhpFile:
+                    if (openProject.PhpbbVersion.DeterminePrimary().StartsWith("2.0"))
+                    {
+                        templateFile = "phpbb2.php";
+                    }
+                    else if (openProject.PhpbbVersion.DeterminePrimary().StartsWith("3.0"))
+                    {
+                        templateFile = "phpbb3.php";
+                    }
+                    break;
+                case ModStudioFileTypes.HtmlFile:
+                    templateFile = "html.html";
+                    break;
+                case ModStudioFileTypes.TemplateFile:
+                    if (openProject.PhpbbVersion.DeterminePrimary().StartsWith("2.0"))
+                    {
+                        templateFile = "phpbb2.tpl";
+                        fileFullPath = CleanFileExtension(fileFullPath) + ".tpl";
+                    }
+                    else if (openProject.PhpbbVersion.DeterminePrimary().StartsWith("3.0"))
+                    {
+                        templateFile = "phpbb3.html";
+                        fileFullPath = CleanFileExtension(fileFullPath) + ".html";
+                    }
+                    break;
+                case ModStudioFileTypes.CascadingStyleSheet:
+                    templateFile = "css.css";
+                    break;
+                case ModStudioFileTypes.TextFile:
+                    templateFile = "text.txt";
+                    break;
+                case ModStudioFileTypes.XsltFile:
+                    templateFile = "xslt.xsl";
+                    break;
+                case ModStudioFileTypes.Gpl2License:
+                    templateFile = "gpl.txt";
+                    break;
+                case ModStudioFileTypes.ProsilverXslt:
+                    templateFile = "modx.prosilver.en.xsl";
+                    break;
+                case ModStudioFileTypes.SubsilverXslt:
+                    templateFile = "modx.subsilver.en.xsl";
+                    break;
+            }
+
+            // call the code to open a window once, that way we can add additional smarts to
+            // prevent file conflicts
+            if (!string.IsNullOrEmpty(templateFile))
+            {
+                if (File.Exists(fileFullPath))
+                {
+                    if (MessageBox.Show("File already exists, overwrite?", "Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            File.Delete(fileFullPath);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Cannot create file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                // copy the template file
+                File.Copy(Path.Combine(templateDirectory, templateFile), fileFullPath);
+
+                // TODO: use the smart file determination to open the new window
+                if (open)
+                {
+                    NewOpenTextEditorFileWindow(fileFullPath);
+                }
+                else
+                {
+                    ProjectFile pf = new ProjectFile(CleanProjectFileNameRelative(fileName), BuildAction.Package, false);
+                    AddFileToCurrentProjectFolder(pf);
+                }
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public string CleanProjectFileNameRelative(string fileName)
+        {
+            if (fileName.StartsWith(openProjectPath))
+            {
+                fileName = fileName.Remove(0, openProjectPath.Length);
+                fileName = fileName.TrimStart(new char[] { Path.DirectorySeparatorChar });
+            }
+            return fileName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string CleanFileExtension(string fileName)
+        {
+            int l = fileName.LastIndexOf('.');
+            if (l >= 0)
+            {
+                return fileName.Remove(l);
+            }
+            else
+            {
+                return fileName;
+            }
+        }
+
+        private void NewTextEditorFileWindow(string fileExt)
+        {
+            TextEditor newEditor = new TextEditor();
+            newEditor.MdiParent = this;
+            newEditor.Text = "untitled." + fileExt;
+            newEditor.Show();
+        }
+
+        private void OpenTextEditorFileWindow(string fileName)
+        {
+            TextEditor newEditor = new TextEditor(fileName);
+            newEditor.MdiParent = this;
+            newEditor.Text = fileName;
+            newEditor.Show();
+        }
+
+        private void NewOpenTextEditorFileWindow(string fileName)
+        {
+            FileInfo fi = new FileInfo(fileName);
+            OpenTextEditorFileWindow(fileName);
+
+            // add the file to the project
+            ProjectFile pf = new ProjectFile(fi.Name, BuildAction.Package, true);
+            AddFileToCurrentProjectFolder(pf);
+        }
+
+        private void NewModFileWindow(bool isModx)
+        {
+            ModEditor newEditor = new ModEditor(isModx);
+            newEditor.MdiParent = this;
+            newEditor.ThisMod.Header.Title.Add("Untitled Mod", "en");
+            newEditor.Show();
+        }
+
+        private void NewModFileWindow(bool isModx, string fileName)
+        {
+            if (openProject == null)
+            {
+                return;
+            }
+
+            if (File.Exists(Path.Combine(openProjectPath, fileName)))
+            {
+                if (MessageBox.Show("A file with the name already exists, overwrite?", "File already exists", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    // TODO: remove existing file from project
+                }
+            }
+
+            ModEditor newEditor = new ModEditor(isModx);
+            newEditor.MdiParent = this;
+            newEditor.ThisMod.Header.Title.Add(CleanFileExtension(CleanProjectFileNameRelative(fileName)), "en");
+            newEditor.Text = fileName;
+            newEditor.Show();
+            newEditor.SetModified();
+            newEditor.SaveFile();
+
+            // add the new MODX Window to the project
+            ProjectFile pf = new ProjectFile(CleanProjectFileNameRelative(fileName), BuildAction.Package, true);
+            AddFileToCurrentProjectFolder(pf);
+        }
+
+        private void NewModxFileWindow()
+        {
+            NewModFileWindow(true);
+        }
+
+        private void NewModxFileWindow(string fileName)
+        {
+            NewModFileWindow(true, fileName);
+        }
+
+        private void OpenModFileWindow(string fileName)
+        {
+            ModEditor newEditor = new ModEditor(fileName);
+            newEditor.MdiParent = this;
+            newEditor.Text = fileName;
+            newEditor.Show();
+
+            if (openProject != null)
+            {
+                if (fileName.StartsWith(openProjectPath))
+                {
+                    projectPanel1.OpenMod(fileName.Remove(0, openProjectPath.Length).TrimStart(new char[] { Path.DirectorySeparatorChar }), newEditor.ThisMod.Actions);
+                }
+            }
+        }
+
+        private void OpenModxFileWindow(string fileName)
+        {
+            OpenModFileWindow(fileName);
+        }
+
+        private void NewTextModFileWindow()
+        {
+            NewModFileWindow(false);
+        }
+
+        private void NewTextModFileWindow(string fileName)
+        {
+            NewModFileWindow(false, fileName);
+        }
+
+        private void OpenTextModFileWindow(string fileName)
+        {
+            OpenModFileWindow(fileName);
         }
 
 	}

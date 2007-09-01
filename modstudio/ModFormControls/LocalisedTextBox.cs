@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: LocalisedTextBox.cs,v 1.8 2007-07-23 09:03:37 smithydll Exp $
+ *   $Id: LocalisedTextBox.cs,v 1.9 2007-09-01 13:52:35 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -186,6 +186,7 @@ namespace ModFormControls
 		{
 			textLang.Add("",e.Language);
 			UpdateDisplay();
+            this.Parent.Select();
 		}
 
 		public override string Text
@@ -296,7 +297,10 @@ namespace ModFormControls
 			if (textBox1.SelectionLength != lastSelectionLength ||
 				textBox1.SelectionStart != lastSelectionStart)
 			{
-				SelectionChanged(this, new EventArgs());
+                if (SelectionChanged != null)
+                {
+                    SelectionChanged(this, new EventArgs());
+                }
 				lastSelectionLength = textBox1.SelectionLength;
 				lastSelectionStart = textBox1.SelectionStart;
 			}
@@ -307,13 +311,10 @@ namespace ModFormControls
 			if (textBox1.SelectionLength != lastSelectionLength ||
 				textBox1.SelectionStart != lastSelectionStart)
 			{
-				try
-				{
-					SelectionChanged(this, new EventArgs());
-				}
-				catch
-				{
-				}
+                if (SelectionChanged != null)
+                {
+                    SelectionChanged(this, new EventArgs());
+                }
 				lastSelectionLength = textBox1.SelectionLength;
 				lastSelectionStart = textBox1.SelectionStart;
 			}
@@ -324,7 +325,10 @@ namespace ModFormControls
 			if (textBox1.SelectionLength != lastSelectionLength ||
 				textBox1.SelectionStart != lastSelectionStart)
 			{
-				SelectionChanged(this, new EventArgs());
+                if (SelectionChanged != null)
+                {
+                    SelectionChanged(this, new EventArgs());
+                }
 				lastSelectionLength = textBox1.SelectionLength;
 				lastSelectionStart = textBox1.SelectionStart;
 			}
@@ -335,7 +339,10 @@ namespace ModFormControls
 			if (textBox1.SelectionLength != lastSelectionLength ||
 				textBox1.SelectionStart != lastSelectionStart)
 			{
-				SelectionChanged(this, new EventArgs());
+                if (SelectionChanged != null)
+                {
+                    SelectionChanged(this, new EventArgs());
+                }
 				lastSelectionLength = textBox1.SelectionLength;
 				lastSelectionStart = textBox1.SelectionStart;
 			}
@@ -351,9 +358,11 @@ namespace ModFormControls
 		/// 
 		/// </summary>
 		public delegate void SelectionChangedHandler(object sender, EventArgs e);
+
 		/// <summary>
 		/// 
 		/// </summary>
-		public event SelectionChangedHandler SelectionChanged;
+        public event SelectionChangedHandler SelectionChanged;
+
 	}
 }

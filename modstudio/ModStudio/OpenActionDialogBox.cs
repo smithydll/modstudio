@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OpenActionDialogBox.cs,v 1.14 2007-07-23 09:03:47 smithydll Exp $
+ *   $Id: OpenActionDialogBox.cs,v 1.15 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -60,6 +60,10 @@ namespace ModStudio
             SetPhpbbVersion(new TargetVersionCases(new ModVersion(2, 0, 0)));
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="phpbbVersion"></param>
         public void SetPhpbbVersion(TargetVersionCases phpbbVersion)
         {
             if (phpbbVersion.Primary.StartsWith("3"))

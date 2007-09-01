@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: AuthorEditorDialog.cs,v 1.12 2007-07-23 09:03:44 smithydll Exp $
+ *   $Id: AuthorEditorDialog.cs,v 1.13 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/

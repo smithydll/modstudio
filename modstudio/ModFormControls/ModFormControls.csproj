@@ -189,6 +189,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModProjects\ModProjects.csproj">
+      <Project>{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}</Project>
+      <Name>ModProjects</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

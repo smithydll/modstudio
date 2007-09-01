@@ -1,34 +1,43 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModStudio", "ModStudio\ModStudio.csproj", "{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModFormControls", "ModFormControls\ModFormControls.csproj", "{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModProjects", "ModProjects\ModProjects.csproj", "{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ModStudioInstaller", "ModStudioInstaller\ModStudioInstaller.vdproj", "{C62EE2C2-FA67-4421-BF08-1E68C614907C}"
 EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		BuildAll = BuildAll
-		Debug = Debug
-		Release = Release
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		BuildAll|Any CPU = BuildAll|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll.ActiveCfg = BuildAll|.NET
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll.Build.0 = BuildAll|.NET
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug.ActiveCfg = Debug|.NET
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug.Build.0 = Debug|.NET
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release.ActiveCfg = Release|.NET
-		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release.Build.0 = Release|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll.ActiveCfg = BuildAll|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll.Build.0 = BuildAll|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug.ActiveCfg = Debug|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug.Build.0 = Debug|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Release.ActiveCfg = Release|.NET
-		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Release.Build.0 = Release|.NET
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F02B08-A9AB-4328-AE6C-FBC5B92EC06F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll|Any CPU.ActiveCfg = BuildAll|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.BuildAll|Any CPU.Build.0 = BuildAll|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{341966A9-3CC2-41C7-AB36-07BFFA28F3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.BuildAll|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.BuildAll|Any CPU.Build.0 = Release|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4F8B7AB-29D0-4108-9FD7-B5C2F674062A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C62EE2C2-FA67-4421-BF08-1E68C614907C}.BuildAll|Any CPU.ActiveCfg = Release
+		{C62EE2C2-FA67-4421-BF08-1E68C614907C}.Debug|Any CPU.ActiveCfg = Debug
+		{C62EE2C2-FA67-4421-BF08-1E68C614907C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
