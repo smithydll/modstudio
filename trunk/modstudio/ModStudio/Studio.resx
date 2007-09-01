@@ -272,8 +272,11 @@
   <data name="menuItem4.Text" xml:space="preserve">
     <value>Add License</value>
   </data>
+  <data name="menuItem27.Text" xml:space="preserve">
+    <value>Add New Item</value>
+  </data>
   <data name="menuItem5.Text" xml:space="preserve">
-    <value>Add Files</value>
+    <value>Add Existing File</value>
   </data>
   <data name="menuItem6.Text" xml:space="preserve">
     <value>-</value>
@@ -292,9 +295,6 @@
   </data>
   <data name="menuItem1.Text" xml:space="preserve">
     <value>Project</value>
-  </data>
-  <data name="menuItem1.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="menuItemToolsOptions.Text" xml:space="preserve">
     <value>&amp;Options</value>
@@ -518,57 +518,6 @@
         AYABAAGAAQEEAAGAAQEBgAEDBAABgAEDAYABBwQAAYABBwGAAQ8EAAs=
 </value>
   </data>
-  <data name="tabBar1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="tabBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 28</value>
-  </data>
-  <data name="tabBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 28</value>
-  </data>
-  <data name="tabBar1.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tabBar1.Name" xml:space="preserve">
-    <value>tabBar1</value>
-  </data>
-  <data name="&gt;&gt;tabBar1.Type" xml:space="preserve">
-    <value>ModFormControls.TabBar, ModFormControls, Version=1.0.2755.725, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;tabBar1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tabBar1.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="projectPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <data name="projectPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>592, 56</value>
-  </data>
-  <data name="projectPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 489</value>
-  </data>
-  <data name="projectPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="projectPanel1.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;projectPanel1.Name" xml:space="preserve">
-    <value>projectPanel1</value>
-  </data>
-  <data name="&gt;&gt;projectPanel1.Type" xml:space="preserve">
-    <value>ModFormControls.ProjectPanel, ModFormControls, Version=1.0.2755.725, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;projectPanel1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;projectPanel1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="splitter1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Right</value>
   </data>
@@ -579,7 +528,7 @@
     <value>589, 56</value>
   </data>
   <data name="splitter1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>3, 489</value>
+    <value>3, 0</value>
   </data>
   <data name="splitter1.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -596,6 +545,66 @@
   <data name="&gt;&gt;splitter1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="projectPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="projectPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>592, 56</value>
+  </data>
+  <data name="projectPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 0</value>
+  </data>
+  <data name="projectPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="projectPanel1.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;projectPanel1.Name" xml:space="preserve">
+    <value>projectPanel1</value>
+  </data>
+  <data name="&gt;&gt;projectPanel1.Type" xml:space="preserve">
+    <value>ModFormControls.ProjectPanel, ModFormControls, Version=1.0.2799.39485, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;projectPanel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;projectPanel1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabBar1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="tabBar1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 28</value>
+  </data>
+  <data name="tabBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>792, 28</value>
+  </data>
+  <data name="tabBar1.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tabBar1.Name" xml:space="preserve">
+    <value>tabBar1</value>
+  </data>
+  <data name="&gt;&gt;tabBar1.Type" xml:space="preserve">
+    <value>ModFormControls.TabBar, ModFormControls, Version=1.0.2799.39485, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;tabBar1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabBar1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="newProjectDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>595, 17</value>
+  </metadata>
+  <metadata name="openFileDialog3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>749, 17</value>
+  </metadata>
+  <metadata name="newFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 56</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -603,7 +612,7 @@
     <value>5, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>792, 545</value>
+    <value>792, 0</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1080,6 +1089,12 @@
   <data name="&gt;&gt;menuItem4.Type" xml:space="preserve">
     <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;menuItem27.Name" xml:space="preserve">
+    <value>menuItem27</value>
+  </data>
+  <data name="&gt;&gt;menuItem27.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;menuItem5.Name" xml:space="preserve">
     <value>menuItem5</value>
   </data>
@@ -1229,6 +1244,24 @@
   </data>
   <data name="&gt;&gt;imageList2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;newProjectDialog1.Name" xml:space="preserve">
+    <value>newProjectDialog1</value>
+  </data>
+  <data name="&gt;&gt;newProjectDialog1.Type" xml:space="preserve">
+    <value>ModStudio.NewProjectDialog, ModStudio, Version=0.4.2799.39610, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog3.Name" xml:space="preserve">
+    <value>openFileDialog3</value>
+  </data>
+  <data name="&gt;&gt;openFileDialog3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;newFileDialog1.Name" xml:space="preserve">
+    <value>newFileDialog1</value>
+  </data>
+  <data name="&gt;&gt;newFileDialog1.Type" xml:space="preserve">
+    <value>ModStudio.NewFileDialog, ModStudio, Version=0.4.2799.39610, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Studio</value>

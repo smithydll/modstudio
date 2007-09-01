@@ -10,6 +10,9 @@ using Phpbb.ModTeam.Tools.DataStructures;
  */
 namespace ModStudio
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TargetVersionDialog : System.Windows.Forms.CommonDialog
     {
         private TargetVersionCases cases = new TargetVersionCases();

@@ -74,6 +74,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Phpbb.ModTeam.Tools, Version=1.0.2797.24806, Culture=neutral, PublicKeyToken=0b97e62f9e2b11d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Phpbb.ModTeam.Tools\bin\Debug\Phpbb.ModTeam.Tools.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

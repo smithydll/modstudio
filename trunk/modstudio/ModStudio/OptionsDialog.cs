@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: OptionsDialog.cs,v 1.8 2007-07-23 09:03:48 smithydll Exp $
+ *   $Id: OptionsDialog.cs,v 1.9 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/

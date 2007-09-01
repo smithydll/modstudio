@@ -65,82 +65,82 @@ namespace ModFormControls
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.closeLabel = new System.Windows.Forms.Label();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.tabPanel = new System.Windows.Forms.Panel();
-			this.leftLabel = new System.Windows.Forms.Label();
-			this.rightLabel = new System.Windows.Forms.Label();
-			this.panel1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// closeLabel
-			// 
-			this.closeLabel.Font = new System.Drawing.Font("Webdings", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(2)));
-			this.closeLabel.Location = new System.Drawing.Point(128, 4);
-			this.closeLabel.Name = "closeLabel";
-			this.closeLabel.Size = new System.Drawing.Size(16, 20);
-			this.closeLabel.TabIndex = 0;
-			this.closeLabel.Text = "r";
-			this.closeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.closeLabel.Click += new System.EventHandler(this.closeLabel_Click);
-			this.closeLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
-			this.closeLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
-			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.rightLabel);
-			this.panel1.Controls.Add(this.leftLabel);
-			this.panel1.Controls.Add(this.tabPanel);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(150, 24);
-			this.panel1.TabIndex = 1;
-			this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-			// 
-			// tabPanel
-			// 
-			this.tabPanel.Location = new System.Drawing.Point(4, 4);
-			this.tabPanel.Name = "tabPanel";
-			this.tabPanel.Size = new System.Drawing.Size(40, 16);
-			this.tabPanel.TabIndex = 0;
-			// 
-			// leftLabel
-			// 
-			this.leftLabel.Font = new System.Drawing.Font("Webdings", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(2)));
-			this.leftLabel.Location = new System.Drawing.Point(96, 5);
-			this.leftLabel.Name = "leftLabel";
-			this.leftLabel.Size = new System.Drawing.Size(16, 20);
-			this.leftLabel.TabIndex = 1;
-			this.leftLabel.Text = "3";
-			this.leftLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.leftLabel.Click += new System.EventHandler(this.leftLabel_Click);
-			this.leftLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
-			this.leftLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
-			// 
-			// rightLabel
-			// 
-			this.rightLabel.Font = new System.Drawing.Font("Webdings", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(2)));
-			this.rightLabel.Location = new System.Drawing.Point(112, 5);
-			this.rightLabel.Name = "rightLabel";
-			this.rightLabel.Size = new System.Drawing.Size(16, 20);
-			this.rightLabel.TabIndex = 2;
-			this.rightLabel.Text = "4";
-			this.rightLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.rightLabel.Click += new System.EventHandler(this.rightLabel_Click);
-			this.rightLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
-			this.rightLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
-			// 
-			// TabBar
-			// 
-			this.BackColor = System.Drawing.Color.FloralWhite;
-			this.Controls.Add(this.closeLabel);
-			this.Controls.Add(this.panel1);
-			this.Name = "TabBar";
-			this.Size = new System.Drawing.Size(150, 24);
-			this.Resize += new System.EventHandler(this.TabBar_Resize);
-			this.panel1.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.closeLabel = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.rightLabel = new System.Windows.Forms.Label();
+            this.leftLabel = new System.Windows.Forms.Label();
+            this.tabPanel = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // closeLabel
+            // 
+            this.closeLabel.Font = new System.Drawing.Font("Webdings", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.closeLabel.Location = new System.Drawing.Point(128, 4);
+            this.closeLabel.Name = "closeLabel";
+            this.closeLabel.Size = new System.Drawing.Size(16, 20);
+            this.closeLabel.TabIndex = 0;
+            this.closeLabel.Text = "r";
+            this.closeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.closeLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
+            this.closeLabel.Click += new System.EventHandler(this.closeLabel_Click);
+            this.closeLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.rightLabel);
+            this.panel1.Controls.Add(this.leftLabel);
+            this.panel1.Controls.Add(this.tabPanel);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(150, 24);
+            this.panel1.TabIndex = 1;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // rightLabel
+            // 
+            this.rightLabel.Font = new System.Drawing.Font("Webdings", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.rightLabel.Location = new System.Drawing.Point(112, 5);
+            this.rightLabel.Name = "rightLabel";
+            this.rightLabel.Size = new System.Drawing.Size(16, 20);
+            this.rightLabel.TabIndex = 2;
+            this.rightLabel.Text = "4";
+            this.rightLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.rightLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
+            this.rightLabel.Click += new System.EventHandler(this.rightLabel_Click);
+            this.rightLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
+            // 
+            // leftLabel
+            // 
+            this.leftLabel.Font = new System.Drawing.Font("Webdings", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.leftLabel.Location = new System.Drawing.Point(96, 5);
+            this.leftLabel.Name = "leftLabel";
+            this.leftLabel.Size = new System.Drawing.Size(16, 20);
+            this.leftLabel.TabIndex = 1;
+            this.leftLabel.Text = "3";
+            this.leftLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.leftLabel.MouseLeave += new System.EventHandler(this.closeLabel_MouseLeave);
+            this.leftLabel.Click += new System.EventHandler(this.leftLabel_Click);
+            this.leftLabel.MouseEnter += new System.EventHandler(this.closeLabel_MouseEnter);
+            // 
+            // tabPanel
+            // 
+            this.tabPanel.Location = new System.Drawing.Point(4, 4);
+            this.tabPanel.Name = "tabPanel";
+            this.tabPanel.Size = new System.Drawing.Size(40, 16);
+            this.tabPanel.TabIndex = 0;
+            // 
+            // TabBar
+            // 
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Controls.Add(this.closeLabel);
+            this.Controls.Add(this.panel1);
+            this.Name = "TabBar";
+            this.Size = new System.Drawing.Size(150, 24);
+            this.Resize += new System.EventHandler(this.TabBar_Resize);
+            this.panel1.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 		#endregion

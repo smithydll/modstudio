@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ModEditor.cs,v 1.19 2007-07-23 09:03:45 smithydll Exp $
+ *   $Id: ModEditor.cs,v 1.20 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -37,7 +37,7 @@ namespace ModStudio
 	/// <summary>
 	/// Summary description for ModEditor.
 	/// </summary>
-	public class ModEditor : System.Windows.Forms.Form
+	public class ModEditor : System.Windows.Forms.Form, IEditor
 	{
 		private System.Windows.Forms.TabControl tabControlEditor;
 		private System.Windows.Forms.TabPage tabPageOverview;
@@ -249,8 +249,8 @@ namespace ModStudio
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModEditor));
-            Phpbb.ModTeam.Tools.DataStructures.ModAuthor modAuthor3 = new Phpbb.ModTeam.Tools.DataStructures.ModAuthor();
-            Phpbb.ModTeam.Tools.DataStructures.ModHistoryEntry modHistoryEntry3 = new Phpbb.ModTeam.Tools.DataStructures.ModHistoryEntry();
+            Phpbb.ModTeam.Tools.DataStructures.ModAuthor modAuthor2 = new Phpbb.ModTeam.Tools.DataStructures.ModAuthor();
+            Phpbb.ModTeam.Tools.DataStructures.ModHistoryEntry modHistoryEntry2 = new Phpbb.ModTeam.Tools.DataStructures.ModHistoryEntry();
             this.tabControlEditor = new System.Windows.Forms.TabControl();
             this.tabPageOverview = new System.Windows.Forms.TabPage();
             this.label13 = new System.Windows.Forms.Label();
@@ -358,7 +358,7 @@ namespace ModStudio
             // 
             // tabPageOverview
             // 
-            this.tabPageOverview.BackColor = System.Drawing.Color.White;
+            this.tabPageOverview.BackColor = System.Drawing.SystemColors.Window;
             this.tabPageOverview.Controls.Add(this.label13);
             this.tabPageOverview.Controls.Add(this.labelPhpbbVersion);
             this.tabPageOverview.Controls.Add(this.button10);
@@ -380,7 +380,6 @@ namespace ModStudio
             this.tabPageOverview.Size = new System.Drawing.Size(784, 540);
             this.tabPageOverview.TabIndex = 0;
             this.tabPageOverview.Text = "Overview";
-            this.tabPageOverview.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -535,7 +534,7 @@ namespace ModStudio
             // 
             // tabPageHeader
             // 
-            this.tabPageHeader.BackColor = System.Drawing.Color.LightYellow;
+            this.tabPageHeader.BackColor = System.Drawing.SystemColors.Info;
             this.tabPageHeader.Controls.Add(this.ModVersionStageComboBox);
             this.tabPageHeader.Controls.Add(this.MODTitleTextBox);
             this.tabPageHeader.Controls.Add(this.MODHistoryListView);
@@ -939,7 +938,7 @@ namespace ModStudio
             // modDisplayBox2
             // 
             this.modDisplayBox2.AutoScroll = true;
-            this.modDisplayBox2.BackColor = System.Drawing.Color.AliceBlue;
+            this.modDisplayBox2.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.modDisplayBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.modDisplayBox2.Location = new System.Drawing.Point(0, 36);
             this.modDisplayBox2.Name = "modDisplayBox2";
@@ -1120,12 +1119,12 @@ namespace ModStudio
             // 
             // authorEditorDialog1
             // 
-            this.authorEditorDialog1.Entry = modAuthor3;
+            this.authorEditorDialog1.Entry = modAuthor2;
             this.authorEditorDialog1.Save += new ModStudio.AuthorEditorDialogBox.AuthorEditorDialogBoxSaveHandler(this.authorEditorDialog1_Save);
             // 
             // historyEditorDialog1
             // 
-            this.historyEditorDialog1.Entry = modHistoryEntry3;
+            this.historyEditorDialog1.Entry = modHistoryEntry2;
             this.historyEditorDialog1.Save += new ModStudio.HistoryEditorDialogBox.HistoryEditorDialogBoxSaveHandler(this.historyEditorDialog1_Save);
             // 
             // noteEditorDialog1
@@ -1699,6 +1698,7 @@ namespace ModStudio
 
 		private void menuItemAddActionOpen_Click(object sender, System.EventArgs e)
 		{
+            openActionDialog1.PhpbbVersion = ThisMod.Header.PhpbbVersion;
 			openActionDialog1.ShowDialog(this);
 		}
 
@@ -2056,6 +2056,11 @@ namespace ModStudio
 		/// <returns></returns>
 		public bool IsCutCopyPaste()
 		{
+            if (this.ActiveControl == null)
+            {
+                return false;
+            }
+
 			if (this.ActiveControl.GetType() == typeof(LocalisedTextBox))
 			{
 				if (((LocalisedTextBox)this.ActiveControl).Enabled)
@@ -2232,11 +2237,78 @@ namespace ModStudio
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void DoCopy()
+        {
+            if (this.ActiveControl.GetType() == typeof(LocalisedTextBox))
+            {
+                LocalisedTextBox currentLocalisedTextBox = (LocalisedTextBox)this.ActiveControl;
+                //currentLocalisedTextBox.DoCut();
+            }
+            else if (this.ActiveControl.GetType() == typeof(NumericUpDown))
+            {
+                NumericUpDown currentNumericUpDown = (NumericUpDown)this.ActiveControl;
+                Clipboard.SetDataObject(((TextBox)currentNumericUpDown.Controls[1]).SelectedText);
+            }
+            else if (this.ActiveControl.GetType() == typeof(DomainUpDown))
+            {
+                DomainUpDown currentDomainUpDown = (DomainUpDown)this.ActiveControl;
+                Clipboard.SetDataObject(((TextBox)currentDomainUpDown.Controls[1]).SelectedText);
+            }
+            else if (this.ActiveControl.GetType() == typeof(ComboBox))
+            {
+                ComboBox currentComboBox = (ComboBox)this.ActiveControl;
+                Clipboard.SetDataObject(currentComboBox.SelectedText);
+                //return true;
+            }
+            else if (this.ActiveControl.GetType() == typeof(ModDisplayBox))
+            {
+                //return true;
+            }
+        }
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public void DoPaste()
 		{
+            if (this.ActiveControl.GetType() == typeof(LocalisedTextBox))
+            {
+                LocalisedTextBox currentLocalisedTextBox = (LocalisedTextBox)this.ActiveControl;
+                //currentLocalisedTextBox.DoCut();
+            }
+            else if (this.ActiveControl.GetType() == typeof(NumericUpDown))
+            {
+                NumericUpDown currentNumericUpDown = (NumericUpDown)this.ActiveControl;
+                Clipboard.SetDataObject(((TextBox)currentNumericUpDown.Controls[1]).SelectedText);
+                string clipData = Clipboard.GetText(TextDataFormat.Text);
+                try
+                {
+                    currentNumericUpDown.Value = (decimal)int.Parse(clipData);
+                }
+                catch
+                {
+                }
+            }
+            else if (this.ActiveControl.GetType() == typeof(DomainUpDown))
+            {
+                DomainUpDown currentDomainUpDown = (DomainUpDown)this.ActiveControl;
+                Clipboard.SetDataObject(((TextBox)currentDomainUpDown.Controls[1]).SelectedText);
+                ((TextBox)currentDomainUpDown.Controls[1]).SelectedText = Clipboard.GetText(TextDataFormat.UnicodeText);
+            }
+            else if (this.ActiveControl.GetType() == typeof(ComboBox))
+            {
+                ComboBox currentComboBox = (ComboBox)this.ActiveControl;
+                Clipboard.SetDataObject(currentComboBox.SelectedText);
+                currentComboBox.SelectedText = Clipboard.GetText(TextDataFormat.UnicodeText);
+                //return true;
+            }
+            else if (this.ActiveControl.GetType() == typeof(ModDisplayBox))
+            {
+                //return true;
+            }
 		}
 
 		private void MODTitleTextBox_Enter(object sender, System.EventArgs e)

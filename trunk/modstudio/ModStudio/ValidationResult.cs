@@ -5,7 +5,7 @@
  *   copyright            : (C) 2005 smithy_dll
  *   email                : smithydll@users.sourceforge.net
  *
- *   $Id: ValidationResult.cs,v 1.8 2007-07-23 09:03:49 smithydll Exp $
+ *   $Id: ValidationResult.cs,v 1.9 2007-09-01 13:52:37 smithydll Exp $
  *
  *
  ***************************************************************************/
@@ -40,6 +40,9 @@ namespace ModStudio
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public ValidationResult()
 		{
 			//
