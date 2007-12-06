@@ -1,0 +1,32 @@
+#TPLNAME:'MOD';
+#ICON:'0';
+#EXT:'mod,txt';
+#EDITOR:'mod';
+#INSTALLED:'true';
+#AUTHOR-FORMAT:'<author.phpBB_UID/> < <author.email/> > (<author.name/>) <author.website/>';
+#HISTORY-FORMAT:'YYYY-MM-DD - Version x.y.za';
+#LICENSE-FORMAT:'## License: <mod.license/>';
+#DEFAULT-LICENSE:'http://opensource.org/licenses/gpl-license.php GNU Public License v2';
+###END OF HEADER###
+##############################################################
+## MOD Title: <mod.title/>
+## MOD Author: <mod.author/>
+## MOD Description: <mod.description/>
+## MOD Version: <mod.version/>
+## 
+## Installation Level: <mod.install_level/>
+## Installation Time: <mod.install_time/>
+## Files To Edit: <mod.files_to_edit/>
+## Included Files: <mod.inc_files/><mod.license/><mod.generator/>
+##############################################################
+## For security purposes, please check: http://www.phpbb.com/mods/
+## for the latest version of this MOD. Although MODs are checked
+## before being allowed in the MODs Database there is no guarantee
+## that there are no security problems within the MOD. No support
+## will be given for MODs not found within the MODs Database which
+## can be found at http://www.phpbb.com/mods/
+##############################################################
+## Author Notes: <mod.author_notes/><mod.history/>
+##############################################################
+## Before Adding This MOD To Your Forum, You Should Back Up All Files Related To This MOD 
+##############################################################
