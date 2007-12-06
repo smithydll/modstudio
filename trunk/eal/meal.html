@@ -1,0 +1,148 @@
+<html>
+<head>
+<title>mEAL</title>
+<!-- $Id: meal.html,v 1.1 2007-12-06 03:58:48 smithydll Exp $ -->
+<!-- LGPL -->
+<style type="text/css">
+<!--
+html
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+body
+{
+	margin: 0px;
+	padding: 0px;
+	font-family: Times New Roman, Serif;
+	font-size: 12pt;
+}
+
+#header
+{
+	background-color: #EAEAEA;
+	border-bottom: solid 2px #4D4D4D;
+	font-family: Trebuchet MS, Sans Serif;
+	font-size: 10pt;
+	padding: 1.5cm 2cm;
+	padding-bottom: 0;
+}
+
+#body
+{
+	padding: 0 2cm;
+}
+
+#footer
+{
+	width: 100%;
+	height: 60px;
+	background-color: #EAEAEA;
+	border-top: solid 2px #4D4D4D;
+	text-align: center;
+	font-family: Trebuchet MS, Sans Serif;
+	font-size: 10pt;
+}
+
+.copyright
+{
+	font-size: 8pt;
+}
+
+h1
+{
+	font-family: Arial;
+	font-size: 20pt;
+	font-weight: bold;
+	padding-top: 12pt;
+	padding-after: 3pt;
+}
+
+h2
+{
+	font-family: Arial;
+	font-size: 18pt;
+	font-weight: bold;
+	font-style: italic;
+	padding-top: 12pt;
+	padding-after: 3pt;
+}
+
+h3
+{
+	font-family: Arial;
+	font-size: 16pt;
+	font-weight: bold;
+	padding-top: 12pt;
+	padding-after: 3pt;
+}
+
+.code
+{
+	color: orange;
+	font-family: Courier New, Monospaced;
+	font-size: 10pt;
+}
+
+.terminal
+{
+	color: green;
+	font-family: Courier New, Monospaced;
+	font-size: 10pt;
+	border: solid 1px black;
+}
+
+hr#footnote
+{
+	border: none;
+	border-top: solid 1px black;
+	width: 5.5cm;
+	text-align: left;
+}
+
+img#logo
+{
+	position: absolute;
+	right: 2.2cm;
+	height: 60px;
+}
+-->
+</style>
+</head>
+<body>
+<div id="header">
+<!--img src="modx_logo.png" id="logo"/-->
+<p>mEAL<br />
+The phpBB Modifications Team</p>
+</div>
+<div id="body">
+<div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="d0e1"></a>mEAL Automated Check</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#d0e22">System Requirements</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e27">Linux</a></span></dt><dt><span class="section"><a href="#d0e43">MAC OSX</a></span></dt><dt><span class="section"><a href="#d0e59">Windows</a></span></dt></dl></dd><dt><span class="section"><a href="#d0e78">Using mEAL</a></span></dt><dd><dl><dt><span class="section"><a href="#d0e81">Linux, MAC OSX and MONO on Windows<sup>&reg;</sup></a></span></dt><dt><span class="section"><a href="#d0e129">The .net Framework on Windows&reg; (best for windows)</a></span></dt></dl></dd></dl></div><p>mEAL (minimal EAL) is a version of EAL, a MOD validation tool used by the phpBB modifications team designed for use by modification writers. mEAL creates HTML reports about the entire structure of a MOD prior to submission to the phpBB modifications database. mEAL performs the following checks:</p><div class="itemizedlist"><ul type="disc"><li><p>phpBB MOD Template validation</p></li><li><p>MODX validation</p></li><li><p>PHP function usage validation (to MOD Team requirements)</p></li><li><p>HTML usage validation (to phpBB requirements)</p></li><li><p>MODX packaging requirements</p></li></ul></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e22"></a>System Requirements</h2></div></div></div><p>mEAL is designed run on many systems and has been tested under the following platforms with the following recommended hardware</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e27"></a>Linux</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Any Linux distribution running MONO; which can be downloaded from http://www.mono-project.com/Downloads</p></li><li><p>32MB RAM</p></li><li><p>200MHz processor, faster recommended</p></li><li><p>5MB HDD space</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e43"></a>MAC OSX</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>MONO; which can be downloaded from http://www.mono-project.com/Downloads</p></li><li><p>32MB RAM</p></li><li><p>200MHz processor, faster recommended</p></li><li><p>5MB HDD space</p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e59"></a>Windows</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>Windows 98, NT4, 2000, XP or Vista</p></li><li><p>The .net framework 1.1 or MONO 1.1</p></li><li><p>32MB RAM</p></li><li><p>200MHz processor, faster recommended</p></li><li><p>5MB HDD space</p></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e78"></a>Using mEAL</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e81"></a>Linux, MAC OSX and MONO on Windows<sup>&reg;</sup></h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>Make sure you have the minimum system requirements</p></li><li><p>If you haven&#8217;t already, download mEAL from phpBB.com</p></li><li><p>Extract mEAL.zip if you haven&#8217;t already</p></li><li><p>Start a terminal window/bash/command window</p></li><li><p>Type the following (using the path meal.exe is located, here it is /root/release/)</p><pre class="terminal">[root@fedora ~]# mono /root/release/meal.exe</pre></li><li><p>The following will appear</p><pre class="terminal">----------------------------------------------------------
+pp  pppp    hh          pp  pppp    BBBBBBBB    BBBBBBBB
+pppp    pp  hh          pppp    pp  BB      BB  BB      BB
+pp      pp  hh          pp      pp  BB      BB  BB      BB
+pp      pp  hh          pp      pp  BB      BB  BB      BB
+pppppppp    hhhhhhhh    pppppppp    BBBBBBBB    BBBBBBBB
+pp          hh      hh  pp          BB      BB  BB      BB
+pp          hh      hh  pp          BB      BB  BB      BB
+pp          hh      hh  pp          BBBBBBBB    BBBBBBBB
+----------------------------------------------------------
+The phpBB MOD Team MOD pre-validation script.
+Please enter the path to a folder of zip to validate:</pre></li><li><p>Type in the name of the folder of zip file to validate, for example</p><pre class="terminal">/root/release/sql_backup/sql_backup_v1.0.2/</pre></li><li><p>Press Enter.</p></li><li><p>The file will be validated with a number of status messages filling the screen, feel free to ignore these as they are repeated in the HTML report</p></li><li><p>All done, a file named report.htm will have been created and should have opened in your default browser.</p></li><li><p>Examine the HTML report generated for anything you need to fix. Not all reported issues may be relevant or indeed be issues. Use commonsense to dictate which issues are indeed issues, and need to be fixed.</p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="d0e129"></a>The .net Framework on Windows&reg; (best for windows)</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>Make sure you have the minimum system requirements</p></li><li><p>If you haven&#8217;t already, download mEAL from phpBB.com</p></li><li><p>Extract mEAL.zip if you haven&#8217;t already</p></li><li><p>You now have several options</p><div class="orderedlist"><ol type="1"><li><p>Drag the folder of zip file you wish to validate onto the executable file (meal.exe) and it will be validated automatically. A file named report.htm will have been created and should have opened in your default browser.</p></li><li><p>Open a command prompt by going, start &raquo; run &raquo; type "cmd" &raquo; Enter.</p><div class="orderedlist"><ol type="1"><li><p>Type the following (using the path meal.exe is located, here it is c:\mEAL\)</p><pre class="terminal">C:\&gt;c:\mEAL\meal.exe</pre></li><li><p>The following will appear:</p><pre class="terminal">----------------------------------------------------------
+pp  pppp    hh          pp  pppp    BBBBBBBB    BBBBBBBB
+pppp    pp  hh          pppp    pp  BB      BB  BB      BB
+pp      pp  hh          pp      pp  BB      BB  BB      BB
+pp      pp  hh          pp      pp  BB      BB  BB      BB
+pppppppp    hhhhhhhh    pppppppp    BBBBBBBB    BBBBBBBB
+pp          hh      hh  pp          BB      BB  BB      BB
+pp          hh      hh  pp          BB      BB  BB      BB
+pp          hh      hh  pp          BBBBBBBB    BBBBBBBB
+----------------------------------------------------------
+The phpBB MOD Team MOD pre-validation script.
+Please enter the path to a folder of zip to validate:</pre></li><li><p>Type in the name of the folder of zip file to validate, for example</p><pre class="terminal">c:\downloads\sql_backup\sql_backup_v1.0.2\</pre></li><li><p>Press Enter.</p></li><li><p>Alternatively type the following (all on one line) and Press Enter:</p><pre class="terminal">C:\&gt;c:\mEAL\meal.exe c:\downloads\sql_backup\sql_backup_v1.0.2\</pre></li><li><p>The file will be validated with a number of status messages filling the screen, feel free to ignore these as they are repeated in the HTML report</p></li><li><p>All done, a file named report.htm will have been created and should have opened in your default browser.</p></li><li><p>Examine the HTML report generated for anything you need to fix. Not all reported issues may be relevant or indeed be issues. Use commonsense to dictate which issues are indeed issues, and need to be fixed.</p></li></ol></div></li></ol></div></li></ol></div></div></div></div></div>
+<div id="footer">
+<p><br />
+<span class="copyright">Copyright &copy; 2006 The phpBB MOD Team</span></p>
+</div>
+</body>
+</html>
