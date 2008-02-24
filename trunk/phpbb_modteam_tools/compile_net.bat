@@ -1,0 +1,1 @@
+phpc /target:dll /out:Phpbb.ModTeam.Tools.dll phpbb_mod_team_tools.php mod.php data_structures.php mod_actions.php mod_header.php modx_mod.php text_mod.php validation.php
